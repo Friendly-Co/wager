@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
+//bug: will not post playerName or currScore to database
+//clues: validation in this model does trigger, indicating the post route is good
+//seed file does seed the database
+
 const gameSchema = new Schema({
   // gameInfo: {
   //   type: String,
@@ -9,10 +13,11 @@ const gameSchema = new Schema({
   //   unique: true
   // },
   playerName: {
-    type: String,
-    required: [true, "must provide a player name"],
-    unique: true,
-    maxlength: 32
+    type: String
+    // required: [true, "must provide a player name"],
+    // required: true,
+    // unique: true
+    // maxlength: 32
   },
   currScore: { type: Number, default: 50 },
   date: { type: Date, default: Date.now }
