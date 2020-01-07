@@ -4,8 +4,8 @@ const scoresController = require("../../controllers/scoresController");
 // Matches with "/api/scores"
 router
   .route("/")
-  .get(booksController.findAll)
-  .post(booksController.create);
+  .get(scoresController.findAll)
+  .post(scoresController.create);
 
 // Matches with "/api/scores/:id" this is the id of the player
 router
