@@ -27,14 +27,24 @@ module.exports = {
   },
   update: function(req, res) {
     console.log("update function in scoresController.js");
+    console.log(req.body);
     db.findOneAndUpdate({ _id: req.params.id }, req.body) //route for updating all?
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
-    // },
-    // remove: function(req, res) {
-    //   db.findById({ _id: req.params.id })
-    //     .then(dbModel => dbModel.remove())
-    //     .then(dbModel => res.json(dbModel))
-    //     .catch(err => res.status(422).json(err));
+  },
+  remove: function(req, res) {
+    console.log(req.params.id);
+    db.findById({ _id: req.params.id })
+      .then(dbModel => dbModel.remove())
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
+  removeAll: function(req, res) {
+    console.log("removeAll function in scoresController.js");
+    db.deleteMany({}, function(err) {
+      if (err) {
+        console.log(err);
+      }
+    });
   }
 };
