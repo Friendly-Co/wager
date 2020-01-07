@@ -1,0 +1,16 @@
+.delete-btn {
+  float: right;
+  color: #e74944;
+  font-size: xx-large;
+  transition: all .2s ease-in-out;
+}
+
+.delete-btn:hover {
+  cursor: pointer;
+  color: #df0700;
+  transform: scale(1.50);
+}
+
+.delete-btn:active {
+  color: #a30601;
+}
