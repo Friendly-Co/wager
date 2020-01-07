@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const db = require("../models");
+const db = require("../models/House");
 
 // This file empties the House collection and inserts the scores below
 
@@ -50,8 +50,16 @@ const scoreSeed = [
   }
 ];
 
-db.House.remove({})
-  .then(() => db.House.collection.insertMany(scoreSeed))
+// (node:29604) DeprecationWarning: collection.ensureIndex is deprecated. Use createIndexes instead.
+// (node:29604) DeprecationWarning: collection.remove is deprecated. Use deleteOne, deleteMany, or bulkWrite instead.
+
+// db.remove({})
+db.deleteMany({}, function(err) {
+  if (err) {
+    console.log(err);
+  }
+})
+  .then(() => db.collection.insertMany(scoreSeed))
   .then(data => {
     console.log(data.result.n + " records inserted!");
     process.exit(0);
