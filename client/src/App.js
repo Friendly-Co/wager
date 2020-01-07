@@ -6,7 +6,6 @@ import "./App.css";
 function App() {
   return (
     <div>
-      <Nav />
       <Router>
         <Switch>
           {/* <Route exact path="/" component={} /> */}
