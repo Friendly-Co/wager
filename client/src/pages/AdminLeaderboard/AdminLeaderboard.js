@@ -60,7 +60,7 @@ class AdminLeaderboard extends Component {
                     </DeleteBtn>
                     <strong>
                       <h3>{score.playerName}</h3>
-                      <p>Current Score: {score.playerScore}</p>
+                      <p>Current Score: {score.currScore}</p>
                     </strong>
                   </ListItem>
                 );
