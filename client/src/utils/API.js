@@ -17,7 +17,7 @@ export default {
   deleteAllPlayers: function() {
     return axios.delete("/api/scores/");
   },
-  // Saves a player's score to the database- takes in player's unique id
+  // Saves a player's score to the database- takes in player's unique id OR username
   saveScore: function(toSave) {
     console.log("saveScore from API.js- toSave:");
     console.log(toSave);
