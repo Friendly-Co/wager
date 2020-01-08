@@ -30,15 +30,15 @@ class AdminLeaderboard extends Component {
   };
 
   // Deletes a score from the database with a given id, then reloads scores from the db
-  deleteScore = id => {
-    API.deleteScore(id)
+  deletePlayer = id => {
+    API.deletePlayer(id)
       .then(res => this.loadScores())
       .catch(err => console.log(err));
   };
   // Deletes all scores from the database, then reloads scores from the db
-  deleteAllScores = () => {
-    API.deleteAllScores()
-      .then(res => this.loadScores())
+  deleteAllPlayers = () => {
+    API.deleteAllPlayers()
+      .then(res => this.loadScores()) //deletes all, but does not reload all players
       .catch(err => console.log(err));
   };
 
@@ -46,18 +46,22 @@ class AdminLeaderboard extends Component {
     return (
       <div>
         <h1>Player Scores</h1>
+        <DeleteBtn onClick={() => this.deleteAllPlayers()}>
+          Delete All
+        </DeleteBtn>
         <div className="container">
           {this.state.scores.length ? (
             <List>
               {this.state.scores.map(score => {
                 return (
                   <ListItem key={score._id}>
-                    <DeleteBtn onClick={() => this.deleteScore(score._id)} />
+                    <DeleteBtn onClick={() => this.deletePlayer(score._id)}>
+                      Delete Player
+                    </DeleteBtn>
                     <strong>
                       <h3>{score.playerName}</h3>
                       <p>Current Score: {score.playerScore}</p>
                     </strong>
-                    <DeleteBtn onClick={() => this.deleteAllScores()} />
                   </ListItem>
                 );
               })}
