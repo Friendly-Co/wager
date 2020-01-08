@@ -6,9 +6,7 @@ import { List, ListItem } from "../../components/List";
 class AdminLeaderboard extends Component {
   // Setting our component's initial state
   state = {
-    scores: [],
-    playerName: "",
-    playerScore: ""
+    scores: []
   };
 
   // When the component mounts, load all scores and save them to this.state.scores
@@ -21,9 +19,7 @@ class AdminLeaderboard extends Component {
     API.getScores()
       .then(res =>
         this.setState({
-          scores: res.data,
-          playerName: "",
-          playerScore: ""
+          scores: res.data
         })
       )
       .catch(err => console.log(err));
@@ -38,7 +34,7 @@ class AdminLeaderboard extends Component {
   // Deletes all scores from the database, then reloads scores from the db
   deleteAllPlayers = () => {
     API.deleteAllPlayers()
-      .then(res => this.loadScores()) //deletes all, but does not reload all players
+      .then(res => this.loadScores()) //deletes all, but does not reload
       .catch(err => console.log(err));
   };
 

@@ -1,0 +1,23 @@
+.search-bar {
+    /* width: 500px; */
+    align-self: auto;
+    margin-bottom: 10;
+}
+
+button.btn.btn-success.search-button {
+    /* margin: 10px 32vw 30px; */
+    margin-top: 10px;
+    margin-bottom: 30px;
+    /* align-self: auto; */
+
+}
+
+button.btn.btn-success.search-button:hover {
+    background: #158055;
+    outline-color: #158055;
+}
+
+button.btn.btn-success.search-button:active {
+    background: #00aa55;
+    outline-color: #00aa55;
+}
