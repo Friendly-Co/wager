@@ -18,20 +18,6 @@ class Login extends Component {
     });
   };
 
-  // When the form is submitted, use the API.saveBook method to save the book data
-  // Then reload books from the database
-  // handleSave = event => {
-  //   event.preventDefault();
-  //   if (this.state.username) {
-  //     var toSave = {
-  //       playerName: this.state.username
-  //     };
-  //     API.saveScore(toSave).then(
-  //       this.setState({ message: alert("Your username has been saved") })
-  //     );
-  //   }
-  // };
-
   //search the database for any matching usernames.
   //If matching, alert the user to change their name
   handleSave = event => {
