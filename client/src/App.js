@@ -1,11 +1,24 @@
-import React from "react";
+import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import AdminGame from "./pages/AdminGame";
 import Login from "./pages/Login";
 import User from "./pages/User/User";
 import "./App.css";
+import { connect } from "./api/api.js";
 
-function App() {
+class App extends Component {
+  constructor(props) {
+    super(props);
+    // call our connect function and define
+    // an anonymous callback function that
+    // simply console.log's the received
+    // message
+    connect(message => {
+      console.log(message);
+    })
+  }
+
+render(){
   return (
     <div>
       <Router>

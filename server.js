@@ -9,8 +9,24 @@ const PORT = process.env.PORT || 3001;
 const server = http.createServer(app);
 const io = socketIo(server);
 
-io.on('connection', socket => {
-  console.log('User connected')
+// This enables CORs and ensures that our frontend,
+// running on a different server can connect to our backend
+io.set("origins", "*:*");
+// whenever we receive a `connection` event
+// our async function is then called
+io.on('connection', async (socket) => {
+
+  
+  // we should see this printed out whenever we have
+  // a successful connection
+  console.log('Client Successfully Connected')
+  // we then send out a new message to the
+  // `chat` channel with "Hello World"
+  // Our clientside should be able to see
+  // this and print it out in the console
+  io.emit("chat", "this is the message from the server");
+
+
 
   socket.on('disconnect', () => {
     console.log('user disconnected')
