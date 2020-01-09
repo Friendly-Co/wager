@@ -9,11 +9,6 @@ class Login extends Component {
     message: ""
   };
 
-  // When the component mounts, load all scores and save them to this.state.scores
-  //   componentDidMount() {
-  //     this.loadScores();
-  //   }
-
   //handles form input change
   // Handles updating component state when the user types into the input field
   handleInputChange = event => {
@@ -25,42 +20,52 @@ class Login extends Component {
 
   // When the form is submitted, use the API.saveBook method to save the book data
   // Then reload books from the database
+  // handleSave = event => {
+  //   event.preventDefault();
+  //   if (this.state.username) {
+  //     var toSave = {
+  //       playerName: this.state.username
+  //     };
+  //     API.saveScore(toSave).then(
+  //       this.setState({ message: alert("Your username has been saved") })
+  //     );
+  //   }
+  // };
+
+  //search the database for any matching usernames.
+  //If matching, alert the user to change their name
   handleSave = event => {
     event.preventDefault();
+    //verify unique username
     if (this.state.username) {
-      var toSave = {
-        playerName: this.state.username
-      };
-      API.saveScore(toSave).then(
-        this.setState({ message: alert("Your username has been saved") })
-      );
+      API.getScores()
+        .then(res => {
+          console.log(res.data);
+          for (let i = 0; i < res.data.length; i++) {
+            if (this.state.username === res.data[i].playerName) {
+              this.setState({
+                message: alert(
+                  "This username has been taken. Please enter a unique name."
+                )
+              });
+              return false;
+            }
+          }
+          //handle save
+          var toSave = {
+            playerName: this.state.username
+          };
+          API.saveScore(toSave).then(
+            this.setState({ message: alert("Your username has been saved") })
+          );
+        })
+        .catch(err => console.log(err));
     }
   };
-
-  // Loads all books  and sets them to this.state.scores
-  //   loadScores = () => {
-  //     API.getScores()
-  //       .then(res =>
-  //         this.setState({
-  //           scores: res.data
-  //         })
-  //       )
-  //       .catch(err => console.log(err));
-  //   };
-
-  // Deletes a score from the database with a given id, then reloads scores from the db
-  //   deletePlayer = id => {
-  //     API.deletePlayer(id)
-  //       .then(res => this.loadScores())
-  //       .catch(err => console.log(err));
-  //   };
 
   render() {
     return (
       <div className="container">
-        {/* <DeleteBtn onClick={() => this.deletePlayer(score._id)}>
-                      Delete Player
-                    </DeleteBtn> */}
         <form className="form-inline">
           <Input
             value={this.state.username}
