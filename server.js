@@ -2,34 +2,39 @@ const express = require("express");
 const http = require("http");
 const mongoose = require("mongoose");
 const routes = require("./routes");
-const socketIo = require("socket.io");
+const socket = require("socket.io");
 
 const app = express();
 const PORT = process.env.PORT || 3001;
 const server = http.createServer(app);
-const io = socketIo(server);
+const io = socket(server);
 
 // This enables CORs and ensures that our frontend,
 // running on a different server can connect to our backend
 io.set("origins", "*:*");
 // whenever we receive a `connection` event
 // our async function is then called
-io.on('connection', async (socket) => {
-
+io.on('connection', (socket) => {
+  console.log("Client with socket id || " + socket.id + ' || is now connected');
   
   // we should see this printed out whenever we have
   // a successful connection
-  console.log('Client Successfully Connected')
+  console.log()
+
+  socket.on('SEND_MESSAGE', function(data) {
+    io.emit("RECIEVE_MESSAGE", data);
+  })
   // we then send out a new message to the
   // `chat` channel with "Hello World"
   // Our clientside should be able to see
   // this and print it out in the console
-  io.emit("chat", "this is the message from the server");
+
+  // io.emit("chat", "this is the message from the server");
 
 
 
   socket.on('disconnect', () => {
-    console.log('user disconnected')
+    console.log("Client with socket id || " + socket.id + ' || is now connected')
   })
 })
 
