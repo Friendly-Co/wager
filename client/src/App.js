@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import AdminLeaderboard from "./pages/AdminGame";
+import AdminGame from "./pages/AdminGame";
 import Login from "./pages/Login";
 import User from "./pages/User/User";
 import "./App.css";
@@ -17,7 +17,6 @@ class App extends Component {
       console.log(message);
     });
   }
-
 
   render() {
     return (
