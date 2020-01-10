@@ -15,22 +15,22 @@ class App extends Component {
     // message
     connect(message => {
       console.log(message);
-    })
+    });
   }
 
-render(){
-  return (
-    <div>
-      <Router>
-        <Switch>
-          {/* <Route exact path="/" component={} /> */}
-          <Route exact path="/admingame" component={AdminGame} />
-          <Route exact path="/user" component={User} />
-          <Route exact path="/login" component={Login} />
-        </Switch>
-      </Router>
-    </div>
-  );
+  render() {
+    return (
+      <div>
+        <Router>
+          <Switch>
+            <Route exact path="/admingame" component={AdminGame} />
+            <Route exact path="/user" component={User} />
+            <Route exact path="/login" component={Login} />
+          </Switch>
+        </Router>
+      </div>
+    );
+  }
 }
 
 export default App;

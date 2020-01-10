@@ -3,18 +3,14 @@ import "./AdminBtns.css";
 // import API from "../../utils/API";
 
 class AdminBtns extends Component {
-  //Socket emitting stuff??
-
-  // handleAnswer = e => {
-  //   console.log(e.target.value);
-  // };
-
-  // handleAnswer(e) {
-  //   console.log(e.target.value);
-  // }
+  haltBets = () => {
+    console.log("halt bets button pressed");
+    //Socket emitting stuff??
+  };
 
   handleAnswer = value => {
     console.log(value);
+    //Socket emitting stuff??
   };
 
   render() {
