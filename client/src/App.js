@@ -15,16 +15,16 @@ class App extends Component {
     // message
     connect(message => {
       console.log(message);
-    })
+    });
   }
 
-render(){
-  return (
+
+  render() {
+    return (
       <div>
         <Router>
           <Switch>
-            {/* <Route exact path="/" component={} /> */}
-            <Route exact path="/adminleaderboard" component={AdminLeaderboard} />
+            <Route exact path="/admingame" component={AdminGame} />
             <Route exact path="/user" component={User} />
             <Route exact path="/login" component={Login} />
           </Switch>
