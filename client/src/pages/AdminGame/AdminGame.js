@@ -3,7 +3,7 @@ import Leaderboard from "../../components/Leaderboard";
 import AdminBtns from "../../components/AdminBtns";
 import { Col, Row, Container } from "../../components/Grid";
 
-class AdminLeaderboard extends Component {
+class AdminGame extends Component {
   render() {
     return (
       <Container fluid>
@@ -21,4 +21,4 @@ class AdminLeaderboard extends Component {
   }
 }
 
-export default AdminLeaderboard;
+export default AdminGame;
