@@ -12,50 +12,9 @@ class Leaderboard extends Component {
     this.state = {
       scores: [],
       user: "",
-      currentGuess: 5
+      currentGuess: 5,
+      scoreSeed: []
     };
-
-    var scoreSeed = [
-      {
-        playerName: "Annabelle",
-        currScore: 35
-      },
-      {
-        playerName: "Jose",
-        currScore: 70,
-        currentGuess: Run
-      },
-      {
-        playerName: "Elli",
-        currScore: 30,
-        currentGuess: Run
-      },
-      {
-        playerName: "Roland",
-        currScore: 75,
-        currentGuess: Pass
-      },
-      {
-        playerName: "Denisha",
-        currScore: 41,
-        currentGuess: Run
-      },
-      {
-        playerName: "John",
-        currScore: 31,
-        currentGuess: Run
-      },
-      {
-        playerName: "Maria",
-        currScore: 15,
-        currentGuess: Turnover
-      },
-      {
-        playerName: "Luz",
-        currScore: 50,
-        currentGuess: Turnover
-      }
-    ];
 
     this.socket = io("localhost:3001");
 
@@ -82,7 +41,7 @@ class Leaderboard extends Component {
 
   // When the component mounts, load all scores and save them to this.state.scores
   componentDidMount() {
-    // this.loadScores();
+    this.loadScores();
   }
 
   // Loads all books  and sets them to this.state.scores
@@ -94,6 +53,50 @@ class Leaderboard extends Component {
     //     })
     //   )
     //   .catch(err => console.log(err));
+    this.setState({
+      scoreSeed: [
+        {
+          playerName: "Annabelle",
+          currScore: 35,
+          currentGuess: "Run"
+        },
+        {
+          playerName: "Jose",
+          currScore: 70,
+          currentGuess: "Run"
+        },
+        {
+          playerName: "Elli",
+          currScore: 30,
+          currentGuess: "Run"
+        },
+        {
+          playerName: "Roland",
+          currScore: 75,
+          currentGuess: "Pass"
+        },
+        {
+          playerName: "Denisha",
+          currScore: 41,
+          currentGuess: "Run"
+        },
+        {
+          playerName: "John",
+          currScore: 31,
+          currentGuess: "Run"
+        },
+        {
+          playerName: "Maria",
+          currScore: 15,
+          currentGuess: "Turnover"
+        },
+        {
+          playerName: "Luz",
+          currScore: 50,
+          currentGuess: "Turnover"
+        }
+      ]
+    });
   };
 
   // Deletes a score from the database with a given id, then reloads scores from the db
@@ -125,19 +128,20 @@ class Leaderboard extends Component {
           Delete All
         </DeleteBtn>
         <div className="container">
-          {this.state.scores.length ? (
+          {this.state.scoreSeed.length ? (
             <List>
-              {this.state.scores.map(score => {
+              {this.state.scoreSeed.map(score => {
                 return (
-                  <ListItem key={score._id}>
+                  // <ListItem key={score._id}>
+                  <ListItem key={score.playerName}>
                     {/* <DeleteBtn onClick={() => this.deletePlayer(score._id)}> */}
-                    <DeleteBtn onClick={() => this.deletePlayer(scoreSeed)}>
+                    {/* <DeleteBtn onClick={() => this.deletePlayer(scoreSeed)}>
                       Delete Player
-                    </DeleteBtn>
+                    </DeleteBtn> */}
                     <strong>
-                      <h3>{scoreSeed.playerName}</h3>
-                      <p>Current Score: {scoreSeed.currScore}</p>
-                      <p>Current Guess: {scoreSeed.currentGuess}</p>
+                      <h3>{score.playerName}</h3>
+                      <p>Current Score: {score.currScore}</p>
+                      <p>Current Guess: {score.currentGuess}</p>
                       {/* <h3>{score.playerName}</h3>
                       <p>Current Score: {score.currScore}</p>
                       <p>Current Guess: {score.currentGuess}</p> */}
