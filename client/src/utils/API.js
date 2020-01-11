@@ -9,6 +9,10 @@ export default {
   getScore: function(id) {
     return axios.get("/api/scores/" + id);
   },
+  // Gets the player with the given playerName
+  getPlayerScore: function(playerName) {
+    return axios.get("/api/scores/score/" + playerName);
+  },
   // Deletes the player with the given id
   deletePlayer: function(id) {
     return axios.delete("/api/scores/" + id);

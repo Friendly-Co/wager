@@ -5,7 +5,7 @@ import photo from "../../friendlybanner.png";
 function Logo() {
     return(
         <div>
-            <img src={photo}></img>
+            <img src={photo} alt="Logo"></img>
         </div>
     );
 }

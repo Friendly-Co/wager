@@ -7,22 +7,27 @@ import API from "../../utils/API";;
 
 let guess = " "
 let score;
+let username;
+
 class User extends Component {
     state = {
         score,
-        guess
+        guess,
+        username
     }
 
     componentDidMount() {
+        username = this.props.match.params.username;
+        console.log(username);
         this.loadScore();
       }
     
       // Loads score and sets them to this.state.scores
       loadScore = () => {
-        API.getScores()
+        API.getPlayerScore(username)
           .then(res =>
             this.setState({
-              score: res.data
+              score: res.data[0].currScore
             })
           )
           .catch(err => console.log(err));
