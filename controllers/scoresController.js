@@ -18,6 +18,13 @@ module.exports = {
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
+  findByName: function(req, res) {
+    console.log(req.params.playerName)
+    console.log("findByName function in scoresController.js");
+    db.find({"playerName": req.params.playerName})
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
   create: function(req, res) {
     console.log("create function in scoresController.js");
     console.log(req.body);

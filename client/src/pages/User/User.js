@@ -8,12 +8,15 @@ import io from 'socket.io-client';
 
 let guess = " "
 let score;
+let username;
+
 class User extends Component {
     constructor(props){
         super(props);
     this.state = {
         score,
-        guess
+        guess,
+        username
     };
 
     this.socket = io('localhost:3001');
@@ -34,15 +37,17 @@ class User extends Component {
 
 
     componentDidMount() {
+        username = this.props.match.params.username;
+        console.log(username);
         this.loadScore();
       }
     
       // Loads score and sets them to this.state.scores
       loadScore = () => {
-        API.getScores()
+        API.getPlayerScore(username)
           .then(res =>
             this.setState({
-              score: res.data
+              score: res.data[0].currScore
             })
           )
           .catch(err => console.log(err));

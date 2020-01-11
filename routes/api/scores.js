@@ -15,4 +15,9 @@ router
   .put(scoresController.update)
   .delete(scoresController.remove);
 
+router
+  .route("/score/:playerName")
+  .get(scoresController.findByName)
+  .put(scoresController.update);
+
 module.exports = router;

@@ -43,10 +43,11 @@ class Login extends Component {
           };
           API.saveScore(toSave).then(
             this.setState({ message: alert("Your username has been saved") })
-          );
+            );
+            window.location = "/user/" + this.state.username
         })
         .catch(err => console.log(err));
-    }
+      }
   };
 
   render() {
