@@ -5,7 +5,9 @@ function Score(props) {
     return(
         <div>
             <div id="scoreBox">
-            <h3>Score: {props.score}</h3>
+            <h3>Score: 
+            {/* {props.score} */}
+            </h3>
             </div>
         </div>
     );

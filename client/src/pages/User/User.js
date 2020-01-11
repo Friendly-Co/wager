@@ -3,18 +3,38 @@ import Logo from "../../components/Logo"
 import GuessButtons from "../../components/GuessButtons";
 import GuessState from "../../components/GuessState";
 import Score from "../../components/Score";
-import API from "../../utils/API";;
+import API from "../../utils/API";
+import io from 'socket.io-client';
 
 let guess = " "
 let score;
 let username;
 
 class User extends Component {
-    state = {
+    constructor(props){
+        super(props);
+    this.state = {
         score,
         guess,
         username
+    };
+
+    this.socket = io('localhost:3001');
+
+    this.socket.on('RECIEVE_MESSAGE', function(data) {
+
+    });
+
+    this.sendGuess = ev => {
+        ev.preventDefault();
+        this.socket.emit('SEND_MESSAGE', {
+            currentGuess: this.state.guess,
+        });
+        this.setState({guess: ''});
+        this.setState({})
     }
+}
+
 
     componentDidMount() {
         username = this.props.match.params.username;
@@ -36,7 +56,8 @@ class User extends Component {
     // function that updates guess state with onClick
 guessUpdate = (value) => {
     this.setState({ guess: value});
-}
+};
+
 
 
 

@@ -2,12 +2,43 @@ import React, { Component } from "react";
 import API from "../../utils/API";
 import DeleteBtn from "../DeleteBtn";
 import { List, ListItem } from "../List";
+import io from "socket.io-client";
 
 class Leaderboard extends Component {
   // Setting our component's initial state
-  state = {
-    scores: []
+  constructor(props){
+    super(props);
+
+  this.state = {
+    scores: [],
+    user: '',
+    currentGuess: 5
   };
+
+  this.socket = io('localhost:3001');
+
+  this.socket.on('RECIEVE_MESSAGE', function(data) {
+    addUserInfo(data);
+  });
+
+  const addUserInfo = data => {
+    console.log(data);
+    this.setState({currentGuess: this.state.currentGuess, data});
+    console.log(this.state.currentGuess);
+  };
+
+  this.sendUserInfo = ev => {
+    ev.preventDefault();
+    this.socket.emit('SEND_MESSAGE', {
+      user: this.state.user,
+      currentGuess: this.state.currentGuess,
+
+    });
+    this.setState({currentGuess: ''});
+    this.setState({})
+  }
+
+}
 
   // When the component mounts, load all scores and save them to this.state.scores
   componentDidMount() {
@@ -57,6 +88,7 @@ class Leaderboard extends Component {
                     <strong>
                       <h3>{score.playerName}</h3>
                       <p>Current Score: {score.currScore}</p>
+                      <p>Current Guess: {score.currentGuess}</p>
                     </strong>
                   </ListItem>
                 );
