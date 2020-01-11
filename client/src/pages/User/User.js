@@ -3,7 +3,7 @@ import Logo from "../../components/Logo"
 import GuessButtons from "../../components/GuessButtons";
 import GuessState from "../../components/GuessState";
 import Score from "../../components/Score";
-import API from "../../utils/API";;
+import API from "../../utils/API";
 
 let guess = " "
 let score;
