@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import AdminGame from "./pages/AdminGame";
 import Login from "./pages/Login";
 import User from "./pages/User/User";
-import Chat from "./components/Chat";
+// import Chat from "./components/Chat";
 import "./App.css";
 import { connect } from "./api/api.js";
 
@@ -29,9 +29,9 @@ class App extends Component {
             <Route exact path="/login" component={Login} />
           </Switch>
         </Router>
-        <div>
+        {/* <div>
           <Chat/>
-        </div>
+        </div> */}
       </div>
     );
   }
