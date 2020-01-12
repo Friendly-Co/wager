@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import API from "../../utils/API";
+import API from "../../utils/API";
 import DeleteBtn from "../DeleteBtn";
 import { List, ListItem } from "../List";
 import io from "socket.io-client";
@@ -15,27 +15,29 @@ class Leaderboard extends Component {
       scoreSeed: props.scoreSeed
     };
 
-    //   this.socket = io("localhost:3001");
+    this.socket = io("localhost:3001");
 
-    //   this.socket.on("RECIEVE_MESSAGE", function(data) {
-    //     addUserInfo(data);
-    //   });
+    this.socket.on("RECIEVE_MESSAGE", function(data) {
+      addUserInfo(data);
+      console.log(data);
+    });
 
-    //   const addUserInfo = data => {
-    //     console.log(data);
-    //     this.setState({ currentGuess: this.state.currentGuess, data });
-    //     console.log(this.state.currentGuess);
-    //   };
+    const addUserInfo = data => {
+      console.log(data);
+      this.setState({ currentGuess: this.state.scoreSeed.currentGuess, data });
+      console.log(this.state.currentGuess);
+    };
 
-    //   this.sendUserInfo = ev => {
-    //     ev.preventDefault();
-    //     this.socket.emit("SEND_MESSAGE", {
-    //       user: this.state.user,
-    //       currentGuess: this.state.currentGuess
-    //     });
-    //     this.setState({ currentGuess: "" });
-    //     this.setState({});
-    //   };
+    this.sendUserInfo = ev => {
+      ev.preventDefault();
+      this.socket.emit("SEND_MESSAGE", {
+        user: this.state.scoreSeed.user,
+        currentGuess: this.state.scoreSeed.currentGuess
+      });
+      this.setState({ currentGuess: "" });
+      this.setState({});
+      // console.log({ currentGuess });
+    };
   }
 
   // When the component mounts, load all scores and save them to this.state.scores

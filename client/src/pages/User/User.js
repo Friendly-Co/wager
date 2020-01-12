@@ -26,12 +26,13 @@ class User extends Component {
     });
 
     this.sendGuess = ev => {
-        ev.preventDefault();
+        // ev.preventDefault();
         this.socket.emit('SEND_MESSAGE', {
             currentGuess: this.state.guess,
         });
-        this.setState({guess: ''});
-        this.setState({})
+        console.log(this.state.guess);
+        // this.setState({guess: ''});
+        // this.setState({})
     }
 }
 
@@ -55,7 +56,23 @@ class User extends Component {
 
     // function that updates guess state with onClick
 guessUpdate = (value) => {
-    this.setState({ guess: value});
+    this.setState({ 
+        guess: value});
+    // this.sendGuess = ev => {
+    //     ev.preventDefault();
+    //     this.socket.emit('SEND_MESSAGE', {
+    //         name: username,
+    //         currentGuess: this.state.guess,
+    //     });
+    //     this.setState({ guess: ''});
+    //     this.setState({})
+    // };
+    console.log({ 
+        name: username,
+        guess: value
+    });
+
+
 };
 
 
@@ -65,12 +82,13 @@ render() {
     return (
         <div>
             <Logo/>
+            <h1>Player name: {username}</h1>
             <Score
                 score={this.state.score}
             />
-            <GuessState 
-                guess={this.state.guess}
-            />
+            <GuessState onChange={this.sendGuess()} > 
+                guess={this.state.guess} 
+                </GuessState>
             <GuessButtons
             guessUpdate={this.guessUpdate}
             />
