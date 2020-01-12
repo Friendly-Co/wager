@@ -1,66 +1,59 @@
-import React, { Component } from "react";
+// import React, { Component } from "react";
+import React from "react";
 import "./AdminBtns.css";
+// import io from "socket.io-client";
 // import API from "../../utils/API";
+// import Leaderboard from "../../components/Leaderboard";
 
-class AdminBtns extends Component {
-  haltBets = () => {
-    console.log("halt bets button pressed");
-    //Socket emitting stuff??
-  };
-
-  handleAnswer = value => {
-    console.log(value);
-    //Socket emitting stuff??
-  };
-
-  render() {
-    return (
+function AdminBtns(props) {
+  // render() {
+  return (
+    <div>
+      <span
+        className="btn btn-dark halt-bets"
+        role="button"
+        tabIndex="0"
+        onClick={() => props.haltBets()}
+      >
+        Halt Bets
+      </span>
       <div>
         <span
-          className="btn btn-dark halt-bets"
+          className="btn btn-primary"
           role="button"
           tabIndex="0"
-          onClick={() => this.haltBets()}
+          onClick={() => props.handleAnswer("Run")}
         >
-          Halt Bets
+          Run
         </span>
-        <div>
-          <span
-            className="btn btn-primary"
-            role="button"
-            tabIndex="0"
-            onClick={() => this.handleAnswer("Run")}
-          >
-            Run
-          </span>
-          <span
-            className="btn btn-primary"
-            role="button"
-            tabIndex="0"
-            onClick={() => this.handleAnswer("Pass")}
-          >
-            Pass
-          </span>
-          <span
-            className="btn btn-primary"
-            role="button"
-            tabIndex="0"
-            onClick={() => this.handleAnswer("Kick")}
-          >
-            Kick
-          </span>
-          <span
-            className="btn btn-primary"
-            role="button"
-            tabIndex="0"
-            onClick={() => this.handleAnswer("Turnover")}
-          >
-            Turnover
-          </span>
-        </div>
+        <span
+          className="btn btn-primary"
+          role="button"
+          tabIndex="0"
+          onClick={() => props.handleAnswer("Pass")}
+        >
+          Pass
+        </span>
+        <span
+          className="btn btn-primary"
+          role="button"
+          tabIndex="0"
+          onClick={() => props.handleAnswer("Kick")}
+        >
+          Kick
+        </span>
+        <span
+          className="btn btn-primary"
+          role="button"
+          tabIndex="0"
+          onClick={() => props.handleAnswer("Turnover")}
+        >
+          Turnover
+        </span>
       </div>
-    );
-  }
+    </div>
+  );
 }
+// }
 
 export default AdminBtns;
