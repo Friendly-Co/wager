@@ -20,22 +20,24 @@ class Leaderboard extends Component {
 
     this.socket.on("RECIEVE_MESSAGE", function(data) {
       addUserInfo(data);
+      console.log(data);
     });
 
     const addUserInfo = data => {
       console.log(data);
-      this.setState({ currentGuess: this.state.currentGuess, data });
+      this.setState({ currentGuess: this.state.scoreSeed.currentGuess, data });
       console.log(this.state.currentGuess);
     };
 
     this.sendUserInfo = ev => {
       ev.preventDefault();
       this.socket.emit("SEND_MESSAGE", {
-        user: this.state.user,
-        currentGuess: this.state.currentGuess
+        user: this.state.scoreSeed.user,
+        currentGuess: this.state.scoreSeed.currentGuess
       });
       this.setState({ currentGuess: "" });
       this.setState({});
+      // console.log({ currentGuess });
     };
   }
 
