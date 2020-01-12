@@ -26,7 +26,7 @@ class User extends Component {
     this.sendGuess = ev => {
       // ev.preventDefault();
       this.socket.emit("SEND_MESSAGE", {
-        player: username,
+        playerName: username,
         currentGuess: this.state.guess
       });
       console.log(this.state.guess);

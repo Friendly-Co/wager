@@ -10,29 +10,51 @@ class AdminGame extends Component {
     super(props);
     this.state = {
       scoreSeed: [],
-      answer: "",
-      currentGuess: ""
+      answer: ""
+      // currentGuess: ""
     };
 
     this.socket = io("localhost:3001");
 
     this.socket.on("RECIEVE_MESSAGE", function(data) {
-      addUserInfo(data);
-      console.log(data);
+      //if there is a currentGuess, render to the page- may need to change
+      if (data.currentGuess !== " ") {
+        addUserInfo(data);
+        console.log(data);
+      }
     });
 
     const addUserInfo = data => {
-      console.log(data); // {player: "Tarzan", currentGuess: " "}
+      console.log(data); // {playerName: "Tarzan", currentGuess: " "}
       // this.setState({ currentGuess: data.currentGuess, data }); // here
-      // if (Object.values(data).includes("")) {
-      if (data.player != " ") {
-        //BUG objects are always truthy :/
-        this.setState(state => {
+      this.setState(state => {
+        var playerIndex = -1;
+        const alreadyHere = function() {
+          for (let i = 0; i < state.scoreSeed.length; i++) {
+            if (state.scoreSeed[i].playerName == data.playerName) {
+              playerIndex = i;
+              console.log("these names are matching!");
+              return true;
+            } else {
+              console.log("hey these names don't match");
+              return false;
+            }
+          }
+        };
+        if (!alreadyHere()) {
           var scoreSeed = state.scoreSeed.concat(data);
           return { scoreSeed };
-        });
-        console.log(this.state.currentGuess);
-      }
+        } else {
+          var scoreSeed = state.scoreSeed;
+          scoreSeed[playerIndex].currentGuess = data.currentGuess; //needs to be immutable- check!
+
+          console.log("playerIndex: ");
+          console.log(playerIndex);
+          return scoreSeed;
+        }
+      });
+      // console.log(this.state.currentGuess);
+      // }
     };
 
     this.sendUserInfo = ev => {

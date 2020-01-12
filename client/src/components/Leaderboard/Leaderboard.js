@@ -139,7 +139,7 @@ class Leaderboard extends Component {
                       Delete Player
                     </DeleteBtn> */}
                     <strong>
-                      <h3>{score.player}</h3>
+                      <h3>{score.playerName}</h3>
                       <p>Current Score: {score.currScore}</p>
                       <p>Current Guess: {score.currentGuess}</p>
                     </strong>
