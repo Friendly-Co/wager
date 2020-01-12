@@ -10,64 +10,72 @@ class AdminGame extends Component {
     super(props);
     this.state = {
       scoreSeed: [],
-      answer: ""
+      answer: "",
+      currentGuess: ""
+    };
+
+    this.socket = io("localhost:3001");
+
+    this.socket.on("RECIEVE_MESSAGE", function(data) {
+      addUserInfo(data);
+      console.log(data);
+    });
+
+    const addUserInfo = data => {
+      console.log(data); // {player: "Tarzan", currentGuess: " "}
+      // this.setState({ currentGuess: data.currentGuess, data }); // here
+      // if (Object.values(data).includes("")) {
+      if (data.player != " ") {
+        //BUG objects are always truthy :/
+        this.setState(state => {
+          var scoreSeed = state.scoreSeed.concat(data);
+          return { scoreSeed };
+        });
+        console.log(this.state.currentGuess);
+      }
+    };
+
+    this.sendUserInfo = ev => {
+      ev.preventDefault();
+      this.socket.emit("SEND_MESSAGE", {
+        user: this.state.scoreSeed.user,
+        currentGuess: this.state.scoreSeed.currentGuess
+      });
+      this.setState({ currentGuess: "" });
+      this.setState({});
+      // console.log({ currentGuess });
     };
   }
 
-  componentDidMount() {
-    this.loadScores();
-  }
+  // componentDidMount() {
+  //   this.loadScores();
+  // }
 
-  loadScores = () => {
-    this.setState({
-      scoreSeed: [
-        {
-          playerName: "Annabelle",
-          currScore: 35,
-          currentGuess: "Run"
-        },
-        {
-          playerName: "Jose",
-          currScore: 70,
-          currentGuess: "Run"
-        },
-        {
-          playerName: "Elli",
-          currScore: 30,
-          currentGuess: "Run"
-        },
-        {
-          playerName: "Roland",
-          currScore: 75,
-          currentGuess: "Pass"
-        },
-        {
-          playerName: "Denisha",
-          currScore: 41,
-          currentGuess: "Run"
-        },
-        {
-          playerName: "John",
-          currScore: 31,
-          currentGuess: "Run"
-        },
-        {
-          playerName: "Maria",
-          currScore: 15,
-          currentGuess: "Turnover"
-        },
-        {
-          playerName: "Luz",
-          currScore: 50,
-          currentGuess: "Turnover"
-        }
-      ]
-    });
-  };
+  // loadScores = () => {
+  //   this.setState({
+  //     scoreSeed: [
+  //       {
+  //         playerName: "Annabelle",
+  //         currScore: 35,
+  //         currentGuess: "Run"
+  //       },
+  //       {
+  //         playerName: "Jose",
+  //         currScore: 70,
+  //         currentGuess: "Run"
+  //       },
+  //       {
+  //         playerName: "Luz",
+  //         currScore: 50,
+  //         currentGuess: "Turnover"
+  //       }
+  //     ]
+  //   });
+  // };
 
   haltBets = () => {
     console.log("halt bets button pressed");
-    io.socket.off();
+    // io.socket.off();  //does not work yet
     //Socket emitting stuff??
   };
 
@@ -101,6 +109,7 @@ class AdminGame extends Component {
             <Leaderboard
               scoreSeed={this.state.scoreSeed}
               deleteAllPlayers={this.deleteAllPlayers}
+              currentGuess={this.state.currentGuess}
             />
           </Col>
 

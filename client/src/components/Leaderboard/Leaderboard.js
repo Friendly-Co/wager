@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import API from "../../utils/API";
 import DeleteBtn from "../DeleteBtn";
 import { List, ListItem } from "../List";
-import io from "socket.io-client";
+// import io from "socket.io-client";
 
 class Leaderboard extends Component {
   constructor(props) {
@@ -11,33 +11,33 @@ class Leaderboard extends Component {
     this.state = {
       scores: [],
       user: "",
-      currentGuess: 5,
+      currentGuess: props.currentGuess,
       scoreSeed: props.scoreSeed
     };
 
-    this.socket = io("localhost:3001");
+    // this.socket = io("localhost:3001");
 
-    this.socket.on("RECIEVE_MESSAGE", function(data) {
-      addUserInfo(data);
-      console.log(data);
-    });
+    // this.socket.on("RECIEVE_MESSAGE", function(data) {
+    //   addUserInfo(data);
+    //   console.log(data);
+    // });
 
-    const addUserInfo = data => {
-      console.log(data);
-      this.setState({ currentGuess: this.state.scoreSeed.currentGuess, data });
-      console.log(this.state.currentGuess);
-    };
+    // const addUserInfo = data => {
+    //   console.log(data);
+    //   this.setState({ currentGuess: this.state.scoreSeed.currentGuess, data });
+    //   console.log(this.state.currentGuess);
+    // };
 
-    this.sendUserInfo = ev => {
-      ev.preventDefault();
-      this.socket.emit("SEND_MESSAGE", {
-        user: this.state.scoreSeed.user,
-        currentGuess: this.state.scoreSeed.currentGuess
-      });
-      this.setState({ currentGuess: "" });
-      this.setState({});
-      // console.log({ currentGuess });
-    };
+    // this.sendUserInfo = ev => {
+    //   ev.preventDefault();
+    //   this.socket.emit("SEND_MESSAGE", {
+    //     user: this.state.scoreSeed.user,
+    //     currentGuess: this.state.scoreSeed.currentGuess
+    //   });
+    //   this.setState({ currentGuess: "" });
+    //   this.setState({});
+    //   // console.log({ currentGuess });
+    // };
   }
 
   // When the component mounts, load all scores and save them to this.state.scores
@@ -127,7 +127,7 @@ class Leaderboard extends Component {
           {/* {this.state.scoreSeed.length ? ( */}
           {this.props.scoreSeed.length ? (
             <List>
-              {this.props.scoreSeed.map(score => {
+              {(this.props.scoreSeed || []).map(score => {
                 // {
                 /* {props.scoreSeed.map(score => { */
                 // }
@@ -139,7 +139,7 @@ class Leaderboard extends Component {
                       Delete Player
                     </DeleteBtn> */}
                     <strong>
-                      <h3>{score.playerName}</h3>
+                      <h3>{score.player}</h3>
                       <p>Current Score: {score.currScore}</p>
                       <p>Current Guess: {score.currentGuess}</p>
                     </strong>
