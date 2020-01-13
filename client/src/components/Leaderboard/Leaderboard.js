@@ -24,7 +24,7 @@ class Leaderboard extends Component {
     console.log("this.props.scoreSeed: ");
     console.log(this.props.scoreSeed);
     // if (!this.props.scoreSeed.length) {
-    console.log("not this.props.scoreseed");
+    console.log("not from this.props.scoreseed");
     // loadScores = () => {
     API.getScores()
       .then(res => {
@@ -69,8 +69,8 @@ class Leaderboard extends Component {
             </List>
           ) : (
             <List>
-              {/* bug: CONSTANTLY updates and calls database while scoreSeeds is empty */}
-              {this.getFromDb()}
+              {/* bug: CONSTANTLY updates and calls database while scoreSeeds is empty
+              {this.getFromDb()} */}
               {this.state.dbScores.map(score => {
                 return (
                   <ListItem key={score.playerName}>
