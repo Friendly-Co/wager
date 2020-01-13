@@ -16,6 +16,7 @@ class AdminGame extends Component {
 
     this.socket = io("localhost:3001");
 
+    //when socket receives a current bet from a user, update the scoreSeed state
     this.socket.on("RECIEVE_MESSAGE", function(data) {
       //if there is a currentGuess, render to the page- may need to change
       if (data.currentGuess !== " " && data.playerName !== " ") {
@@ -31,11 +32,15 @@ class AdminGame extends Component {
         var playerIndex = -1;
         var alreadyHere = false;
         for (let i = 0; i < state.scoreSeed.length; i++) {
+          //bug- rendering some user bets twice
           if (state.scoreSeed[i].playerName == data.playerName) {
+            //both if statements are firing??
             //malfunctions if you use === - It behaves like the data types are different, when they SHOULD both be strings
             playerIndex = i;
             console.log("these names are matching!");
             alreadyHere = true;
+            break;
+            // return;
           } else {
             console.log("hey these names don't match");
             alreadyHere = false;
@@ -73,6 +78,7 @@ class AdminGame extends Component {
     console.log(value);
     API.getScores()
       .then(res => {
+        //grab data and send in new route back to server.  Complete calculations there and then return the scores, assignt to scoreSeeds
         // console.log(res.data);
         // this.setState({
         //   scores: res.data
