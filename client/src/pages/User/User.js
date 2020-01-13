@@ -96,21 +96,28 @@ class User extends Component {
     this.setState({
       guess: value
     });
-    // this.sendGuess = ev => {
-    //     ev.preventDefault();
-    //     this.socket.emit('SEND_MESSAGE', {
-    //         name: username,
-    //         currentGuess: this.state.guess,
-    //     });
-    //     this.setState({ guess: ''});
-    //     this.setState({})
-    // };
+    const toSave = {
+      playerName: this.state.username,
+      currentGuess: value
+    };
+    console.log(toSave);
     console.log({
       name: username,
       guess: value
     });
+    this.savePlayerGuess(toSave);
   };
 
+  savePlayerGuess = toSave => {
+    // API.updateGuess(toSave)
+    API.saveScore(toSave)
+      .then(res =>
+        this.setState({
+          score: 55
+        })
+      )
+      .catch(err => console.log(err));
+  };
   render() {
     const sortedLeaderboard = this.state.leaderboard;
     const tableBody = sortedLeaderboard.map((player, index) => (
