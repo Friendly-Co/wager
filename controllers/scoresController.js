@@ -19,26 +19,51 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
   findByName: function(req, res) {
-    console.log(req.params.playerName)
+    console.log(req.params.playerName);
     console.log("findByName function in scoresController.js");
-    db.find({"playerName": req.params.playerName})
+    db.find({ playerName: req.params.playerName })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
   create: function(req, res) {
     console.log("create function in scoresController.js");
     console.log(req.body);
-    db.create(req.body)
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
+    if (req.body.currentGuess) {
+      console.log("there's a currentGuess here!");
+      console.log("req.params.playerName: ");
+      console.log(req.params.playerName);
+      console.log("req.params.currentGuess: ");
+      console.log(req.params.currentGuess);
+      console.log("req.body: ");
+      console.log(req.body);
+      console.log("req.params: ");
+      console.log(req.params);
+      db.findOneAndUpdate(
+        { playerName: req.body.playerName },
+        { currentGuess: req.body.currentGuess }
+      )
+        .then(dbModel => res.json(dbModel))
+        .catch(err => res.status(422).json(err));
+    } else {
+      db.create(req.body)
+        .then(dbModel => res.json(dbModel))
+        .catch(err => res.status(422).json(err));
+    }
   },
   update: function(req, res) {
     console.log("update function in scoresController.js");
     console.log(req.body);
-    db.findOneAndUpdate({ _id: req.params.id }, req.body) //route for updating all?
+    db.findOneAndUpdate({ playerName: req.params.playerName }, req.body) //route for updating all?
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
+  // update: function(req, res) {
+  //   console.log("update function in scoresController.js");
+  //   console.log(req.body);
+  //   db.findOneAndUpdate({ _id: req.params.id }, req.body) //route for updating all?
+  //     .then(dbModel => res.json(dbModel))
+  //     .catch(err => res.status(422).json(err));
+  // },
   remove: function(req, res) {
     console.log("remove function in scoresController.js");
     console.log(req.params.id);
