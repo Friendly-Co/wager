@@ -29,15 +29,6 @@ module.exports = {
     console.log("create function in scoresController.js");
     console.log(req.body);
     if (req.body.currentGuess) {
-      console.log("there's a currentGuess here!");
-      console.log("req.params.playerName: ");
-      console.log(req.params.playerName);
-      console.log("req.params.currentGuess: ");
-      console.log(req.params.currentGuess);
-      console.log("req.body: ");
-      console.log(req.body);
-      console.log("req.params: ");
-      console.log(req.params);
       db.findOneAndUpdate(
         { playerName: req.body.playerName },
         { currentGuess: req.body.currentGuess }
