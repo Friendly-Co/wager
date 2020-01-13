@@ -1,3 +1,4 @@
+import "./style.css";
 import React, { Component } from "react";
 import Logo from "../../components/Logo";
 import GuessButtons from "../../components/GuessButtons";
@@ -29,6 +30,7 @@ class User extends Component {
 
     this.socket.on("RECIEVE_MESSAGE", function(data) {});
 
+
     this.sendGuess = ev => {
       // ev.preventDefault();
       this.socket.emit("SEND_MESSAGE", {
@@ -40,6 +42,7 @@ class User extends Component {
       // this.setState({})
     };
   }
+
 
   componentDidMount() {
     username = this.props.match.params.username;
@@ -121,22 +124,30 @@ class User extends Component {
       </tr>
     ));
     return (
-      <div>
-        <Logo />
-        <Score score={this.state.score} />
-        <GuessState onChange={this.sendGuess()} guess={this.state.guess} />
-        <GuessButtons
-          guessUpdate={this.guessUpdate}
-          toggleModalOn={this.toggleModalOn}
-        />
-        <LeaderModal
-          username={this.state.username}
-          score={this.state.score}
-          show={this.state.setModalShow}
-          leaderboard={tableBody}
-          onHide={() => this.toggleModalOff()}
-        />
-        {/* <CorrectModal
+
+        <div>
+            <Logo/>
+            <Score
+                user={this.state.username}
+                score={this.state.score}
+            />
+            <GuessState
+                onChange={this.sendGuess()} 
+                guess={this.state.guess}
+            />
+            <GuessButtons
+            guessUpdate={this.guessUpdate}
+            toggleModalOn={this.toggleModalOn}
+            />
+            <LeaderModal
+            username={this.state.username}
+            score={this.state.score}
+            show={this.state.setModalShow}
+            leaderboard={tableBody}
+            onHide={() => this.toggleModalOff()}
+            />
+            {/* <CorrectModal
+
             score={this.state.score}
             show={this.state.setModalShow}
             onHide={() => this.toggleModalOff()}

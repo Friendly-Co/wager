@@ -1,6 +1,6 @@
 import React from "react";
 import "./style.css";
-import photo from "../../friendlybanner.png";
+import photo from "../../img/FWlogo@2x.png";
 
 function Logo() {
     return(

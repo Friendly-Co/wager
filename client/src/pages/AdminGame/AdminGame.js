@@ -9,26 +9,27 @@ class AdminGame extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      scoreSeed: []
-      // answer: ""
-      // currentGuess: ""
+      scoreSeed: [],
+      answer: "",
+      currentGuess: ""
     };
 
     this.socket = io("localhost:3001");
 
     //when socket receives a current bet from a user, update the scoreSeed state
     this.socket.on("RECIEVE_MESSAGE", function(data) {
-      console.log(data);
 
       //if there is a currentGuess, render to the page- may need to change
       if (data.currentGuess !== " " && data.playerName !== " ") {
         //bug - without the data.currentGuess !== " " statement, it renders empty cards on page load- as a result, we cannot empty the currentGuess display
         addUserInfo(data);
+        console.log("the guess " + data.currentGuess +  " came from user " + data.username );
+
       }
     });
 
     const addUserInfo = data => {
-      console.log(data); // {playerName: "Tarzan", currentGuess: " "}
+      // console.log(data); // {playerName: "Tarzan", currentGuess: " "}
       this.setState(state => {
         var playerIndex = -1;
         var alreadyHere = false;
