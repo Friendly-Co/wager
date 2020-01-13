@@ -19,7 +19,7 @@ io.on('connection', (socket) => {
   
   // we should see this printed out whenever we have
   // a successful connection
-  // console.log()
+  console.log()
 
   socket.on('SEND_MESSAGE', function(data) {
     io.emit("RECIEVE_MESSAGE", data);
@@ -29,7 +29,7 @@ io.on('connection', (socket) => {
   // Our clientside should be able to see
   // this and print it out in the console
 
-  io.emit("chat", "this is the message from the server");
+  // io.emit("chat", "this is the message from the server");
 
 
 

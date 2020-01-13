@@ -1,3 +1,4 @@
+import "./style.css";
 import React, { Component } from "react";
 import Logo from "../../components/Logo";
 import GuessButtons from "../../components/GuessButtons";
@@ -31,7 +32,7 @@ class User extends Component {
 
     this.socket.on("RECIEVE_MESSAGE", function(data) {});
 
-    this.sendGuess = ev => {
+    this.sendGuess = () => {
         // ev.preventDefault();
         this.socket.emit('SEND_MESSAGE', {
             username: this.state.username,
@@ -127,6 +128,7 @@ render() {
         <div>
             <Logo/>
             <Score
+                user={this.state.username}
                 score={this.state.score}
             />
             <GuessState
