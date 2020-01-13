@@ -1,68 +1,63 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Just a Friendly Wager
 
-## Available Scripts
+## Getting Started
 
-In the project directory, you can run:
+Google Books is a web app that lets users search for books by title and save/delete books for future reference. It was built with React, MongoDB, Mongoose, Node, and Express.
 
-### `npm start`
+![demo](relative link to gif)
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+For a demo of the app, visit: <>
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+### Prerequisites
 
-### `npm test`
+To download and test this app, you will need the Node Packet Manager installed.  For more information, visit: <https://www.npmjs.com/get-npm>
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+You will also need Node.js installed.  For more information, visit <https://nodejs.org/en/download/>
 
-### `npm run build`
+Finally, you will need MongoDB installed. For more information, visit <https://www.mongodb.com/download-center>
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Installing
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+To install, access the Github page <https://github.com/itsgoodtobegrant/project3>.  You may fork the repository and then clone it to your computer.  
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Next, you will need to download the required NPM packages.  The required NPM packages include:
+```
+    "axios": "^0.18.1",
+    "express": "^4.17.1",
+    "if-env": "^1.0.4",
+    "mongoose": "^5.3.16",
+    "socket.io": "^2.3.0"
+```
+Because these packages are listed as dependencies already in the package.json file, you may install these packages by typing `npm install` on the commandline.
 
-### `npm run eject`
+You will also need MongoDB installed for your database <https://www.mongodb.com/download-center>
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Your app should now be ready for testing and then deployment.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Then, To use this app on your local device, run the backend with the following command on the command line:
+```
+node server.js
+```
+OR, run the frontend with the following command on the command line:
+```
+npm start
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Then go to the following URL in your browser: `localhost:3000`
+You should be able to enter your unique username, store it to the database, and got to the game page.
 
-## Learn More
+## Deployment and General Use
+This app can be deployed to a server, such as Heroku or AWS, for online use from different users in different locations. To store data input, you will need to utilize an online database, such as the `JawsDB` add-on offered by Heroku.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Built With
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+* Javascript
+* React
+* Socket.io
+* Bootstrap Framework
+* MongoDB
 
-### Code Splitting
+## Authors
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+> Grant Bowen [@itsgoodtobegrant](https://github.com/itsgoodtobegrant) , Taylor Ellis [@teelis20](https://github.com/teellis20), Sarah Arnold [@digipet007](https://github.com/digipet007)
