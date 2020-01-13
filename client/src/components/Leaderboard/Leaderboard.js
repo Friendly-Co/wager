@@ -9,9 +9,9 @@ class Leaderboard extends Component {
     super(props);
 
     this.state = {
-      scores: [],
+      dbScores: [],
       user: "",
-      currentGuess: props.currentGuess,
+      // currentGuess: props.currentGuess,
       scoreSeed: props.scoreSeed
     };
 
@@ -45,61 +45,6 @@ class Leaderboard extends Component {
   // this.loadScores();
   // }
 
-  // Loads all  and sets them to this.state.scores
-  // loadScores = () => {
-  // API.getScores()
-  //   .then(res =>
-  //     this.setState({
-  //       scores: res.data
-  //     })
-  //   )
-  //   .catch(err => console.log(err));
-  //   this.setState({
-  //     scoreSeed: [
-  //       {
-  //         playerName: "Annabelle",
-  //         currScore: 35,
-  //         currentGuess: "Run"
-  //       },
-  //       {
-  //         playerName: "Jose",
-  //         currScore: 70,
-  //         currentGuess: "Run"
-  //       },
-  //       {
-  //         playerName: "Elli",
-  //         currScore: 30,
-  //         currentGuess: "Run"
-  //       },
-  //       {
-  //         playerName: "Roland",
-  //         currScore: 75,
-  //         currentGuess: "Pass"
-  //       },
-  //       {
-  //         playerName: "Denisha",
-  //         currScore: 41,
-  //         currentGuess: "Run"
-  //       },
-  //       {
-  //         playerName: "John",
-  //         currScore: 31,
-  //         currentGuess: "Run"
-  //       },
-  //       {
-  //         playerName: "Maria",
-  //         currScore: 15,
-  //         currentGuess: "Turnover"
-  //       },
-  //       {
-  //         playerName: "Luz",
-  //         currScore: 50,
-  //         currentGuess: "Turnover"
-  //       }
-  //     ]
-  //   });
-  // };
-
   // Deletes a score from the database with a given id, then reloads scores from the db
   // deletePlayer = id => {
   // API.deletePlayer(id)
@@ -116,18 +61,34 @@ class Leaderboard extends Component {
   // };
   // Deletes all scores from the database, then reloads scores from the db
 
-  loadScores = () => {
+  componentDidMount() {
+    this.getFromDb();
+  }
+
+  getFromDb = () => {
+    console.log("this.props.scoreSeed: ");
+    console.log(this.props.scoreSeed);
+    // if (!this.props.scoreSeed.length) {
+    console.log("not this.props.scoreseed");
+    // loadScores = () => {
     API.getScores()
       .then(res => {
-        return res;
-        // if (res.length) {
-        //   return true;
-        // } else {
-        //   return false;
-        // }
+        console.log(res);
+        this.setState({ dbScores: res.data });
+        console.log(this.state.dbScores);
       })
       .catch(err => console.log(err));
+    // };
+    // }
   };
+
+  // whereToGrabData = () => {
+  //   this.getFromDb();
+  //   const getFromSocket = true;
+  //   if (!this.props.scoreSeed.length) {
+  //     getFromSocket = false;
+  //   }
+  // };
 
   render(props) {
     return (
@@ -137,21 +98,11 @@ class Leaderboard extends Component {
           Delete All
         </DeleteBtn>
         <div className="container">
-          {/* {this.state.scoreSeed.length ? ( */}
           {this.props.scoreSeed.length ? (
             <List>
-              {(this.props.scoreSeed || this.loadScores).map(score => {
-                // needs to load from database if empty array!!!!!!!!
-                // {
-                /* {props.scoreSeed.map(score => { */
-                // }
+              {this.props.scoreSeed.map(score => {
                 return (
-                  // <ListItem key={score._id}>
                   <ListItem key={score.playerName}>
-                    {/* <DeleteBtn onClick={() => this.deletePlayer(score._id)}> */}
-                    {/* <DeleteBtn onClick={() => this.deletePlayer(scoreSeed)}>
-                      Delete Player
-                    </DeleteBtn> */}
                     <strong>
                       <h3>{score.playerName}</h3>
                       <p>Current Score: {score.currScore}</p>
@@ -162,9 +113,25 @@ class Leaderboard extends Component {
               })}
             </List>
           ) : (
-            <h3>No Scores to Display</h3>
+            <List>
+              {/* bug: CONSTANTLY updates and calls database while scoreSeeds is empty */}
+              {this.getFromDb()}
+              {this.state.dbScores.map(score => {
+                return (
+                  <ListItem key={score.playerName}>
+                    <strong>
+                      <h3>{score.playerName}</h3>
+                      <p>Current Score: {score.currScore}</p>
+                      <p>Current Guess: {score.currentGuess}</p>
+                    </strong>
+                  </ListItem>
+                );
+              })}
+            </List>
           )}
         </div>
+        {/* <h3>No Scores to Display</h3>  */}
+        {/* can't do nested ternary opertor to show this- how to render? */}
       </div>
     );
   }
