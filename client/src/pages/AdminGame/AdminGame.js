@@ -18,7 +18,8 @@ class AdminGame extends Component {
 
     this.socket.on("RECIEVE_MESSAGE", function(data) {
       //if there is a currentGuess, render to the page- may need to change
-      if (data.currentGuess !== " ") {
+      if (data.currentGuess !== " " && data.playerName !== " ") {
+        //bug - without the data.currentGuess !== " " statement, it renders empty cards on page load- as a result, we cannot empty the currentGuess display
         addUserInfo(data);
         console.log(data);
       }
@@ -26,35 +27,36 @@ class AdminGame extends Component {
 
     const addUserInfo = data => {
       console.log(data); // {playerName: "Tarzan", currentGuess: " "}
-      // this.setState({ currentGuess: data.currentGuess, data }); // here
       this.setState(state => {
         var playerIndex = -1;
-        const alreadyHere = function() {
-          for (let i = 0; i < state.scoreSeed.length; i++) {
-            if (state.scoreSeed[i].playerName == data.playerName) {
-              playerIndex = i;
-              console.log("these names are matching!");
-              return true;
-            } else {
-              console.log("hey these names don't match");
-              return false;
-            }
+        var alreadyHere = false;
+        for (let i = 0; i < state.scoreSeed.length; i++) {
+          // console.log("state.scoreSeed[i].playerName: ");
+          // console.log(state.scoreSeed[i].playerName);
+          // console.log("data.playerName: ");
+          // console.log(data.playerName);
+          if (state.scoreSeed[i].playerName == data.playerName) {
+            //malfunctions if you use === - It behaves like the data types are different, when they SHOULD both be strings
+            playerIndex = i;
+            console.log("these names are matching!");
+            alreadyHere = true;
+          } else {
+            console.log("hey these names don't match");
+            alreadyHere = false;
           }
-        };
-        if (!alreadyHere()) {
-          var scoreSeed = state.scoreSeed.concat(data);
+        }
+        if (!alreadyHere) {
+          const scoreSeed = state.scoreSeed.concat(data);
           return { scoreSeed };
         } else {
           var scoreSeed = state.scoreSeed;
-          scoreSeed[playerIndex].currentGuess = data.currentGuess; //needs to be immutable- check!
-
+          scoreSeed[playerIndex].currentGuess = data.currentGuess; //needs to be immutable
           console.log("playerIndex: ");
           console.log(playerIndex);
-          return scoreSeed;
+          playerIndex = -1;
+          return { scoreSeed };
         }
       });
-      // console.log(this.state.currentGuess);
-      // }
     };
 
     this.sendUserInfo = ev => {
@@ -68,32 +70,6 @@ class AdminGame extends Component {
       // console.log({ currentGuess });
     };
   }
-
-  // componentDidMount() {
-  //   this.loadScores();
-  // }
-
-  // loadScores = () => {
-  //   this.setState({
-  //     scoreSeed: [
-  //       {
-  //         playerName: "Annabelle",
-  //         currScore: 35,
-  //         currentGuess: "Run"
-  //       },
-  //       {
-  //         playerName: "Jose",
-  //         currScore: 70,
-  //         currentGuess: "Run"
-  //       },
-  //       {
-  //         playerName: "Luz",
-  //         currScore: 50,
-  //         currentGuess: "Turnover"
-  //       }
-  //     ]
-  //   });
-  // };
 
   haltBets = () => {
     console.log("halt bets button pressed");
@@ -117,8 +93,9 @@ class AdminGame extends Component {
   };
 
   deleteAllPlayers = () => {
+    //function does not work as is.
     API.deleteAllPlayers()
-      .then(res => this.loadScores()) //Bug: deletes all, but does not reload
+      .then(res => this.setState({ scoreSeed: [] })) //Bug: completely breaks
       .catch(err => console.log(err));
     console.log("deletingggggg");
   };
