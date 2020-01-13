@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import API from "../../utils/API";
 import { FormBtn, Input } from "../../components/Form";
+import Logo from "../../components/Logo";
 
 class Login extends Component {
   // Setting our component's initial state
@@ -53,6 +54,7 @@ class Login extends Component {
   render() {
     return (
       <div className="container">
+        <Logo />
         <form className="form-inline">
           <Input
             value={this.state.username}
