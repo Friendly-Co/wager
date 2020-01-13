@@ -77,7 +77,7 @@ class AdminGame extends Component {
 
   handleAnswer = value => {
     console.log(value);
-    API.getScores()
+    API.saveScore()
       .then(res => {
         //grab data and send in new route back to server.  Complete calculations there and then return the scores, assignt to scoreSeeds
         // console.log(res.data);

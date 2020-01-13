@@ -113,7 +113,7 @@ class User extends Component {
     API.saveScore(toSave)
       .then(res =>
         this.setState({
-          score: 55
+          score: 55 //need to change
         })
       )
       .catch(err => console.log(err));
