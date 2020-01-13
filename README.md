@@ -2,7 +2,7 @@
 
 ## Getting Started
 
-Google Books is a web app that lets users search for books by title and save/delete books for future reference. It was built with React, MongoDB, Mongoose, Node, and Express.
+Just a Friendly Wager is a betting app, which allows users to login and bet on future events.
 
 ![demo](relative link to gif)
 
