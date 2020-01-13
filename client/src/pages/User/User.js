@@ -1,20 +1,21 @@
-import React, { Component } from "react"
-import Logo from "../../components/Logo"
+import React, { Component } from "react";
+import Logo from "../../components/Logo";
 import GuessButtons from "../../components/GuessButtons";
 import GuessState from "../../components/GuessState";
 import Score from "../../components/Score";
 import API from "../../utils/API";
-import io from 'socket.io-client';
 import LeaderModal from "../../components/LeaderModal/LeaderModal";
 import CorrectModal from "../../components/CorrectModal/CorrectModal";
 import HaltModal from "../../components/HaltModal/HaltModal";
+import io from "socket.io-client";
 
-let guess = " "
+let guess = " ";
 let score;
 let username;
 let tempboard = [];
 
 class User extends Component {
+
     constructor(props){
         super(props);
         this.state = {
@@ -23,13 +24,12 @@ class User extends Component {
         username,
         setModalShow: false,
         leaderboard: []
+
     };
 
-    this.socket = io('localhost:3001');
+    this.socket = io("localhost:3001");
 
-    this.socket.on('RECIEVE_MESSAGE', function(data) {
-
-    });
+    this.socket.on("RECIEVE_MESSAGE", function(data) {});
 
     this.sendGuess = ev => {
         ev.preventDefault();
@@ -92,6 +92,25 @@ toggleModalOff = () => {
     this.setState({setModalShow: false})
 };
 
+  // function that updates guess state with onClick
+  guessUpdate = value => {
+    this.setState({
+      guess: value
+    });
+    // this.sendGuess = ev => {
+    //     ev.preventDefault();
+    //     this.socket.emit('SEND_MESSAGE', {
+    //         name: username,
+    //         currentGuess: this.state.guess,
+    //     });
+    //     this.setState({ guess: ''});
+    //     this.setState({})
+    // };
+    console.log({
+      name: username,
+      guess: value
+    });
+  };
 
 render() {
     const sortedLeaderboard = this.state.leaderboard;
@@ -134,7 +153,6 @@ render() {
         </div>
     )
 }
-
 }
 
 export default User;
