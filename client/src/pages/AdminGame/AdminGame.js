@@ -18,11 +18,12 @@ class AdminGame extends Component {
 
     //when socket receives a current bet from a user, update the scoreSeed state
     this.socket.on("RECIEVE_MESSAGE", function(data) {
+      console.log(data);
+
       //if there is a currentGuess, render to the page- may need to change
       if (data.currentGuess !== " " && data.playerName !== " ") {
         //bug - without the data.currentGuess !== " " statement, it renders empty cards on page load- as a result, we cannot empty the currentGuess display
         addUserInfo(data);
-        // console.log(data);
       }
     });
 
@@ -33,7 +34,7 @@ class AdminGame extends Component {
         var alreadyHere = false;
         for (let i = 0; i < state.scoreSeed.length; i++) {
           //bug- rendering some user bets twice
-          if (state.scoreSeed[i].playerName == data.playerName) {
+          if (state.scoreSeed[i].playerName === data.playerName) {
             //both if statements are firing??
             //malfunctions if you use === - It behaves like the data types are different, when they SHOULD both be strings
             playerIndex = i;
@@ -64,7 +65,7 @@ class AdminGame extends Component {
         user: this.state.scoreSeed.user,
         currentGuess: this.state.scoreSeed.currentGuess
       });
-      // this.setState({ currentGuess: "" });
+      this.setState({ currentGuess: "" });
       // this.setState({});
     };
   }

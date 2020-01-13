@@ -5,8 +5,8 @@ import GuessState from "../../components/GuessState";
 import Score from "../../components/Score";
 import API from "../../utils/API";
 import LeaderModal from "../../components/LeaderModal/LeaderModal";
-import CorrectModal from "../../components/CorrectModal/CorrectModal";
-import HaltModal from "../../components/HaltModal/HaltModal";
+// import CorrectModal from "../../components/CorrectModal/CorrectModal";
+// import HaltModal from "../../components/HaltModal/HaltModal";
 import io from "socket.io-client";
 
 let guess = " ";
@@ -34,10 +34,12 @@ class User extends Component {
     this.sendGuess = ev => {
         ev.preventDefault();
         this.socket.emit('SEND_MESSAGE', {
+            username: this.state.username,
             currentGuess: this.state.guess,
         });
         this.setState({guess: ''});
-        this.setState({})
+        console.log(guess);
+        // this.setState({})
     }
 }
 
@@ -49,7 +51,7 @@ componentDidMount() {
     console.log(username);
     this.loadScore();
     this.loadLeaderboard();
-    console.log(this.state.score);
+    console.log("This is from Grant");
   }
 
     

@@ -69,8 +69,8 @@ class Leaderboard extends Component {
             </List>
           ) : (
             <List>
-              {/* bug: CONSTANTLY updates and calls database while scoreSeeds is empty */}
-              {this.getFromDb()}
+              {/* bug: CONSTANTLY updates and calls database while scoreSeeds is empty
+              {this.getFromDb()} */}
               {this.state.dbScores.map(score => {
                 return (
                   <ListItem key={score.playerName}>
