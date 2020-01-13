@@ -5,18 +5,24 @@ import GuessState from "../../components/GuessState";
 import Score from "../../components/Score";
 import API from "../../utils/API";
 import io from 'socket.io-client';
+import LeaderModal from "../../components/LeaderModal/LeaderModal";
+import CorrectModal from "../../components/CorrectModal/CorrectModal";
+import HaltModal from "../../components/HaltModal/HaltModal";
 
 let guess = " "
 let score;
 let username;
+let tempboard = [];
 
 class User extends Component {
     constructor(props){
         super(props);
-    this.state = {
+        this.state = {
         score,
         guess,
-        username
+        username,
+        setModalShow: false,
+        leaderboard: []
     };
 
     this.socket = io('localhost:3001');
@@ -35,12 +41,17 @@ class User extends Component {
     }
 }
 
+componentDidMount() {
+    username = this.props.match.params.username;
+    this.setState({
+        username: username
+    })
+    console.log(username);
+    this.loadScore();
+    this.loadLeaderboard();
+    console.log(this.state.score);
+  }
 
-    componentDidMount() {
-        username = this.props.match.params.username;
-        console.log(username);
-        this.loadScore();
-      }
     
       // Loads score and sets them to this.state.scores
       loadScore = () => {
@@ -53,15 +64,44 @@ class User extends Component {
           .catch(err => console.log(err));
       };
 
+      loadLeaderboard = () => {
+        API.getScores()
+        .then(res => {
+            tempboard = [];
+            for (let i = 0; i < 10; i++) {
+                // console.log(res.data[i]);
+              tempboard.push(res.data[i]);
+            }
+            this.setState({leaderboard: tempboard})
+            console.log(this.state.leaderboard);
+        })
+          .catch(err => console.log(err));  
+    }
+
     // function that updates guess state with onClick
 guessUpdate = (value) => {
     this.setState({ guess: value});
 };
 
+toggleModalOn = () => {
+    this.loadLeaderboard();
+    this.setState({setModalShow: true});
+};
 
+toggleModalOff = () => {
+    this.setState({setModalShow: false})
+};
 
 
 render() {
+    const sortedLeaderboard = this.state.leaderboard;
+    const tableBody = sortedLeaderboard.map((player, index) => (
+        <tr key={player._id}>
+            <td>{index + 1} </td>
+            <td>{player.playerName} </td>
+            <td>{player.currScore} </td>
+        </tr>
+    ));
     return (
         <div>
             <Logo/>
@@ -73,7 +113,24 @@ render() {
             />
             <GuessButtons
             guessUpdate={this.guessUpdate}
+            toggleModalOn={this.toggleModalOn}
             />
+            <LeaderModal
+            username={this.state.username}
+            score={this.state.score}
+            show={this.state.setModalShow}
+            leaderboard={tableBody}
+            onHide={() => this.toggleModalOff()}
+            />
+            {/* <CorrectModal
+            score={this.state.score}
+            show={this.state.setModalShow}
+            onHide={() => this.toggleModalOff()}
+            /> */}
+            {/* <HaltModal 
+            show={this.state.setModalShow}
+            onHide={() => this.toggleModalOff()}
+            /> */}
         </div>
     )
 }

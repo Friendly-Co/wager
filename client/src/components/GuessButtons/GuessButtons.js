@@ -24,14 +24,16 @@ function GuessButtons(props) {
         </div>
         <div className="guessButton" onClick={() => {
             // insert onclick functions here
-            props.guessUpdate("TURNOVER");
+            // props.guessUpdate("TURNOVER");
+            props.toggleModalOn();
 
         }}>
             <button value="TURNOVER" id="turnoverBttn">Turnover</button>
         </div>
         <div className="guessButton" onClick={() => {
             // insert onclick functions here
-            
+            props.toggleModalOn();
+            console.log("leaderboard clicked");
 
         }}>
             <button id="leaderboardBttn">Leaderboard</button>
