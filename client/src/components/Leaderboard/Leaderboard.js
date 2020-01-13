@@ -45,7 +45,7 @@ class Leaderboard extends Component {
   // this.loadScores();
   // }
 
-  // Loads all books  and sets them to this.state.scores
+  // Loads all  and sets them to this.state.scores
   // loadScores = () => {
   // API.getScores()
   //   .then(res =>
@@ -116,6 +116,19 @@ class Leaderboard extends Component {
   // };
   // Deletes all scores from the database, then reloads scores from the db
 
+  loadScores = () => {
+    API.getScores()
+      .then(res => {
+        return res;
+        // if (res.length) {
+        //   return true;
+        // } else {
+        //   return false;
+        // }
+      })
+      .catch(err => console.log(err));
+  };
+
   render(props) {
     return (
       <div>
@@ -127,7 +140,8 @@ class Leaderboard extends Component {
           {/* {this.state.scoreSeed.length ? ( */}
           {this.props.scoreSeed.length ? (
             <List>
-              {(this.props.scoreSeed || []).map(score => {
+              {(this.props.scoreSeed || this.loadScores).map(score => {
+                // needs to load from database if empty array!!!!!!!!
                 // {
                 /* {props.scoreSeed.map(score => { */
                 // }
@@ -139,7 +153,7 @@ class Leaderboard extends Component {
                       Delete Player
                     </DeleteBtn> */}
                     <strong>
-                      <h3>{score.player}</h3>
+                      <h3>{score.playerName}</h3>
                       <p>Current Score: {score.currScore}</p>
                       <p>Current Guess: {score.currentGuess}</p>
                     </strong>
