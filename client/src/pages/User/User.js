@@ -118,6 +118,7 @@ class User extends Component {
       )
       .catch(err => console.log(err));
   };
+
   render() {
     const sortedLeaderboard = this.state.leaderboard;
     const tableBody = sortedLeaderboard.map((player, index) => (
