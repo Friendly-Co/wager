@@ -15,6 +15,11 @@ router
   .put(scoresController.update)
   .delete(scoresController.remove);
 
+// Matches with "/api/scores/guess/:playerName" this is the id of the player
+// router
+//   .route("/playerName/:playerName/currentGuess/:currentguess")  //cannot...
+//   .put(scoresController.update);
+
 router
   .route("/score/:playerName")
   .get(scoresController.findByName)

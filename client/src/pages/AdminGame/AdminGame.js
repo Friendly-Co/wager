@@ -76,15 +76,21 @@ class AdminGame extends Component {
     // io.socket.off();  //does not work yet
   };
 
+  //send house answer and player guesses to the server for calculation
   handleAnswer = value => {
+    const houseAnswer = { answer: value };
+    const toSend = this.state.scoreSeed.concat(houseAnswer);
     console.log(value);
-    API.getScores()
+    console.log(value);
+    API.saveScore(toSend)
       .then(res => {
         //grab data and send in new route back to server.  Complete calculations there and then return the scores, assignt to scoreSeeds
         // console.log(res.data);
         // this.setState({
         //   scores: res.data
         // })
+        // console.log(res);
+        API.getScores().then(response => console.log(response));
       })
       .catch(err => console.log(err));
     // this.setState({ answer: value });

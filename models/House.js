@@ -16,7 +16,8 @@ const gameSchema = new Schema({
   },
   currScore: { type: Number, default: 50 },
   date: { type: Date, default: Date.now },
-  currentGuess: { type: Number, default: 5}
+  currentGuess: { type: String }
+  // currentGuess: { type: Number, default: 5}
 
   // players: [
   //   {
