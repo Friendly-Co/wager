@@ -95,10 +95,12 @@ class AdminGame extends Component {
   };
 
   deleteAllPlayers = () => {
-    //function does not work as is.
-    API.deleteAllPlayers()
-      .then(res => this.setState({ scoreSeed: [] })) //Bug: completely breaks
-      .catch(err => console.log(err));
+    //function does not work as is. Shows up as undefined in Leaderboard.js line 52
+    API.deleteAllPlayers().then(res => {
+      this.setState(state => {
+        state.scoreSeed = [];
+      }); //Bug: completely breaks
+    });
     console.log("deletingggggg");
   };
 
