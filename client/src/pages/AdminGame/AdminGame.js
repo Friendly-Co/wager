@@ -84,22 +84,30 @@ class AdminGame extends Component {
     const toSend = this.state.scoreSeed.concat(houseAnswer);
     console.log(value);
     console.log(value);
-    API.saveScore(toSend)
-      .then(res => {
-        // console.log(res.data);
-        console.log("after that, ...");
-        API.getScores().then(response => {
-          console.log("here is your data :");
-          console.log(response.data);
-          //   this.setState(state => {
-          //     var scoreSeed = state.scoreSeed;
-          //     scoreSeed = response.data; //Note: updating state of array needs to be immutable
-          // });
-        });
-      })
-      .catch(err => console.log(err));
+    // new Promise(function(resolve, reject) {
+    API.saveScore(toSend);
+    // .then(function(res) {
+    //   console.log("scores saved: ");
+    //   console.log("after that, ...");
+    //   return res.data;
+    // })
+    // .catch(err => console.log(err))
+    // .then(function() {
+    // return
+    API.getScores().then(response => {
+      console.log("here is your data :");
+      console.log(response.data);
+      // this.setState(state => {
+      //   var scoreSeed = state.scoreSeed;
+      //   scoreSeed = response.data; //Note: updating state of array needs to be immutable
+      // });
+    });
+    // });
+    // .catch(err => console.log(err));
+    // resolve(result);
     // this.setState({ answer: value });
     // console.log(this.state.scoreSeed); //undefined
+    // });
   };
 
   deleteAllPlayers = () => {
