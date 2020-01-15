@@ -30,7 +30,6 @@ class User extends Component {
 
     this.socket.on("RECIEVE_MESSAGE", function(data) {});
 
-
     this.sendGuess = ev => {
       // ev.preventDefault();
       this.socket.emit("SEND_MESSAGE", {
@@ -38,11 +37,11 @@ class User extends Component {
         currentGuess: this.state.guess
       });
       // this.setState({guess: ''});
-      console.log(guess);
+      console.log(this.state.username);
+      console.log(this.state.guess);
       // this.setState({})
     };
   }
-
 
   componentDidMount() {
     username = this.props.match.params.username;
@@ -123,38 +122,36 @@ class User extends Component {
   };
 
   render() {
-    const sortedLeaderboard = this.state.leaderboard;
-    const tableBody = sortedLeaderboard.map((player, index) => (
-      <tr key={player._id}>
-        <td>{index + 1} </td>
-        <td>{player.playerName} </td>
-        <td>{player.currScore} </td>
-      </tr>
-    ));
+    var tableBody;
+    if (this.state.sortedLeaderboard) {
+      const sortedLeaderboard = this.state.leaderboard;
+      tableBody = sortedLeaderboard.map((player, index) => (
+        <tr key={player._id}>
+          <td>{index + 1} </td>
+          <td>{player.playerName} </td>
+          <td>{player.currScore} </td>
+        </tr>
+      ));
+    } else {
+      tableBody = "No Scores to Display";
+    }
     return (
-
-        <div>
-            <Logo/>
-            <Score
-                user={this.state.username}
-                score={this.state.score}
-            />
-            <GuessState
-                onChange={this.sendGuess()} 
-                guess={this.state.guess}
-            />
-            <GuessButtons
-            guessUpdate={this.guessUpdate}
-            toggleModalOn={this.toggleModalOn}
-            />
-            <LeaderModal
-            username={this.state.username}
-            score={this.state.score}
-            show={this.state.setModalShow}
-            leaderboard={tableBody}
-            onHide={() => this.toggleModalOff()}
-            />
-            {/* <CorrectModal
+      <div>
+        <Logo />
+        <Score user={this.state.username} score={this.state.score} />
+        <GuessState onChange={this.sendGuess()} guess={this.state.guess} />
+        <GuessButtons
+          guessUpdate={this.guessUpdate}
+          toggleModalOn={this.toggleModalOn}
+        />
+        <LeaderModal
+          username={this.state.username}
+          score={this.state.score}
+          show={this.state.setModalShow}
+          leaderboard={tableBody}
+          onHide={() => this.toggleModalOff()}
+        />
+        {/* <CorrectModal
 
             score={this.state.score}
             show={this.state.setModalShow}
