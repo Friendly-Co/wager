@@ -59,7 +59,7 @@ class User extends Component {
     API.getPlayerScore(username)
       .then(res =>
         this.setState({
-          score: res.data[0].currScore
+          score: res.data.currScore
         })
       )
       .catch(err => console.log(err));
@@ -115,7 +115,7 @@ class User extends Component {
     API.saveScore(toSave)
       .then(res =>
         this.setState({
-          score: 55 //need to change
+          score: res.data.currScore
         })
       )
       .catch(err => console.log(err));
