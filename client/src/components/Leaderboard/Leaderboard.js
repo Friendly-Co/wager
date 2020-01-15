@@ -23,27 +23,18 @@ class Leaderboard extends Component {
   getFromDb = () => {
     console.log("this.props.scoreSeed: ");
     console.log(this.props.scoreSeed);
-    // if (!this.props.scoreSeed.length) {
-    console.log("not from this.props.scoreseed");
-    // loadScores = () => {
-    API.getScores()
-      .then(res => {
-        console.log(res);
-        this.setState({ dbScores: res.data });
-        console.log(this.state.dbScores);
-      })
-      .catch(err => console.log(err));
-    // };
-    // }
+    console.log("this.props.scoreSeed,length: ");
+    console.log(this.props.scoreSeed.length);
+    if (!this.props.scoreSeed.length) {
+      API.getScores()
+        .then(res => {
+          console.log(res);
+          this.setState({ dbScores: res.data });
+          console.log(this.state.dbScores);
+        })
+        .catch(err => console.log(err));
+    }
   };
-
-  // whereToGrabData = () => {
-  //   this.getFromDb();
-  //   const getFromSocket = true;
-  //   if (!this.props.scoreSeed.length) {
-  //     getFromSocket = false;
-  //   }
-  // };
 
   render(props) {
     return (
@@ -60,6 +51,7 @@ class Leaderboard extends Component {
                   <ListItem key={score.playerName}>
                     <strong>
                       <h3>{score.playerName}</h3>
+                      <h2>rendering from props</h2>
                       <p>Current Score: {score.currScore}</p>
                       <p>Current Guess: {score.currentGuess}</p>
                     </strong>
@@ -69,13 +61,12 @@ class Leaderboard extends Component {
             </List>
           ) : (
             <List>
-              {/* bug: CONSTANTLY updates and calls database while scoreSeeds is empty
-              {this.getFromDb()} */}
               {this.state.dbScores.map(score => {
                 return (
                   <ListItem key={score.playerName}>
                     <strong>
                       <h3>{score.playerName}</h3>
+                      <h2>rendering from db</h2>
                       <p>Current Score: {score.currScore}</p>
                       <p>Current Guess: {score.currentGuess}</p>
                     </strong>
