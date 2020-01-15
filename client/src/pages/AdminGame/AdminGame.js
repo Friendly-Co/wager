@@ -18,13 +18,16 @@ class AdminGame extends Component {
 
     //when socket receives a current bet from a user, update the scoreSeed state
     this.socket.on("RECIEVE_MESSAGE", function(data) {
-
       //if there is a currentGuess, render to the page- may need to change
       if (data.currentGuess !== " " && data.playerName !== " ") {
         //bug - without the data.currentGuess !== " " statement, it renders empty cards on page load- as a result, we cannot empty the currentGuess display
         addUserInfo(data);
-        console.log("the guess " + data.currentGuess +  " came from user " + data.username );
-
+        console.log(
+          "the guess " +
+            data.currentGuess +
+            " came from user " +
+            data.playerName
+        );
       }
     });
 
@@ -33,21 +36,20 @@ class AdminGame extends Component {
       this.setState(state => {
         var playerIndex = -1;
         var alreadyHere = false;
+        //make sure we only update current players's guesses
         for (let i = 0; i < state.scoreSeed.length; i++) {
-          //bug- rendering some user bets twice
-          if (state.scoreSeed[i].playerName === data.playerName) {
-            //both if statements are firing??
+          if (state.scoreSeed[i].playerName == data.playerName) {
             //malfunctions if you use === - It behaves like the data types are different, when they SHOULD both be strings
             playerIndex = i;
             console.log("these names are matching!");
             alreadyHere = true;
             break;
-            // return;
           } else {
             console.log("hey these names don't match");
             alreadyHere = false;
           }
         }
+        // Create a new card for new player
         if (!alreadyHere) {
           const scoreSeed = state.scoreSeed.concat(data);
           return { scoreSeed };
@@ -84,13 +86,16 @@ class AdminGame extends Component {
     console.log(value);
     API.saveScore(toSend)
       .then(res => {
-        //grab data and send in new route back to server.  Complete calculations there and then return the scores, assignt to scoreSeeds
         // console.log(res.data);
-        // this.setState({
-        //   scores: res.data
-        // })
-        // console.log(res);
-        API.getScores().then(response => console.log(response));
+        console.log("after that, ...");
+        API.getScores().then(response => {
+          console.log("here is your data :");
+          console.log(response.data);
+          //   this.setState(state => {
+          //     var scoreSeed = state.scoreSeed;
+          //     scoreSeed = response.data; //Note: updating state of array needs to be immutable
+          // });
+        });
       })
       .catch(err => console.log(err));
     // this.setState({ answer: value });
