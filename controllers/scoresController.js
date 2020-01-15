@@ -1,4 +1,5 @@
 const db = require("../models/House");
+// const async = require("async");
 
 // Defining methods for the scoresController
 module.exports = {
@@ -28,8 +29,16 @@ module.exports = {
   create: function(req, res) {
     console.log("create function in scoresController.js");
     console.log(req.body);
-    //save guesses
-    if (req.body.currentGuess) {
+    //save login/ username
+    if (!req.body.currentGuess && !(req.body.length > 1)) {
+      //edge case- if only one person votes!!
+      console.log("no guess... this is a new user!");
+      db.create(req.body)
+        .then(dbModel => res.json(dbModel))
+        .catch(err => res.status(422).json(err));
+      //save guesses
+    } else if (req.body.currentGuess) {
+      console.log("nice guess, user!");
       db.findOneAndUpdate(
         { playerName: req.body.playerName },
         { currentGuess: req.body.currentGuess }
@@ -40,62 +49,87 @@ module.exports = {
     }
     // calculate scores and save
     else if (Object.keys(req.body[req.body.length - 1]).includes("answer")) {
-      console.log("this has an answer in here!");
+      console.log("Admin page: this has an answer in here!");
       var answer = req.body.pop();
       answer = answer.answer.toUpperCase();
-      console.log("answer: ");
-      console.log(answer); //Run
-      console.log("req.body: ");
       console.log(req.body); //[ { playerName: 'Dexter', currentGuess: 'PASS' } ]
-      const rightAnswers = req.body.filter(index =>
-        index.currentGuess.includes(answer)
-      );
+      // const rightAnswers = req.body.filter(index =>
+      //   index.currentGuess.includes(answer)
+      // );
+      // const wrongAnswers = req.body.filter(
+      //   index => index.currentGuess !== answer
+      // );
 
-      console.log("rightAnswers: ");
-      console.log(rightAnswers);
-      var toAdd = 0;
+      //should be according to the user's guess, not the answer!
+      var toAddOrSubtract = 0;
+
       switch (answer) {
-        case "RUN" || "PASS":
-          toAdd = 2;
+        case "RUN":
+          toAddOrSubtract = 3;
+          break;
+        case "PASS":
+          toAddOrSubtract = 3;
           break;
         case "KICK":
-          toAdd = 1;
+          toAddOrSubtract = 1;
           break;
         case "TURNOVER":
-          toAdd = 10;
+          toAddOrSubtract = 10;
           break;
         default:
-          toAdd = 0;
+          toAddOrSubtract = 0;
       }
-      console.log("toAdd: ");
-      console.log(toAdd);
+
+      //Subtract 1 from scores when unanswered -this one will only work once I update the DOM with scores
       db.updateMany(
-        { currentGuess: answer },
-        { $inc: { currScore: +toAdd } },
+        { currentGuess: " " },
+        { $inc: { currScore: -1 }, $set: { currentGuess: " " } },
         { multi: true }
       )
-        .then(dbModel => res.json(dbModel))
-        .catch(err => res.status(422).json(err));
-    } else {
-      db.create(req.body)
-        .then(dbModel => res.json(dbModel))
+
+        .then(() => {
+          // increase scores of correct guesses
+          return db.updateMany(
+            { currentGuess: answer },
+            {
+              $inc: { currScore: +toAddOrSubtract },
+              $set: { currentGuess: " " }
+            },
+            { multi: true }
+          );
+        })
+        .then(() => {
+          // if a player answered the question, but incorrectly - will be much more complex if subtracting by player's answer...
+          return db.updateMany(
+            { currentGuess: { $nin: [answer, " "] } },
+            {
+              $inc: { currScore: -toAddOrSubtract },
+              $set: { currentGuess: " " }
+            },
+            { multi: true }
+          );
+        })
+        //breaks the db call??
+        // .then(() => {
+        //   return db
+        //     .find(req.query)
+
+        //     .then(dbModel => {
+        //       // console.log(dbModel);
+        //       res.json(dbModel);
+        //     });
+        // })
+        // .then(dbModel => res.json(dbModel))
         .catch(err => res.status(422).json(err));
     }
   },
   update: function(req, res) {
     console.log("update function in scoresController.js");
     console.log(req.body);
-    db.findOneAndUpdate({ playerName: req.params.playerName }, req.body) //route for updating all?
+    db.findOneAndUpdate({ playerName: req.params.playerName }, req.body)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
-  // update: function(req, res) {
-  //   console.log("update function in scoresController.js");
-  //   console.log(req.body);
-  //   db.findOneAndUpdate({ _id: req.params.id }, req.body) //route for updating all?
-  //     .then(dbModel => res.json(dbModel))
-  //     .catch(err => res.status(422).json(err));
-  // },
   remove: function(req, res) {
     console.log("remove function in scoresController.js");
     console.log(req.params.id);
