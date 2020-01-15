@@ -20,8 +20,9 @@ class AdminGame extends Component {
     //when socket receives a current bet from a user, update the scoreSeed state
     this.socket.on("RECIEVE_MESSAGE", function(data) {
       //if there is a currentGuess, render to the page- may need to change
-      if (data.currentGuess !== " " && data.playerName !== " ") {
-        //bug - without the data.currentGuess !== " " statement, it renders empty cards on page load- as a result, we cannot empty the currentGuess display
+      // if (data.currentGuess !== " " && data.playerName !== " ") {
+      if (data.playerName) {
+        console.log(data.playerName);
         addUserInfo(data);
         console.log(
           "the guess " +
@@ -55,7 +56,7 @@ class AdminGame extends Component {
           const scoreSeed = state.scoreSeed.concat(data);
           return { scoreSeed };
         } else {
-          var scoreSeed = state.scoreSeed;
+          var scoreSeed = [...state.scoreSeed];
           scoreSeed[playerIndex].currentGuess = data.currentGuess; //Note: updating state of array needs to be immutable
           playerIndex = -1;
           return { scoreSeed };
@@ -63,6 +64,7 @@ class AdminGame extends Component {
       });
     };
 
+    //what purpose does this serve?
     this.sendUserInfo = ev => {
       ev.preventDefault();
       this.socket.emit("SEND_MESSAGE", {
@@ -83,24 +85,44 @@ class AdminGame extends Component {
   handleAnswer = value => {
     const houseAnswer = { answer: value };
     const toSend = this.state.scoreSeed.concat(houseAnswer);
-    console.log(value);
-    console.log(value);
-    API.saveScore(toSend)
-      .then(res => {
-        // console.log(res.data);
-        console.log("after that, ...");
-        API.getScores().then(response => {
-          console.log("here is your data :");
-          console.log(response.data);
-          //   this.setState(state => {
-          //     var scoreSeed = state.scoreSeed;
-          //     scoreSeed = response.data; //Note: updating state of array needs to be immutable
+    // console.log(value);
+    // console.log(value);
+    // new Promise(function(resolve, reject) {
+    API.saveScore(toSend).then(res => {
+      console.log("scores saved");
+      console.log("after that, ...");
+      console.log(res.data);
+      // .then(res => {
+      this.setState(
+        state => {
+          // var scoreSeed = [...state.scoreSeed];
+          // console.log(state.scoreSeed);
+          state.scoreSeed = []; //Note: updating state of array needs to be immutable
           // });
-        });
-      })
-      .catch(err => console.log(err));
+        },
+        function() {
+          this.setState(state => {
+            state.scoreSeed = [...res.data];
+          });
+        }
+      );
+      // });
+    });
+    // .catch(err => console.log(err))
+    // .then(function() {
+    // return
+    // API.getScores().then(response => {
+    //   console.log("here is your data :");
+    //   console.log(response.data); //sometimes returns data too soon- I know because currentGuess should be empty
+    console.log("this.state.scoreSeed is now: ");
+    console.log(this.state.scoreSeed);
+    // });
+    // .catch(err => console.log(err));
+    // resolve(result);
     // this.setState({ answer: value });
     // console.log(this.state.scoreSeed); //undefined
+    // });
+    // });
   };
 
   deleteAllPlayers = () => {
