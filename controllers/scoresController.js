@@ -110,15 +110,15 @@ module.exports = {
           );
         })
         //breaks the db call??
-        // .then(() => {
-        //   return db
-        //     .find(req.query)
+        .then(() => {
+          return db
+            .find({})
 
-        //     .then(dbModel => {
-        //       // console.log(dbModel);
-        //       res.json(dbModel);
-        //     });
-        // })
+            .then(dbModel => {
+              console.log(dbModel);
+              res.json(dbModel);
+            });
+        })
         // .then(dbModel => res.json(dbModel))
         .catch(err => res.status(422).json(err));
     }
