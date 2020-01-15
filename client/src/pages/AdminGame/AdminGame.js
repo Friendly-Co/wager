@@ -1,3 +1,4 @@
+import "./style.css";
 import React, { Component } from "react";
 import Leaderboard from "../../components/Leaderboard";
 import AdminBtns from "../../components/AdminBtns";
@@ -114,15 +115,17 @@ class AdminGame extends Component {
     return (
       <Container fluid>
         <Row>
-          <Col size="md-6">
+          <Col size="md-8">
+            {/* <div className="wrapper"> */}
             <Leaderboard
               scoreSeed={this.state.scoreSeed}
               deleteAllPlayers={this.deleteAllPlayers}
               currentGuess={this.state.currentGuess}
             />
+            {/* </div> */}
           </Col>
 
-          <Col size="md-6">
+          <Col size="md-4">
             <AdminBtns handleAnswer={this.handleAnswer} />
           </Col>
         </Row>

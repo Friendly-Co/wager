@@ -5,8 +5,8 @@
 
 .delete-btn:hover {
   cursor: pointer;
-  /* color: #df0700; */
-  transform: scale(1.50);
+  color: #df0700;
+  transform: scale(1.10);
 }
 
 .delete-btn:active {
