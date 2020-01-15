@@ -35,6 +35,7 @@ class Login extends Component {
                   "This username has been taken. Please enter a unique name."
                 )
               });
+              //clear field
               return false;
             }
           }
@@ -44,11 +45,11 @@ class Login extends Component {
           };
           API.saveScore(toSave).then(
             this.setState({ message: alert("Your username has been saved") })
-            );
-            window.location = "/user/" + this.state.username
+          );
+          window.location = "/user/" + this.state.username;
         })
         .catch(err => console.log(err));
-      }
+    }
   };
 
   render() {
