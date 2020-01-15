@@ -23,12 +23,22 @@ class User extends Component {
       guess,
       username,
       setModalShow: false,
-      leaderboard: []
+      leaderboard: [],
+      scoreSeed: []
     };
 
     this.socket = io("localhost:3001");
 
-    this.socket.on("RECIEVE_MESSAGE", function(data) {});
+    this.socket.on("RECIEVE_MESSAGE", function(data) {
+      console.log("here is the data I got from the admin: ");
+      console.log(data);
+      //here, data immediately passes back after the player makes a guess- the admin does not have to hit anything for it to trigger.
+      //are we passing props here from admin scoreseed? would filtering through that be faster than getting the score from the database?
+      //how can we trigger a message when the admin calculates the score?
+      //possible solution: when currentGuess == " ", then filter through for player info, and render
+      //unfortunately, this will trigger a LOT of API calls, esp in the beginning of the game and between when the admin inputs an answer and before the player chooses the next answer
+      //OR- when the modal pops up with calculated scores, when the player closes the modal, update the score
+    });
 
     this.sendGuess = ev => {
       // ev.preventDefault();
@@ -49,9 +59,10 @@ class User extends Component {
       username: username
     });
     console.log(username);
-    this.loadScore();
+    this.loadScore(); //does not fire on page reload
     this.loadLeaderboard();
-    console.log(this.scoreSeed);
+    // console.log("this.scoreSeed is console logging: ");
+    // console.log(this.scoreSeed); //undefined
   }
 
   // Loads score and sets them to this.state.scores
@@ -110,8 +121,8 @@ class User extends Component {
     this.savePlayerGuess(toSave);
   };
 
+  // function that saves players' guesses to the database
   savePlayerGuess = toSave => {
-    // API.updateGuess(toSave)
     API.saveScore(toSave)
       .then(res =>
         this.setState({

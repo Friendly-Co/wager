@@ -63,15 +63,13 @@ class AdminGame extends Component {
       });
     };
 
-    //what purpose does this serve?
+    //what purpose does this serve? If I move this or remove this, the following functions become undefined
     this.sendUserInfo = ev => {
       ev.preventDefault();
       this.socket.emit("SEND_MESSAGE", {
         user: this.state.scoreSeed.user,
         currentGuess: this.state.scoreSeed.currentGuess
       });
-      this.setState({ currentGuess: "" });
-      // this.setState({});
     };
   }
 
