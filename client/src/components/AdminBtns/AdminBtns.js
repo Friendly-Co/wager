@@ -10,7 +10,7 @@ import DeleteBtn from "../DeleteBtn";
 function AdminBtns(props) {
   // render() {
   return (
-    <div>
+    <div className="center-buttons">
       <span
         className="btn btn-dark halt-bets"
         role="button"
