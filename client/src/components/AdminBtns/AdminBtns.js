@@ -4,6 +4,8 @@ import "./AdminBtns.css";
 // import io from "socket.io-client";
 // import API from "../../utils/API";
 // import Leaderboard from "../../components/Leaderboard";
+import DeleteBtn from "../DeleteBtn";
+
 
 function AdminBtns(props) {
   // render() {
@@ -19,7 +21,7 @@ function AdminBtns(props) {
       </span>
       <div>
         <span
-          className="btn btn-primary"
+          className="btn btn-main"
           role="button"
           tabIndex="0"
           onClick={() => props.handleAnswer("Run")}
@@ -27,7 +29,7 @@ function AdminBtns(props) {
           Run
         </span>
         <span
-          className="btn btn-primary"
+          className="btn btn-main"
           role="button"
           tabIndex="0"
           onClick={() => props.handleAnswer("Pass")}
@@ -35,7 +37,7 @@ function AdminBtns(props) {
           Pass
         </span>
         <span
-          className="btn btn-primary"
+          className="btn btn-main"
           role="button"
           tabIndex="0"
           onClick={() => props.handleAnswer("Kick")}
@@ -43,13 +45,15 @@ function AdminBtns(props) {
           Kick
         </span>
         <span
-          className="btn btn-primary"
+          className="btn btn-main"
           role="button"
           tabIndex="0"
           onClick={() => props.handleAnswer("Turnover")}
         >
           Turnover
         </span>
+        
+        
       </div>
     </div>
   );

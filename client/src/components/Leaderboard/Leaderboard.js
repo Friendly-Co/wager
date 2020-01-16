@@ -49,9 +49,7 @@ class Leaderboard extends Component {
     return (
       <div>
         <h1>Player Scores</h1>
-        <DeleteBtn onClick={() => props.deleteAllPlayers()}>
-          Delete All
-        </DeleteBtn>
+        
         <div className="container">
           {this.props.scoreSeed.length ? (
             <List>
@@ -83,8 +81,13 @@ class Leaderboard extends Component {
                 );
               })}
             </List>
+            
           )}
+          <DeleteBtn onClick={() => props.deleteAllPlayers()}>
+          END GAME/Clear Data
+        </DeleteBtn>
         </div>
+      
         {/* <h3>No Scores to Display</h3>  */}
         {/* can't do nested ternary opertor to show this- how to render? */}
       </div>
