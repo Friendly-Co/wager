@@ -1,4 +1,4 @@
-import "./style.css";
+// import "./style.css";
 import React, { Component } from "react";
 import Logo from "../../components/Logo";
 import GuessButtons from "../../components/GuessButtons";
@@ -73,8 +73,7 @@ class User extends Component {
         this.setState({
           score: res.data[0].currScore
         });
-
-  })
+      })
 
       .catch(err => console.log(err));
   };
