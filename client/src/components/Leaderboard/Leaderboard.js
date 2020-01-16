@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import API from "../../utils/API";
 import DeleteBtn from "../DeleteBtn";
 import { List, ListItem } from "../List";
-import { get } from "mongoose";
+// import { get } from "mongoose";
 // import io from "socket.io-client";
 
 class Leaderboard extends Component {
@@ -29,9 +29,7 @@ class Leaderboard extends Component {
     // if (!this.props.scoreSeed.length) {
     API.getScores()
       .then(res => {
-        console.log(res);
         this.setState({ dbScores: res.data });
-        console.log(this.state.dbScores);
       })
       .catch(err => console.log(err));
     // }
@@ -39,7 +37,7 @@ class Leaderboard extends Component {
 
   render(props) {
     //If no scoreSeed props are coming from the Admin page, render from the database
-    // This is a fallback for bugs related to user and admin page reloads or loosing players
+    // This is a fallback for bugs related to user and admin page reloading
     var renderFrom = this.state.dbScores;
     var dbScoresLength = 0;
     for (let key in this.state.dbScores) {
@@ -64,7 +62,7 @@ class Leaderboard extends Component {
     } else {
       // If the dbScores state is longer than this.props.scoreSeed, something is wrong - display from the database
       console.log(
-        "Something may be wrong. I have more players in the database than in the scoreSeed props. Did we gain a player who hasn't guessed?? Did we loose a player somehow?? Rendering from this.props.dbScores. FYI current guesses will always be one round behind."
+        "Something may be wrong. I have more players in the database than in the scoreSeed props. Did we gain a player who hasn't guessed?? Did we loose a player somehow?? Rendering from this.props.dbScores. FYI current guesses will always be one round behind until the scoreSeed is back."
       );
       renderFrom = this.state.dbScores;
     }
