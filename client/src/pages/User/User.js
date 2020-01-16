@@ -83,12 +83,6 @@ class User extends Component {
       .then(res => {
         console.log(res.data);
         tempboard = [];
-        var boardLength = 0;
-        // if (res.data.length < 10) {
-        //   boardLength = res.data.length;
-        // } else {
-        //   boardLength = 10;
-        // }
         for (let i = 0; i < 10; i++) {
           console.log(res.data[i]);
           tempboard.push(res.data[i]);
