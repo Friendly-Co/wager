@@ -73,7 +73,9 @@ class User extends Component {
         this.setState({
           score: res.data[0].currScore
         });
-      })
+
+  })
+
       .catch(err => console.log(err));
   };
 
