@@ -21,11 +21,11 @@ class Leaderboard extends Component {
   }
 
   getFromDb = () => {
-    console.log("this.props.scoreSeed: ");
-    console.log(this.props.scoreSeed);
+    // console.log("this.props.scoreSeed: ");
+    // console.log(this.props.scoreSeed);
+    // console.log("this.props.scoreSeed,length: ");
+    // console.log(this.props.scoreSeed.length);
     // if (!this.props.scoreSeed.length) {
-    console.log("not from this.props.scoreseed");
-    // loadScores = () => {
     API.getScores()
       .then(res => {
         console.log(res);
@@ -33,27 +33,27 @@ class Leaderboard extends Component {
         console.log(this.state.dbScores);
       })
       .catch(err => console.log(err));
-    // };
     // }
   };
 
-  // whereToGrabData = () => {
-  //   this.getFromDb();
-  //   const getFromSocket = true;
-  //   if (!this.props.scoreSeed.length) {
-  //     getFromSocket = false;
-  //   }
-  // };
-
   render(props) {
+    var renderFrom = this.state.dbScores;
+    if (this.props.scoreSeed.length) {
+      renderFrom = this.props.scoreSeed;
+    } else {
+      // if there is are no current scores in props, pull ONCE from the database and rendeer those
+      // this.getFromDb(); //bug:  this will constatntly load in the beginning of the game.
+      renderFrom = this.state.dbScores;
+    }
     return (
       <div>
         <h1>Player Scores</h1>
         
         <div className="container">
-          {this.props.scoreSeed.length ? (
+          {/* need to fix: if the length is zero OR there is no current score in props, render from the database */}
+          {this.props.scoreSeed.length || this.state.dbScores ? (
             <List>
-              {this.props.scoreSeed.map(score => {
+              {renderFrom.map(score => {
                 return (
                   <ListItem key={score.playerName}>
                     <strong>
@@ -66,6 +66,7 @@ class Leaderboard extends Component {
               })}
             </List>
           ) : (
+
             <List>
               {/* bug: CONSTANTLY updates and calls database while scoreSeeds is empty
               {this.getFromDb()} */}
@@ -82,14 +83,14 @@ class Leaderboard extends Component {
               })}
             </List>
             
+
+            <h3>No Players to Display</h3>
+
           )}
           <DeleteBtn onClick={() => props.deleteAllPlayers()}>
           END GAME/Clear Data
         </DeleteBtn>
         </div>
-      
-        {/* <h3>No Scores to Display</h3>  */}
-        {/* can't do nested ternary opertor to show this- how to render? */}
       </div>
     );
   }
