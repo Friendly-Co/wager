@@ -21,22 +21,30 @@ class Leaderboard extends Component {
   }
 
   getFromDb = () => {
-    console.log("this.props.scoreSeed: ");
-    console.log(this.props.scoreSeed);
-    console.log("this.props.scoreSeed,length: ");
-    console.log(this.props.scoreSeed.length);
-    if (!this.props.scoreSeed.length) {
-      API.getScores()
-        .then(res => {
-          console.log(res);
-          this.setState({ dbScores: res.data });
-          console.log(this.state.dbScores);
-        })
-        .catch(err => console.log(err));
-    }
+    // console.log("this.props.scoreSeed: ");
+    // console.log(this.props.scoreSeed);
+    // console.log("this.props.scoreSeed,length: ");
+    // console.log(this.props.scoreSeed.length);
+    // if (!this.props.scoreSeed.length) {
+    API.getScores()
+      .then(res => {
+        console.log(res);
+        this.setState({ dbScores: res.data });
+        console.log(this.state.dbScores);
+      })
+      .catch(err => console.log(err));
+    // }
   };
 
   render(props) {
+    var renderFrom = this.state.dbScores;
+    if (this.props.scoreSeed.length) {
+      renderFrom = this.props.scoreSeed;
+    } else {
+      // if there is are no current scores in props, pull ONCE from the database and rendeer those
+      // this.getFromDb(); //bug:  this will constatntly load in the beginning of the game.
+      renderFrom = this.state.dbScores;
+    }
     return (
       <div>
         <h1>Player Scores</h1>
@@ -45,14 +53,13 @@ class Leaderboard extends Component {
         </DeleteBtn>
         <div className="container">
           {/* need to fix: if the length is zero OR there is no current score in props, render from the database */}
-          {this.props.scoreSeed.length ? (
+          {this.props.scoreSeed.length || this.state.dbScores ? (
             <List>
-              {this.props.scoreSeed.map(score => {
+              {renderFrom.map(score => {
                 return (
                   <ListItem key={score.playerName}>
                     <strong>
                       <h3>{score.playerName}</h3>
-                      <h2>rendering from props</h2>
                       <p>Current Score: {score.currScore}</p>
                       <p>Current Guess: {score.currentGuess}</p>
                     </strong>
@@ -61,24 +68,9 @@ class Leaderboard extends Component {
               })}
             </List>
           ) : (
-            <List>
-              {this.state.dbScores.map(score => {
-                return (
-                  <ListItem key={score.playerName}>
-                    <strong>
-                      <h3>{score.playerName}</h3>
-                      <h2>rendering from db</h2>
-                      <p>Current Score: {score.currScore}</p>
-                      <p>Current Guess: {score.currentGuess}</p>
-                    </strong>
-                  </ListItem>
-                );
-              })}
-            </List>
+            <h3>No Players to Display</h3>
           )}
         </div>
-        {/* <h3>No Scores to Display</h3>  */}
-        {/* can't do nested ternary opertor to show this- how to render? */}
       </div>
     );
   }
