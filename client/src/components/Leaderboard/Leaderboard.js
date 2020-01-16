@@ -48,9 +48,7 @@ class Leaderboard extends Component {
     return (
       <div>
         <h1>Player Scores</h1>
-        <DeleteBtn onClick={() => props.deleteAllPlayers()}>
-          Delete All
-        </DeleteBtn>
+        
         <div className="container">
           {/* need to fix: if the length is zero OR there is no current score in props, render from the database */}
           {this.props.scoreSeed.length || this.state.dbScores ? (
@@ -68,8 +66,30 @@ class Leaderboard extends Component {
               })}
             </List>
           ) : (
+
+            <List>
+              {/* bug: CONSTANTLY updates and calls database while scoreSeeds is empty
+              {this.getFromDb()} */}
+              {this.state.dbScores.map(score => {
+                return (
+                  <ListItem key={score.playerName}>
+                    <strong>
+                      <h3>{score.playerName}</h3>
+                      <p>Current Score: {score.currScore}</p>
+                      <p>Current Guess: {score.currentGuess}</p>
+                    </strong>
+                  </ListItem>
+                );
+              })}
+            </List>
+            
+
             <h3>No Players to Display</h3>
+
           )}
+          <DeleteBtn onClick={() => props.deleteAllPlayers()}>
+          END GAME/Clear Data
+        </DeleteBtn>
         </div>
       </div>
     );

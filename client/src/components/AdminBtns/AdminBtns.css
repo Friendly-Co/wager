@@ -1,4 +1,52 @@
 .delete-btn {
-  float: right;
-  /* color: #e74944; */
+  color: white;
+  background-color: red;
+  width: 80%;
+  height: 8vh;
+  float: left;
+  font-size: 1.5rem;
+  margin: .5vh 1.25vw 1.25vh 1.25vw;
+  box-shadow: 1vw .5vh .5vh black;
+  padding: 0px 0px 0px 0px;
+  text-align: center;
+  line-height: 8vh;
+  vertical-align: middle;
+
+  
 }
+.halt-bets {
+  color: black;
+  background-color: #e6d929;
+  width: 25vw;
+  height: 20vh;
+  float: left;
+  font-size: 2rem;
+  margin: .5vh 1.25vw 1.25vh 1.25vw;
+  box-shadow: 1vw .5vh .5vh black;
+  padding: 0px 0px 0px 0px;
+  text-align: center;
+  line-height: 20vh;
+  vertical-align: middle;
+}
+.btn-main {
+  color: #4119b0;
+  background-color: #93c8e8;
+  width: 25vw;
+  height: 8vh;
+  float: left;
+  font-size: 2rem;
+  margin: .5vh 1.25vw 1.25vh 1.25vw;
+  box-shadow: 1vw .5vh .5vh black;
+  padding: 0px 0px 0px 0px;
+}
+
+#leaderboardBttn {
+  clear: both;
+  width: 96vw;
+  height: 10vh;
+  margin-top: 1.25vh;
+  display: flex;
+  justify-content: center;
+  
+}
+

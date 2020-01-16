@@ -1,5 +1,5 @@
 .list-overflow-container {
-  max-height: 100vh;
+  max-height: 80vh;
   border: 1px #DDDDDD solid;
   border-radius: 4px;
   overflow-y: scroll;
@@ -35,7 +35,14 @@
 .list-group-item {
   border-radius: 0;
   /* box-shadow: 3px 3px 20px lightslategrey; */
-  margin: 10px 0px 0px 10px;
+  margin: 10px 0px 0px 0px;
+}
+h3 {
+  color: #4219b0;
+}
+p {
+  font-size: 1.25rem;
+  color: #4219b0;
 }
 
 .wrapper {
@@ -43,14 +50,15 @@
     /* background: blue; */
     height: 100vh;
     display: flex;
-    flex-flow: row wrap-reverse;
-    padding: 20px;
+    flex-flow: row wrap;
+    padding: 0px;
     /* padding-top: 50px; */
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-content: flex-start;
-    overflow: auto;
+    overflow: scroll;
 }
 
 .card {
   size: 150px;
+  background-color: #93c8e8;
 }
