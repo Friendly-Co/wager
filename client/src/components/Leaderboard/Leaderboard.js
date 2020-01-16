@@ -49,9 +49,6 @@ class Leaderboard extends Component {
     return (
       <div>
         <h1>Player Scores</h1>
-        <DeleteBtn onClick={() => this.props.deleteAllPlayers()}>
-          Delete All
-        </DeleteBtn>
         <div className="container">
           {/* need to fix: if the length is zero OR there is no current score in props, render from the database */}
           {this.props.scoreSeed.length ? (
@@ -71,6 +68,9 @@ class Leaderboard extends Component {
           ) : (
             <h3>No Players to Display</h3>
           )}
+          <DeleteBtn onClick={() => this.props.deleteAllPlayers()}>
+          END GAME/Clear Data
+        </DeleteBtn>
         </div>
       </div>
     );

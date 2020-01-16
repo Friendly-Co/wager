@@ -1,9 +1,12 @@
+import "./style.css";
 import React, { Component } from "react";
 import Leaderboard from "../../components/Leaderboard";
 import AdminBtns from "../../components/AdminBtns";
 import { Col, Row, Container } from "../../components/Grid";
 import API from "../../utils/API";
 import io from "socket.io-client";
+import Logo from "../../components/Logo";
+
 
 class AdminGame extends Component {
   constructor(props) {
@@ -107,16 +110,21 @@ class AdminGame extends Component {
     return (
       <Container fluid>
         <Row>
-          <Col size="md-6">
+          <Col size="md-8">
+            {/* <div className="wrapper"> */}
             <Leaderboard
               scoreSeed={this.state.scoreSeed}
               currentGuess={this.state.currentGuess}
               deleteAllPlayers={this.deleteAllPlayers}
             />
+            {/* </div> */}
           </Col>
 
-          <Col size="md-6">
+          <Col size="md-4" className="center-buttons">
+            <Logo/>
+            
             <AdminBtns handleAnswer={this.handleAnswer} />
+          
           </Col>
         </Row>
       </Container>
