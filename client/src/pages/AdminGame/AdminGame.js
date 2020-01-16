@@ -114,8 +114,8 @@ class AdminGame extends Component {
             {/* <div className="wrapper"> */}
             <Leaderboard
               scoreSeed={this.state.scoreSeed}
-              deleteAllPlayers={this.deleteAllPlayers}
               currentGuess={this.state.currentGuess}
+              deleteAllPlayers={this.deleteAllPlayers}
             />
             {/* </div> */}
           </Col>
