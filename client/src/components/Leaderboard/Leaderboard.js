@@ -43,17 +43,18 @@ class Leaderboard extends Component {
     } else {
       // if there is are no current scores in props, pull ONCE from the database and rendeer those
       // this.getFromDb(); //bug:  this will constatntly load in the beginning of the game.
+
       renderFrom = this.state.dbScores;
     }
     return (
       <div>
         <h1>Player Scores</h1>
-        <DeleteBtn onClick={() => props.deleteAllPlayers()}>
+        <DeleteBtn onClick={() => this.props.deleteAllPlayers()}>
           Delete All
         </DeleteBtn>
         <div className="container">
           {/* need to fix: if the length is zero OR there is no current score in props, render from the database */}
-          {this.props.scoreSeed.length || this.state.dbScores ? (
+          {this.props.scoreSeed.length ? (
             <List>
               {renderFrom.map(score => {
                 return (
