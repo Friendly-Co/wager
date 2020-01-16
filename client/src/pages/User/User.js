@@ -68,11 +68,12 @@ class User extends Component {
   // Loads score and sets them to this.state.scores
   loadScore = () => {
     API.getPlayerScore(username)
-      .then(res =>
+      .then(res => {
+        console.log(res.data);
         this.setState({
-          score: res.data.currScore
-        })
-      )
+          score: res.data[0].currScore
+        });
+  })
       .catch(err => console.log(err));
   };
 
