@@ -47,7 +47,7 @@ class User extends Component {
         currentGuess: this.state.guess
       });
       // this.setState({guess: ''});
-      console.log(this.state.username);
+      console.log(this.state.username); //undefined
       console.log(this.state.guess);
       // this.setState({})
     };
@@ -68,20 +68,28 @@ class User extends Component {
   // Loads score and sets them to this.state.scores
   loadScore = () => {
     API.getPlayerScore(username)
-      .then(res =>
+      .then(res => {
+        console.log(res.data);
         this.setState({
-          score: res.data.currScore
-        })
-      )
+          score: res.data[0].currScore
+        });
+      })
       .catch(err => console.log(err));
   };
 
   loadLeaderboard = () => {
     API.getScores()
       .then(res => {
+        console.log(res.data);
         tempboard = [];
+        var boardLength = 0;
+        // if (res.data.length < 10) {
+        //   boardLength = res.data.length;
+        // } else {
+        //   boardLength = 10;
+        // }
         for (let i = 0; i < 10; i++) {
-          // console.log(res.data[i]);
+          console.log(res.data[i]);
           tempboard.push(res.data[i]);
         }
         this.setState({ leaderboard: tempboard });
@@ -134,7 +142,8 @@ class User extends Component {
 
   render() {
     var tableBody;
-    if (this.state.sortedLeaderboard) {
+    console.log(this.state.leaderboard);
+    if (this.state.Leaderboard) {
       const sortedLeaderboard = this.state.leaderboard;
       tableBody = sortedLeaderboard.map((player, index) => (
         <tr key={player._id}>
