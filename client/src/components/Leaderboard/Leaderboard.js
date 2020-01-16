@@ -44,6 +44,7 @@ class Leaderboard extends Component {
           Delete All
         </DeleteBtn>
         <div className="container">
+          {/* need to fix: if the length is zero OR there is no current score in props, render from the database */}
           {this.props.scoreSeed.length ? (
             <List>
               {this.props.scoreSeed.map(score => {
