@@ -53,6 +53,7 @@ class AdminGame extends Component {
         }
         // Create a new card for new player
         if (!alreadyHere) {
+          data.currScore = 50;
           const scoreSeed = state.scoreSeed.concat(data);
           return { scoreSeed };
         } else {
