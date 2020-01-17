@@ -14,8 +14,7 @@ function AdminBtns(props) {
         className="btn btn-dark halt-bets"
         role="button"
         tabIndex="0"
-        onClick={() => props.haltBets()}
-      >
+        onClick={() => props.haltBets()}>
         Halt Bets
       </span>
       <div>

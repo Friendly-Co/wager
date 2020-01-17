@@ -1,6 +1,11 @@
+import React from "react";
+import { Modal, Button } from "react-bootstrap";
+import "./style.css";
+
+
 var instructionCopy = {
-    heading1: "How to Play:",
-    subheading1: "Welcome!",
+    heading1: "Welcome!",
+    subheading1: "How to Play:",
     copy1:
         "Welcome to Just a Friendly Wager! Please enter your host-provided ID and a User Name to get started playing",
     subheading2: "Watch the Game:",
@@ -12,3 +17,36 @@ var instructionCopy = {
     subheading4: "PRIZES:",
     copy5: "Winners receive special drink and food deals throughout the game--stay tuned for messages from the Host! "
     };
+
+    import React from "react";
+    import { Modal, Button } from "react-bootstrap";
+    import "./style.css";
+    
+    
+    function HaltModal(props) {
+        return (
+            <Modal
+            {...props}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+            >
+              <Modal.Header closeButton>
+                <Modal.Title id="contained-modal-title-vcenter">
+                    <h1>{instructionCopy.heading1}</h1>                
+                </Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <div id="watch">
+                    <h2>{instructionCopy.subheading1}</h2>
+                    <p>{instructionCopy.copy1}}</p>
+                </div>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button onClick={props.onHide}>Close</Button>
+              </Modal.Footer>
+            </Modal>
+          );
+        }
+    
+    export default instructionsModal;
