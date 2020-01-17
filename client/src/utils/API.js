@@ -14,9 +14,9 @@ export default {
     return axios.get("/api/scores/score/" + playerName);
   },
   // Deletes the player with the given id
-  deletePlayer: function(id) {
-    return axios.delete("/api/scores/" + id);
-  },
+  // deletePlayer: function(id) {
+  //   return axios.delete("/api/scores/" + id);
+  // },
   // Deletes all players
   deleteAllPlayers: function() {
     return axios.delete("/api/scores/");
@@ -26,13 +26,11 @@ export default {
     console.log("saveScore from API.js- toSave:");
     console.log(toSave);
     return axios.post("/api/scores", toSave);
-  }
+  },
   // Should save a player's guess to the database- doesn't work
-  // updateGuess: function(toSave) {
-  //   console.log("saveScore from API.js- toSave:");
-  //   console.log(toSave);
-  //   return axios.post(
-  //     `/playerName/:${toSave.playerName}/currentGuess/:${toSave.currentGuess}`
-  //   );
-  // }
+  calculateScores: function(toSave) {
+    console.log("saveScore from API.js- toSave:");
+    console.log(toSave);
+    return axios.put("/api/scores", toSave);
+  }
 };

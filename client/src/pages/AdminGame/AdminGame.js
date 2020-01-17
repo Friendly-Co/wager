@@ -7,7 +7,6 @@ import API from "../../utils/API";
 import io from "socket.io-client";
 import Logo from "../../components/Logo";
 
-
 class AdminGame extends Component {
   constructor(props) {
     super(props);
@@ -84,7 +83,8 @@ class AdminGame extends Component {
   handleAnswer = value => {
     const houseAnswer = { answer: value };
     const toSend = this.state.scoreSeed.concat(houseAnswer);
-    API.saveScore(toSend).then(res => {
+    // API.saveScore(toSend).then(res => {
+    API.calculateScores(toSend).then(res => {
       console.log("scores saved");
       console.log("after that, ...");
       console.log(res.data);
@@ -121,10 +121,9 @@ class AdminGame extends Component {
           </Col>
 
           <Col size="md-4" className="center-buttons">
-            <Logo/>
-            
+            <Logo />
+
             <AdminBtns handleAnswer={this.handleAnswer} />
-          
           </Col>
         </Row>
       </Container>
