@@ -6,8 +6,8 @@ import GuessState from "../../components/GuessState";
 import Score from "../../components/Score";
 import API from "../../utils/API";
 import LeaderModal from "../../components/LeaderModal/LeaderModal";
-// import CorrectModal from "../../components/CorrectModal/CorrectModal";
-// import HaltModal from "../../components/HaltModal/HaltModal";
+import CorrectModal from "../../components/CorrectModal/CorrectModal";
+import HaltModal from "../../components/HaltModal/HaltModal";
 import io from "socket.io-client";
 
 let guess = " ";
@@ -23,15 +23,21 @@ class User extends Component {
       guess,
       username,
       setModalShow: false,
+      setModalHalt: false,
+      setModalCorrect: false,
       leaderboard: [],
       scoreSeed: []
     };
 
     this.socket = io("localhost:3001");
 
-    this.socket.on("RECIEVE_MESSAGE", function(data) {
+    
+    this.socket.on("RECIEVE_MESSAGE", (data) => {
       console.log("here is the data I got from the admin: ");
-      console.log(data);
+    //   console.log(data);
+      
+      toggleModalHalt(data.setModalHalt);
+      toggleModalCorrect(data.setModalCorrect);
       //here, data immediately passes back after the player makes a guess- the admin does not have to hit anything for it to trigger.
       //are we passing props here from admin scoreseed? would filtering through that be faster than getting the score from the database?
       //how can we trigger a message when the admin calculates the score?
@@ -47,10 +53,21 @@ class User extends Component {
         currentGuess: this.state.guess
       });
       // this.setState({guess: ''});
-      console.log(this.state.username); //undefined
-      console.log(this.state.guess);
+      // console.log(this.state.username); //undefined
+      // console.log(this.state.guess);
       // this.setState({})
     };
+  
+    const toggleModalHalt = (data) => {
+      this.setState( state => { 
+        state.setModalHalt = data})
+    };
+    
+    const toggleModalCorrect = (data) => {
+      this.setState( state => { 
+        state.setModalCorrect = data})
+    };
+
   }
 
   componentDidMount() {
@@ -58,7 +75,7 @@ class User extends Component {
     this.setState({
       username: username
     });
-    console.log(username);
+    // console.log(username);
     this.loadScore(); //does not fire on page reload
     this.loadLeaderboard();
     // console.log("this.scoreSeed is console logging: ");
@@ -69,7 +86,7 @@ class User extends Component {
   loadScore = () => {
     API.getPlayerScore(username)
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         this.setState({
           score: res.data[0].currScore
         });
@@ -81,14 +98,14 @@ class User extends Component {
   loadLeaderboard = () => {
     API.getScores()
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         tempboard = [];
         for (let i = 0; i < 10; i++) {
-          console.log(res.data[i]);
+          // console.log(res.data[i]);
           tempboard.push(res.data[i]);
         }
         this.setState({ leaderboard: tempboard });
-        console.log(this.state.leaderboard);
+        // console.log(this.state.leaderboard);
       })
       .catch(err => console.log(err));
   };
@@ -98,14 +115,28 @@ class User extends Component {
   //     this.setState({ guess: value});
   // };
 
-  toggleModalOn = () => {
-    this.loadLeaderboard();
-    this.setState({ setModalShow: true });
+  toggleModal = () => {
+    if (!this.state.setModalShow) {
+      this.loadLeaderboard();
+      this.setState({ setModalShow: true });
+    } else {
+      this.setState({ setModalShow: false });
+    }
   };
 
-  toggleModalOff = () => {
-    this.setState({ setModalShow: false });
+ toggleModalCorrectOff = () => {
+      this.setState({ setModalCorrect: false })
   };
+ 
+  toggleModalCorrect = () => {
+      this.setState({ setModalCorrect: true })
+  };
+ 
+  toggleModalHalt = () => {    
+    this.setState({ setModalHalt: this.state.setModalHalt })
+  };
+
+  
 
   // function that updates guess state with onClick
   guessUpdate = value => {
@@ -137,8 +168,8 @@ class User extends Component {
 
   render() {
     var tableBody;
-    console.log(this.state.leaderboard);
-    if (this.state.Leaderboard) {
+    // console.log(this.state.leaderboard);
+    if (!this.state.Leaderboard) {
       const sortedLeaderboard = this.state.leaderboard;
       tableBody = sortedLeaderboard.map((player, index) => (
         <tr key={player._id}>
@@ -157,25 +188,24 @@ class User extends Component {
         <GuessState onChange={this.sendGuess()} guess={this.state.guess} />
         <GuessButtons
           guessUpdate={this.guessUpdate}
-          toggleModalOn={this.toggleModalOn}
+          toggleModalOn={this.toggleModal}
         />
         <LeaderModal
           username={this.state.username}
           score={this.state.score}
           show={this.state.setModalShow}
           leaderboard={tableBody}
-          onHide={() => this.toggleModalOff()}
+          onHide={() => this.toggleModal()}
         />
-        {/* <CorrectModal
-
+        <CorrectModal
             score={this.state.score}
-            show={this.state.setModalShow}
-            onHide={() => this.toggleModalOff()}
-            /> */}
-        {/* <HaltModal 
-            show={this.state.setModalShow}
-            onHide={() => this.toggleModalOff()}
-            /> */}
+            show={this.state.setModalCorrect}
+            onHide={() => this.toggleModalCorrectOff()}
+            />
+        <HaltModal 
+            show={this.state.setModalHalt}
+            onHide={() => this.state.setModalHalt}
+            />
       </div>
     );
   }
