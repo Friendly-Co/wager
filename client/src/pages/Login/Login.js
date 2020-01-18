@@ -7,15 +7,20 @@ class Login extends Component {
   // Setting our component's initial state
   state = {
     username: "",
-    message: ""
+    message: "",
+    adminLoginBoolean: false,
+    adminEmail: "",
+    adminUsername: "",
+    email: ""
   };
 
   //handles form input change
   // Handles updating component state when the user types into the input field
   handleInputChange = event => {
-    const { name, value } = event.target;
+    const value = event.target.value;
     this.setState({
-      [name]: value
+      ...this.state,
+      [event.target.name]: value
     });
   };
 
@@ -52,21 +57,53 @@ class Login extends Component {
     }
   };
 
+  //boolean to control rendering for login as admin and login as user
+  toggleLogin = event => {
+    this.setState(prevState => ({
+      adminLoginBoolean: !prevState.adminLoginBoolean
+    }));
+  };
+
   render() {
     return (
       <div className="container">
         <Logo />
-        <form className="form-inline">
-          <Input
-            value={this.state.username}
-            onChange={this.handleInputChange}
-            name="username"
-            placeholder="Username (required)"
-          ></Input>
-          <FormBtn disabled={!this.state.username} onClick={this.handleSave}>
-            Submit
-          </FormBtn>
-        </form>
+        {!this.state.adminLoginBoolean ? (
+          <form className="form-inline">
+            <Input
+              value={this.state.username}
+              onChange={this.handleInputChange}
+              name="username"
+              placeholder="Username (required)"
+            ></Input>
+            <FormBtn disabled={!this.state.username} onClick={this.handleSave}>
+              Submit
+            </FormBtn>
+            <button onClick={this.toggleLogin}>Login as Admin</button>
+          </form>
+        ) : (
+          <form className="form-inline">
+            <Input
+              value={this.state.adminUsername}
+              onChange={this.handleInputChange}
+              name="adminUsername"
+              placeholder="Username (required)"
+            ></Input>
+            <Input
+              value={this.state.email}
+              onChange={this.handleInputChange}
+              name="email"
+              placeholder="Email (required)"
+            ></Input>
+            <FormBtn
+              disabled={!this.state.adminUsername || !this.state.adminEmail}
+              onClick={this.handleAdminSave}
+            >
+              Submit
+            </FormBtn>
+            <button onClick={this.toggleLogin}>Login as Player</button>
+          </form>
+        )}
       </div>
     );
   }
