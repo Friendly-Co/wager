@@ -73,7 +73,22 @@ class AdminGame extends Component {
         currentGuess: this.state.scoreSeed.currentGuess
       });
     };
+
+    
   }
+
+  setModalHalt = ev => {
+    this.socket.emit("SEND_MESSAGE", {
+      setModalHalt: true,
+    });
+  };
+
+  setModalCorrect = ev => {
+    this.socket.emit("SEND_MESSAGE", {
+      setModalHalt: false,
+      setModalCorrect: true, 
+    });
+  };
 
   haltBets = () => {
     console.log("halt bets button pressed");
@@ -123,7 +138,11 @@ class AdminGame extends Component {
           <Col size="md-4" className="center-buttons">
             <Logo/>
             
-            <AdminBtns handleAnswer={this.handleAnswer} />
+            <AdminBtns 
+            handleAnswer={this.handleAnswer} 
+            setModalHalt={this.setModalHalt}
+            setModalCorrect={this.setModalCorrect}
+            />
           
           </Col>
         </Row>
