@@ -96,20 +96,20 @@ class Login extends Component {
               });
               //email username option...add button to email
               this.setState({ emailButton: true });
-              this.setState(state => {
-                // state.emailButton = true;
-                state.emailBody = encodeURIComponent(
-                  `Dear ${res.data[0].adminName}, This is a courtesy email reminder. If you did not request this email, please disregard. Your username is: ${res.data[0].adminName}`
-                );
-                state.emailSubject = encodeURIComponent(
-                  `Your Requested Login Information`
-                );
+              // this.setState(state => {
+              //   // state.emailButton = true;
+              //   state.emailBody = encodeURIComponent(
+              //     `Dear ${res.data[0].adminName}, This is a courtesy email reminder. If you did not request this email, please disregard. Your username is: ${res.data[0].adminName}`
+              //   );
+              //   state.emailSubject = encodeURIComponent(
+              //     `Your Requested Login Information`
+              //   );
 
-                state.emailHref = `mailto:${res.data[0].adminEmail}?subject=${state.emailSubject}&body=hey`;
-              });
-              console.log(this.state.emailSubject);
-              console.log(this.state.emailBody);
-              console.log(this.state.emailHref);
+              //   state.emailHref = `mailto:${res.data[0].adminEmail}?subject=${state.emailSubject}&body=hey`;
+              // });
+              // console.log(this.state.emailSubject);
+              // console.log(this.state.emailBody);
+              // console.log(this.state.emailHref);
               return false;
             }
 
@@ -156,11 +156,14 @@ class Login extends Component {
 
   emailUsername = event => {
     event.preventDefault();
-    const toSend = {
-      adminName: this.state.adminName,
-      adminEmail: this.state.adminEmail
-    };
-    AdminAPI.sendEmail(toSend).then(res => console.log(res));
+    AdminAPI.getAllAdmin().then(res => {
+      console.log(res.data);
+      const toSend = {
+        adminName: res.data[0].adminName,
+        adminEmail: res.data[0].adminEmail
+      };
+      AdminAPI.sendEmail(toSend).then(res => console.log(res));
+    });
   };
 
   //boolean to control rendering for login as admin and login as user
