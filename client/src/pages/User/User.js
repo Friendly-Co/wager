@@ -1,4 +1,4 @@
-// import "./style.css";
+import "./style.css";
 import React, { Component } from "react";
 import Logo from "../../components/Logo";
 import GuessButtons from "../../components/GuessButtons";

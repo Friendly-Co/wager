@@ -7,7 +7,6 @@ import API from "../../utils/API";
 import io from "socket.io-client";
 import Logo from "../../components/Logo";
 
-
 class AdminGame extends Component {
   constructor(props) {
     super(props);
@@ -54,6 +53,8 @@ class AdminGame extends Component {
         }
         // Create a new card for new player
         if (!alreadyHere) {
+          // may need to change currScore default for late logins
+          data.currScore = 50;
           const scoreSeed = state.scoreSeed.concat(data);
           return { scoreSeed };
         } else {
@@ -99,7 +100,8 @@ class AdminGame extends Component {
   handleAnswer = value => {
     const houseAnswer = { answer: value };
     const toSend = this.state.scoreSeed.concat(houseAnswer);
-    API.saveScore(toSend).then(res => {
+    // API.saveScore(toSend).then(res => {
+    API.calculateScores(toSend).then(res => {
       console.log("scores saved");
       console.log("after that, ...");
       console.log(res.data);
@@ -119,6 +121,7 @@ class AdminGame extends Component {
       }); //Bug: completely breaks
     });
     console.log("deletingggggg");
+    window.location.reload();
   };
 
   render() {
@@ -136,6 +139,7 @@ class AdminGame extends Component {
           </Col>
 
           <Col size="md-4" className="center-buttons">
+
             <Logo/>
             
             <AdminBtns 
