@@ -169,7 +169,7 @@ class User extends Component {
   render() {
     var tableBody;
     // console.log(this.state.leaderboard);
-    if (!this.state.Leaderboard) {
+    if (this.state.Leaderboard) {
       const sortedLeaderboard = this.state.leaderboard;
       tableBody = sortedLeaderboard.map((player, index) => (
         <tr key={player._id}>
