@@ -48,10 +48,15 @@ class User extends Component {
 
     this.sendGuess = ev => {
       // ev.preventDefault();
-      this.socket.emit("SEND_MESSAGE", {
-        playerName: this.state.username,
-        currentGuess: this.state.guess
-      });
+      if(this.state.setModalHalt) {
+        console.log("check check mic check")
+      } else {
+        this.socket.emit("SEND_MESSAGE", {
+          playerName: this.state.username,
+          currentGuess: this.state.guess
+        })
+      }
+    
       // this.setState({guess: ''});
       // console.log(this.state.username); //undefined
       // console.log(this.state.guess);
@@ -133,7 +138,9 @@ class User extends Component {
   };
  
   toggleModalHalt = () => {    
-    this.setState({ setModalHalt: this.state.setModalHalt })
+    if (this.state.setModalCorrect) {
+      this.setState({ setModalHalt: false })
+    }
   };
 
   
@@ -204,7 +211,7 @@ class User extends Component {
             />
         <HaltModal 
             show={this.state.setModalHalt}
-            onHide={() => this.state.setModalHalt}
+            onHide={() => this.toggleModalHalt()}
             />
       </div>
     );
