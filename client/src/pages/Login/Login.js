@@ -9,7 +9,6 @@ class Login extends Component {
     username: "",
     message: "",
     adminLoginBoolean: false,
-    adminName: "",
     adminEmail: "",
     adminUsername: "",
     email: ""
@@ -18,19 +17,12 @@ class Login extends Component {
   //handles form input change
   // Handles updating component state when the user types into the input field
   handleInputChange = event => {
-    // const { name, value } = event.target;
     const value = event.target.value;
     this.setState({
       ...this.state,
       [event.target.name]: value
     });
   };
-  // handleInputChange = event => {
-  //   const { name, value } = event.target;
-  //   this.setState({
-  //     [name]: value
-  //   });
-  // };
 
   //search the database for any matching usernames.
   //If matching, alert the user to change their name
@@ -65,13 +57,11 @@ class Login extends Component {
     }
   };
 
-  //booleans to control rendering for login as admin and login as user
-  adminLogin = event => {
-    this.setState({ adminLoginBoolean: true });
-  };
-
-  loginasUser = event => {
-    this.setState({ adminLoginBoolean: false });
+  //boolean to control rendering for login as admin and login as user
+  toggleLogin = event => {
+    this.setState(prevState => ({
+      adminLoginBoolean: !prevState.adminLoginBoolean
+    }));
   };
 
   render() {
@@ -89,7 +79,7 @@ class Login extends Component {
             <FormBtn disabled={!this.state.username} onClick={this.handleSave}>
               Submit
             </FormBtn>
-            <button onClick={this.adminLogin}>Login as Admin</button>
+            <button onClick={this.toggleLogin}>Login as Admin</button>
           </form>
         ) : (
           <form className="form-inline">
@@ -106,12 +96,12 @@ class Login extends Component {
               placeholder="Email (required)"
             ></Input>
             <FormBtn
-              disabled={!this.state.adminName || !this.state.adminEmail}
+              disabled={!this.state.adminUsername || !this.state.adminEmail}
               onClick={this.handleAdminSave}
             >
               Submit
             </FormBtn>
-            <button onClick={this.loginasUser}>Login as Player</button>
+            <button onClick={this.toggleLogin}>Login as Player</button>
           </form>
         )}
       </div>
