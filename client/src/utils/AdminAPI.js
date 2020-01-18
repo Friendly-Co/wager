@@ -35,5 +35,10 @@ export default {
     console.log("updateEmail from AdminAPI.js- toSave:");
     console.log(toSave);
     return axios.put("/api/admin/login", toSave);
+  },
+  sendEmail: function(toSend) {
+    console.log("sendEmail from AdminAPI.js- toSend:");
+    console.log(toSend);
+    return axios.post("/api/admin/mail", toSend);
   }
 };

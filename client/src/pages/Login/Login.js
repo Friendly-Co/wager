@@ -11,7 +11,11 @@ class Login extends Component {
     message: "",
     adminLoginBoolean: false,
     adminEmail: "",
-    adminName: ""
+    adminName: "",
+    emailButton: false,
+    emailBody: "",
+    emailHref: "",
+    emailSubject: ""
   };
 
   //handles form input change for all fields
@@ -87,10 +91,25 @@ class Login extends Component {
             if (this.state.adminName !== res.data[0].adminName) {
               this.setState({
                 message: alert(
-                  "This username does not match our database. Please try again"
+                  'This username does not match our database. Please try again. If you would like an email reminder of your username, click "Email Login Info"'
                 )
               });
               //email username option...add button to email
+              this.setState({ emailButton: true });
+              this.setState(state => {
+                // state.emailButton = true;
+                state.emailBody = encodeURIComponent(
+                  `Dear ${res.data[0].adminName}, This is a courtesy email reminder. If you did not request this email, please disregard. Your username is: ${res.data[0].adminName}`
+                );
+                state.emailSubject = encodeURIComponent(
+                  `Your Requested Login Information`
+                );
+
+                state.emailHref = `mailto:${res.data[0].adminEmail}?subject=${state.emailSubject}&body=hey`;
+              });
+              console.log(this.state.emailSubject);
+              console.log(this.state.emailBody);
+              console.log(this.state.emailHref);
               return false;
             }
 
@@ -122,7 +141,7 @@ class Login extends Component {
               console.log(
                 "this is the response we got back after saving your login: "
               );
-              console.log(res);
+              console.log(res.data);
               this.setState({
                 message: alert("Your username and email have been saved")
               });
@@ -133,6 +152,15 @@ class Login extends Component {
         })
         .catch(err => console.log(err));
     }
+  };
+
+  emailUsername = event => {
+    event.preventDefault();
+    const toSend = {
+      adminName: this.state.adminName,
+      adminEmail: this.state.adminEmail
+    };
+    AdminAPI.sendEmail(toSend).then(res => console.log(res));
   };
 
   //boolean to control rendering for login as admin and login as user
@@ -173,6 +201,16 @@ class Login extends Component {
               name="adminEmail"
               placeholder="Email (required)"
             ></Input>
+            {this.state.emailButton ? (
+              <p>
+                Forgot your username?{" "}
+                {/* <a href={this.state.emailHref}>Email Login Info</a> */}
+                <button onClick={this.emailUsername}>Email Login Info</button>
+              </p>
+            ) : (
+              <p></p>
+            )}
+
             <FormBtn
               disabled={!this.state.adminName || !this.state.adminEmail}
               onClick={this.handleAdminSave}
