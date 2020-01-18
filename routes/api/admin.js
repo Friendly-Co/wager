@@ -1,7 +1,8 @@
 const router = require("express").Router();
 const adminController = require("../../controllers/adminController");
 
-// Matches with "/api/admin/:adminName"
+// Matches with "/api/admin/login/:adminName"
+//why?? IDK!
 router
   .route("/:adminName")
   .get(adminController.findByName)

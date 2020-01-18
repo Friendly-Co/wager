@@ -72,8 +72,8 @@ class Login extends Component {
           //then log them back in
           if (res.data.length) {
             if (
-              this.state.adminName === res.data[0].adminName &&
-              this.state.adminEmail === res.data[0].adminEmail
+              this.state.adminName !== res.data[0].adminName &&
+              this.state.adminEmail !== res.data[0].adminEmail
             ) {
               this.setState({
                 message: alert(
@@ -84,7 +84,7 @@ class Login extends Component {
               return false;
             }
 
-            if (this.state.adminName === res.data[0].adminName) {
+            if (this.state.adminName !== res.data[0].adminName) {
               this.setState({
                 message: alert(
                   "This username does not match our database. Please try again"
@@ -94,7 +94,7 @@ class Login extends Component {
               return false;
             }
 
-            if (this.state.adminEmail === res.data[0].adminEmail) {
+            if (this.state.adminEmail !== res.data[0].adminEmail) {
               this.setState({
                 message: alert(
                   "This email does not match our database. Please try again"
@@ -115,14 +115,20 @@ class Login extends Component {
           // if no admin are in the database, save info and log in
           else if (!res.data.length) {
             var toSave = {
-              adminName: this.state.adminName
+              adminName: this.state.adminName,
+              adminEmail: this.state.adminEmail
             };
-            AdminAPI.saveAdmin(toSave).then(
+            AdminAPI.saveAdmin(toSave).then(res => {
+              console.log(
+                "this is the response we got back after saving your login: "
+              );
+              console.log(res);
               this.setState({
                 message: alert("Your username and email have been saved")
-              })
-            );
-            window.location = "/admingame/" + this.state.adminName;
+              });
+
+              window.location = "/admingame/admin/" + this.state.adminName;
+            });
           }
         })
         .catch(err => console.log(err));
