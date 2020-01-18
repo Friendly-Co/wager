@@ -25,7 +25,11 @@ class App extends Component {
         <Router>
           <Switch>
             <Route exact path="/" component={Login} />
-            <Route exact path="/admingame" component={AdminGame} />
+            <Route
+              exact
+              path="/admingame/admin/:adminName"
+              component={AdminGame}
+            />
             <Route exact path="/user/:username" component={User} />
           </Switch>
         </Router>

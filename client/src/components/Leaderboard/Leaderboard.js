@@ -37,12 +37,9 @@ class Leaderboard extends Component {
 
   render(props) {
     //If no scoreSeed props are coming from the Admin page, render from the database
-    // This is a fallback for bugs related to user and admin page reloading
+    // This is a fallback for bugs related to user and admin page reloading, or the very beginning of the game
     var renderFrom = this.state.dbScores;
-    var dbScoresLength = 0;
-    for (let key in this.state.dbScores) {
-      dbScoresLength++;
-    }
+    var dbScoresLength = Object.keys(this.state.dbScores).length;
     console.log("Here is the length of dbScores");
     console.log(dbScoresLength);
     console.log("Here is the length of scoreSeed");

@@ -7,6 +7,9 @@ import API from "../../utils/API";
 import io from "socket.io-client";
 import Logo from "../../components/Logo";
 
+//To do: delete function for admin on page close
+//Possibly, an email scores button
+
 class AdminGame extends Component {
   constructor(props) {
     super(props);
@@ -123,6 +126,9 @@ class AdminGame extends Component {
     console.log("deletingggggg");
     window.location.reload();
   };
+
+  //only render if the admin in the database matches the admin params
+  //create message with link to login if this is not the case
 
   render() {
     return (
