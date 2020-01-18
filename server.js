@@ -1,3 +1,5 @@
+const dotenv = require("dotenv");
+dotenv.config();
 const express = require("express");
 const http = require("http");
 const mongoose = require("mongoose");
@@ -14,16 +16,16 @@ const io = socket(server);
 io.set("origins", "*:*");
 // whenever we receive a `connection` event
 // our async function is then called
-io.on('connection', (socket) => {
-  console.log("Client with socket id || " + socket.id + ' || is now connected');
-  
+io.on("connection", socket => {
+  console.log("Client with socket id || " + socket.id + " || is now connected");
+
   // we should see this printed out whenever we have
   // a successful connection
-  console.log()
+  console.log();
 
-  socket.on('SEND_MESSAGE', function(data) {
+  socket.on("SEND_MESSAGE", function(data) {
     io.emit("RECIEVE_MESSAGE", data);
-  })
+  });
   // we then send out a new message to the
   // `chat` channel with "Hello World"
   // Our clientside should be able to see
@@ -31,12 +33,12 @@ io.on('connection', (socket) => {
 
   // io.emit("chat", "this is the message from the server");
 
-
-
-  socket.on('disconnect', () => {
-    console.log("Client with socket id || " + socket.id + ' || is now connected')
-  })
-})
+  socket.on("disconnect", () => {
+    console.log(
+      "Client with socket id || " + socket.id + " || is now connected"
+    );
+  });
+});
 
 // Define middleware here
 app.use(express.urlencoded({ extended: true }));
@@ -65,5 +67,3 @@ mongoose.connect(
 // });
 
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
-
-

@@ -10,7 +10,7 @@ module.exports = {
       service: "gmail",
       auth: {
         user: "TheJustAFriendlyWagerTeam@gmail.com",
-        pass: "WagerTest2020"
+        pass: process.env.PASSWORD
       },
       tls: {
         rejectUnauthorized: false //added
@@ -18,7 +18,7 @@ module.exports = {
     });
 
     const mailOptions = {
-      from: 'TheJustAFriendlyWagerTeam@gmail.com"',
+      from: "TheJustAFriendlyWagerTeam@gmail.com",
       to: req.body.adminEmail,
       subject: "Your Requested Login Information",
       text: `This is a courtesy email reminder. If you did not request this email, please disregard. Your username is: ${req.body.adminName}`
