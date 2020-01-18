@@ -53,6 +53,7 @@ class AdminGame extends Component {
         }
         // Create a new card for new player
         if (!alreadyHere) {
+          // may need to change currScore default for late logins
           data.currScore = 50;
           const scoreSeed = state.scoreSeed.concat(data);
           return { scoreSeed };
@@ -105,6 +106,7 @@ class AdminGame extends Component {
       }); //Bug: completely breaks
     });
     console.log("deletingggggg");
+    window.location.reload();
   };
 
   render() {
