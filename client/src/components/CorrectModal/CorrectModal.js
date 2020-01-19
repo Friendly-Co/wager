@@ -19,13 +19,9 @@ function CorrectModal(props) {
           <Modal.Body>
             <h4>The last correct answer was</h4>
             <div id="answer">
-                {/* {props.correctguess} */}
+                {props.answer}
                 </div>
-            <div>
-                <h4>
-                    Your current score is now: {props.score}
-                </h4>
-            </div>
+
             
         
           </Modal.Body>

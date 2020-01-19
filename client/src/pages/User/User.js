@@ -10,23 +10,23 @@ import CorrectModal from "../../components/CorrectModal/CorrectModal";
 import HaltModal from "../../components/HaltModal/HaltModal";
 import io from "socket.io-client";
 
-let guess = " ";
+// let guess = " ";
 let score;
 let username;
-let tempboard = [];
 
 class User extends Component {
   constructor(props) {
     super(props);
     this.state = {
       score,
-      guess,
+      guess: " ",
       username,
       setModalShow: false,
       setModalHalt: false,
       setModalCorrect: false,
       leaderboard: [],
-      scoreSeed: []
+      scoreSeed: [],
+      answer: " ",
     };
 
     this.socket = io("localhost:3001");
@@ -36,8 +36,11 @@ class User extends Component {
       console.log("here is the data I got from the admin: ");
     //   console.log(data);
       
-      toggleModalHalt(data.setModalHalt);
-      toggleModalCorrect(data.setModalCorrect);
+      this.toggleModalHalt(data.setModalHalt);
+      this.toggleModalCorrect(data.setModalCorrect);
+      console.log("this is sent from admin, set modal = " + data.setModalCorrect);
+      console.log(data.answer);
+      this.acceptAnswer(data.answer);
       //here, data immediately passes back after the player makes a guess- the admin does not have to hit anything for it to trigger.
       //are we passing props here from admin scoreseed? would filtering through that be faster than getting the score from the database?
       //how can we trigger a message when the admin calculates the score?
@@ -63,19 +66,25 @@ class User extends Component {
       // this.setState({})
     };
   
-    const toggleModalHalt = (data) => {
-      this.setState( state => { 
-        state.setModalHalt = data})
-    };
     
-    const toggleModalCorrect = (data) => {
-      this.setState( state => { 
-        state.setModalCorrect = data})
-    };
-
   }
+      toggleModalHalt = (data) => {
+        this.setState( state => { 
+          state.setModalHalt = data})
+      };
+      
+      toggleModalCorrect = (data) => {
+        this.setState( state => { 
+          state.setModalCorrect = data})
+      };
+  
+      acceptAnswer = (data) => {
+        this.setState( state => {
+          state.answer = data
+        })
+      };
 
-  componentDidMount() {
+  componentDidMount = () => {
     username = this.props.match.params.username;
     this.setState({
       username: username
@@ -86,6 +95,7 @@ class User extends Component {
     // console.log("this.scoreSeed is console logging: ");
     // console.log(this.scoreSeed); //undefined
   }
+
 
   // Loads score and sets them to this.state.scores
   loadScore = () => {
@@ -101,15 +111,10 @@ class User extends Component {
   };
 
   loadLeaderboard = () => {
+    this.loadScore();
     API.getScores()
       .then(res => {
-        // console.log(res.data);
-        tempboard = [];
-        for (let i = 0; i < 10; i++) {
-          // console.log(res.data[i]);
-          tempboard.push(res.data[i]);
-        }
-        this.setState({ leaderboard: tempboard });
+        this.setState({ leaderboard: res.data.splice(0,10) });
         // console.log(this.state.leaderboard);
       })
       .catch(err => console.log(err));
@@ -130,20 +135,23 @@ class User extends Component {
   };
 
  toggleModalCorrectOff = () => {
-      this.setState({ setModalCorrect: false })
+      this.loadScore();
+      this.setState({ setModalCorrect: false });
   };
  
-  toggleModalCorrect = () => {
+  toggleCorrect = () => {
       this.setState({ setModalCorrect: true })
   };
  
-  toggleModalHalt = () => {    
+  toggleHalt = () => {    
     if (this.state.setModalCorrect) {
       this.setState({ setModalHalt: false })
     }
   };
 
-  
+  // setInterval = () => {
+  //   loadScore();
+  // }, (100000);
 
   // function that updates guess state with onClick
   guessUpdate = value => {
@@ -175,8 +183,8 @@ class User extends Component {
 
   render() {
     var tableBody;
-    // console.log(this.state.leaderboard);
-    if (this.state.Leaderboard) {
+    console.log(Object.keys(this.state.leaderboard).length);
+    if (Object.keys(this.state.leaderboard).length > 0) {
       const sortedLeaderboard = this.state.leaderboard;
       tableBody = sortedLeaderboard.map((player, index) => (
         <tr key={player._id}>
@@ -206,12 +214,13 @@ class User extends Component {
         />
         <CorrectModal
             score={this.state.score}
+            answer={this.state.answer}
             show={this.state.setModalCorrect}
             onHide={() => this.toggleModalCorrectOff()}
             />
         <HaltModal 
             show={this.state.setModalHalt}
-            onHide={() => this.toggleModalHalt()}
+            onHide={() => this.toggleHalt()}
             />
       </div>
     );

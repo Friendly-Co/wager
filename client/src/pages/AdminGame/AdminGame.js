@@ -15,7 +15,7 @@ class AdminGame extends Component {
     super(props);
     this.state = {
       scoreSeed: [],
-      answer: "",
+      answer: " ",
       currentGuess: ""
     };
 
@@ -87,12 +87,14 @@ class AdminGame extends Component {
     });
   };
 
-  setModalCorrect = ev => {
+  setModalCorrect = value => {
     this.socket.emit("SEND_MESSAGE", {
       setModalHalt: false,
       setModalCorrect: true, 
+      answer: value,
     });
   };
+
 
   haltBets = () => {
     console.log("halt bets button pressed");
@@ -113,8 +115,10 @@ class AdminGame extends Component {
       });
       console.log("this.state.scoreSeed is now: ");
       console.log(this.state.scoreSeed);
-    });
-  };
+    })
+
+    }
+
 
   deleteAllPlayers = () => {
     //function does not work as is. Shows up as undefined in Leaderboard.js line 52
