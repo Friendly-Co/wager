@@ -31,5 +31,6 @@ module.exports = {
         console.log("Email sent: " + info.response);
       }
     });
+    res.end();
   }
 };
