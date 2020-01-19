@@ -28,7 +28,7 @@ function AdminBtns(props) {
           tabIndex="0"
           onClick={() => {
             props.handleAnswer("Run");
-            props.setModalCorrect();
+            props.setModalCorrect("Run");
           }}
         >
           Run
@@ -39,7 +39,7 @@ function AdminBtns(props) {
           tabIndex="0"
           onClick={() => {
             props.handleAnswer("Pass");
-            props.setModalCorrect();
+            props.setModalCorrect("Pass");
           }}
         >
           Pass
@@ -50,7 +50,7 @@ function AdminBtns(props) {
           tabIndex="0"
           onClick={() => {
             props.handleAnswer("Kick");
-            props.setModalCorrect();
+            props.setModalCorrect("Kick");
           }}
         >
           Kick
@@ -61,7 +61,7 @@ function AdminBtns(props) {
           tabIndex="0"
           onClick={() => {
             props.handleAnswer("Turnovover");
-            props.setModalCorrect();
+            props.setModalCorrect("Turnover");
           }}
         >
           Turnover
