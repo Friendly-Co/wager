@@ -28,17 +28,18 @@ export default {
   saveAdmin: function(toSave) {
     console.log("saveAdmin from AdminAPI.js- toSave:");
     console.log(toSave);
-    return axios.post("/api/admin/login", toSave);
+    // return axios.post("/api/admin/login", toSave);
+    return axios.post("/api/admin/adminname", toSave);
   },
   // Should save a player's guess to the database- doesn't work
   updateEmail: function(toSave) {
     console.log("updateEmail from AdminAPI.js- toSave:");
     console.log(toSave);
-    return axios.put("/api/admin/login", toSave);
+    return axios.put("/api/admin/adminname", toSave);
   },
   sendEmail: function(toSend) {
     console.log("sendEmail from AdminAPI.js- toSend:");
     console.log(toSend);
-    return axios.post("/api/admin/mail", toSend);
+    return axios.post("/api/admin/mail/moremail", toSend);
   }
 };
