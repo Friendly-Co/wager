@@ -10,7 +10,7 @@ import CorrectModal from "../../components/CorrectModal/CorrectModal";
 import HaltModal from "../../components/HaltModal/HaltModal";
 import io from "socket.io-client";
 
-// let guess = " ";
+
 let score;
 let username;
 
@@ -27,6 +27,7 @@ class User extends Component {
       leaderboard: [],
       scoreSeed: [],
       answer: " ",
+      rightOrWrong: " "
     };
 
     this.socket = io("localhost:3001");
@@ -38,6 +39,7 @@ class User extends Component {
         this.toggleHalt();
       } else {
         this.acceptAnswer(data.answer);
+        this.lastGuess();
         this.toggleCorrect();
         this.toggleHaltOff();
       }
@@ -158,6 +160,15 @@ class User extends Component {
       .catch(err => console.log(err));
   };
 
+  // logic to check players answer with correct answer to display in modal if guessed right or wrong
+  lastGuess = () => {
+    if (this.state.guess.toLowerCase() === this.state.answer.toLowerCase()) {
+      this.setState({rightOrWrong: "Right"})
+    } else {
+      this.setState({rightOrWrong: "Wrong"})
+    }
+  }
+
   render() {
     var tableBody;
     // console.log(Object.keys(this.state.leaderboard).length);
@@ -192,6 +203,7 @@ class User extends Component {
         <CorrectModal
             score={this.state.score}
             answer={this.state.answer}
+            rightOrWrong={this.state.rightOrWrong}
             show={this.state.setModalCorrect}
             onHide={() => this.toggleModalCorrectOff()}
             />

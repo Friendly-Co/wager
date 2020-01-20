@@ -3,10 +3,18 @@
     height: 125px;
 }
 
-#answer {
+.bigStyle {
     font-size: 50px;
     font-weight: bold;
     text-align: center;
     color: #007BFF;
     text-shadow: grey 2px 2px 5px;
+}
+
+#Wrong {
+    color: #e74c3c;
+}
+
+#Right {
+    color: #4cd137;
 }

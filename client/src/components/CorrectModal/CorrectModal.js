@@ -17,8 +17,12 @@ function CorrectModal(props) {
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <h4>The last correct answer was</h4>
-            <div id="answer">
+            <h4>You guessed</h4>
+            <div id={props.rightOrWrong} className="bigStyle">
+                {props.rightOrWrong}!
+                </div>
+            <h4>The correct answer was</h4>
+            <div id="answer" className="bigStyle">
                 {props.answer}
                 </div>
 
