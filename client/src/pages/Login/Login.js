@@ -3,6 +3,7 @@ import API from "../../utils/API";
 import AdminAPI from "../../utils/AdminAPI";
 import { FormBtn, Input } from "../../components/Form";
 import Logo from "../../components/Logo";
+import InstructionsModal from "../../components/InstructionsModal";
 
 class Login extends Component {
   // Setting our component's initial state
@@ -15,8 +16,13 @@ class Login extends Component {
     emailButton: false,
     emailBody: "",
     emailHref: "",
-    emailSubject: ""
+    emailSubject: "",
+    introModal: false,
   };
+
+  componentDidMount() {
+    this.setState({introModal: true});
+  }
 
   //handles form input change for all fields
   handleInputChange = event => {
@@ -213,7 +219,6 @@ class Login extends Component {
             ) : (
               <p></p>
             )}
-
             <FormBtn
               disabled={!this.state.adminName || !this.state.adminEmail}
               onClick={this.handleAdminSave}
@@ -223,6 +228,10 @@ class Login extends Component {
             <button onClick={this.toggleLogin}>Login as Player</button>
           </form>
         )}
+    <InstructionsModal
+      show={this.state.introModal}
+      onHide={() => this.setState({introModal: false})}
+    />
       </div>
     );
   }
