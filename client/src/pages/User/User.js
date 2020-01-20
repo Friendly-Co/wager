@@ -31,35 +31,24 @@ class User extends Component {
 
     this.socket = io("localhost:3001");
 
-    
-    this.socket.on("RECIEVE_MESSAGE", (data) => {
-      console.log("here is the data I got from the admin: ");
-    //   console.log(data);
-      
-      this.toggleModalHalt(data.setModalHalt);
-      this.toggleModalCorrect(data.setModalCorrect);
-      console.log("this is sent from admin, set modal = " + data.setModalCorrect);
-      console.log(data.answer);
-      this.acceptAnswer(data.answer);
-      //here, data immediately passes back after the player makes a guess- the admin does not have to hit anything for it to trigger.
-      //are we passing props here from admin scoreseed? would filtering through that be faster than getting the score from the database?
-      //how can we trigger a message when the admin calculates the score?
-      //possible solution: when currentGuess == " ", then filter through for player info, and render
-      //unfortunately, this will trigger a LOT of API calls, esp in the beginning of the game and between when the admin inputs an answer and before the player chooses the next answer
-      //OR- when the modal pops up with calculated scores, when the player closes the modal, update the score
+    this.socket.on("modal_on", (data) => {
+      // this.setState({setModalHalt: true})
+      // console.log(this.state.setModalHalt);
+      if(data.setModalHalt) {
+        this.toggleHalt();
+      } else {
+        this.acceptAnswer(data.answer);
+        this.toggleCorrect();
+        this.toggleHaltOff();
+      }
     });
 
     this.sendGuess = ev => {
       // ev.preventDefault();
-      if(this.state.setModalHalt) {
-        console.log("check check mic check")
-      } else {
         this.socket.emit("SEND_MESSAGE", {
           playerName: this.state.username,
           currentGuess: this.state.guess
         })
-      }
-    
       // this.setState({guess: ''});
       // console.log(this.state.username); //undefined
       // console.log(this.state.guess);
@@ -68,16 +57,7 @@ class User extends Component {
   
     
   }
-      toggleModalHalt = (data) => {
-        this.setState( state => { 
-          state.setModalHalt = data})
-      };
-      
-      toggleModalCorrect = (data) => {
-        this.setState( state => { 
-          state.setModalCorrect = data})
-      };
-  
+          
       acceptAnswer = (data) => {
         this.setState( state => {
           state.answer = data
@@ -120,10 +100,7 @@ class User extends Component {
       .catch(err => console.log(err));
   };
 
-  // function that updates guess state with onClick
-  // guessUpdate = (value) => {
-  //     this.setState({ guess: value});
-  // };
+// all the Modal Functions
 
   toggleModal = () => {
     if (!this.state.setModalShow) {
@@ -136,7 +113,7 @@ class User extends Component {
 
  toggleModalCorrectOff = () => {
       this.loadScore();
-      this.setState({ setModalCorrect: false });
+      this.setState({ setModalCorrect: false, guess: " " });
   };
  
   toggleCorrect = () => {
@@ -144,14 +121,14 @@ class User extends Component {
   };
  
   toggleHalt = () => {    
-    if (this.state.setModalCorrect) {
-      this.setState({ setModalHalt: false })
+      this.setState({setModalHalt: true});
     }
-  };
 
-  // setInterval = () => {
-  //   loadScore();
-  // }, (100000);
+  toggleHaltOff = () => {
+    if(this.state.setModalCorrect) {
+      this.setState({setModalHalt: false});
+    }
+  }
 
   // function that updates guess state with onClick
   guessUpdate = value => {
@@ -183,7 +160,7 @@ class User extends Component {
 
   render() {
     var tableBody;
-    console.log(Object.keys(this.state.leaderboard).length);
+    // console.log(Object.keys(this.state.leaderboard).length);
     if (Object.keys(this.state.leaderboard).length > 0) {
       const sortedLeaderboard = this.state.leaderboard;
       tableBody = sortedLeaderboard.map((player, index) => (
@@ -220,7 +197,7 @@ class User extends Component {
             />
         <HaltModal 
             show={this.state.setModalHalt}
-            onHide={() => this.toggleHalt()}
+            onHide={() => this.toggleHaltOff()}
             />
       </div>
     );

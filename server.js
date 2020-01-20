@@ -26,6 +26,10 @@ io.on("connection", socket => {
   socket.on("SEND_MESSAGE", function(data) {
     io.emit("RECIEVE_MESSAGE", data);
   });
+
+  socket.on("toggle_modal", function(data) {
+    io.emit("modal_on", data);
+  });
   // we then send out a new message to the
   // `chat` channel with "Hello World"
   // Our clientside should be able to see

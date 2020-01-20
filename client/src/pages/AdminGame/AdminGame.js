@@ -82,13 +82,13 @@ class AdminGame extends Component {
   }
 
   setModalHalt = ev => {
-    this.socket.emit("SEND_MESSAGE", {
+    this.socket.emit("toggle_modal", {
       setModalHalt: true,
     });
   };
 
   setModalCorrect = value => {
-    this.socket.emit("SEND_MESSAGE", {
+    this.socket.emit("toggle_modal", {
       setModalHalt: false,
       setModalCorrect: true, 
       answer: value,
