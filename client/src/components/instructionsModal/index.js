@@ -1,1 +1,1 @@
-export { default } from "./InstructionsModal";
+export { default } from "./instructionsModal";
