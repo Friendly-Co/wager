@@ -19,7 +19,7 @@ var instructionCopy = {
     copy5: "Winners receive special drink and food deals throughout the game--stay tuned for messages from the Host!"
     };
     
-    function instructionsModal(props) {
+    function InstructionsModal(props) {
       let subheading;
       let copy;
       switch (props.page) {
@@ -69,4 +69,4 @@ var instructionCopy = {
           );
         }
     
-    export default instructionsModal;
+    export default InstructionsModal;
