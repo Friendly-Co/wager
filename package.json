@@ -11,7 +11,7 @@
     "seed": "node scripts/seedDB.js",
     "install": "cd client && npm install",
     "build": "cd client && npm run build",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "cd client && npm install --only=dev && npm run build"
   },
   "author": "Grant Bowen, Taylor Ellis, Sarah Arnold",
   "license": "ISC",
@@ -29,5 +29,8 @@
     "nodemailer": "^6.4.2",
     "react-bootstrap": "^1.0.0-beta.16",
     "socket.io": "^2.3.0"
+  }, 
+  "engines": {
+    "node": "10.16.0"
   }
 }
