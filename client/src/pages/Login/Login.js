@@ -3,7 +3,7 @@ import API from "../../utils/API";
 import AdminAPI from "../../utils/AdminAPI";
 import { FormBtn, Input } from "../../components/Form";
 import Logo from "../../components/Logo";
-import InstructionsModal from "../../components/InstructionsModal/index.js";
+import InstructionsModal from "../../components/InstructionsModal/index";
 
 let count = 1;
 
