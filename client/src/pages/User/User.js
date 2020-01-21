@@ -30,7 +30,7 @@ class User extends Component {
       rightOrWrong: " "
     };
 
-    this.socket = io("localhost:3001" || "http://justafriendlywager.herokuapp.com/");
+    this.socket = io("http://justafriendlywager.herokuapp.com/");
 
     this.socket.on("modal_on", (data) => {
       // this.setState({setModalHalt: true})
