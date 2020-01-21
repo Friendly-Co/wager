@@ -77,24 +77,21 @@ class AdminGame extends Component {
         currentGuess: this.state.scoreSeed.currentGuess
       });
     };
-
-    
   }
 
   setModalHalt = ev => {
     this.socket.emit("toggle_modal", {
-      setModalHalt: true,
+      setModalHalt: true
     });
   };
 
   setModalCorrect = value => {
     this.socket.emit("toggle_modal", {
       setModalHalt: false,
-      setModalCorrect: true, 
-      answer: value,
+      setModalCorrect: true,
+      answer: value
     });
   };
-
 
   haltBets = () => {
     console.log("halt bets button pressed");
@@ -105,7 +102,7 @@ class AdminGame extends Component {
   handleAnswer = value => {
     const houseAnswer = { answer: value };
     const toSend = this.state.scoreSeed.concat(houseAnswer);
-    // API.saveScore(toSend).then(res => {
+    console.log(toSend);
     API.calculateScores(toSend).then(res => {
       console.log("scores saved");
       console.log("after that, ...");
@@ -115,10 +112,8 @@ class AdminGame extends Component {
       });
       console.log("this.state.scoreSeed is now: ");
       console.log(this.state.scoreSeed);
-    })
-
-    }
-
+    });
+  };
 
   deleteAllPlayers = () => {
     //function does not work as is. Shows up as undefined in Leaderboard.js line 52
@@ -149,15 +144,13 @@ class AdminGame extends Component {
           </Col>
 
           <Col size="md-4" className="center-buttons">
+            <Logo />
 
-            <Logo/>
-            
-            <AdminBtns 
-            handleAnswer={this.handleAnswer} 
-            setModalHalt={this.setModalHalt}
-            setModalCorrect={this.setModalCorrect}
+            <AdminBtns
+              handleAnswer={this.handleAnswer}
+              setModalHalt={this.setModalHalt}
+              setModalCorrect={this.setModalCorrect}
             />
-          
           </Col>
         </Row>
       </Container>

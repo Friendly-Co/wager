@@ -27,7 +27,7 @@ class App extends Component {
             <Route exact path="/" component={Login} />
             <Route
               exact
-              path="/admingame/admin/:adminName"
+              path="/admingame/:gameId/admin/:adminName"
               component={AdminGame}
             />
             <Route exact path="/user/:username" component={User} />
