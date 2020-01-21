@@ -5,6 +5,7 @@ const http = require("http");
 const mongoose = require("mongoose");
 const routes = require("./routes");
 const socket = require("socket.io");
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3001;
@@ -69,5 +70,9 @@ mongoose.connect(
 // app.listen(PORT, function() {
 //   console.log(`API Server now listening on PORT ${PORT}`);
 // });
+
+app.get("*", (req, res) => {
+  res.sendFile(path.join(_dirname, "client", "build", "index.html"));
+});
 
 server.listen(PORT, () => console.log(`Listening on port ${PORT}`));
