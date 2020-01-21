@@ -3,7 +3,9 @@ import API from "../../utils/API";
 import AdminAPI from "../../utils/AdminAPI";
 import { FormBtn, Input } from "../../components/Form";
 import Logo from "../../components/Logo";
-import InstructionsModal from "../../components/instructionsModal";
+import InstructionsModal from "../../components/InstructionsModal";
+
+let count = 1;
 
 class Login extends Component {
   // Setting our component's initial state
@@ -18,6 +20,8 @@ class Login extends Component {
     emailHref: "",
     emailSubject: "",
     introModal: false,
+    page: 1,
+    nextOrClose: "Next"
   };
 
   componentDidMount() {
@@ -179,6 +183,26 @@ class Login extends Component {
     }));
   };
 
+  toggleIntro = () => {
+    if (this.state.introModal) {
+      this.setState({introModal: false});
+    } else {
+      this.setState({introModal: true})
+    }
+  };
+
+  introNextorClose = () => {
+    count++;
+    this.setState({page: count});
+    if(count < 5) {
+      this.setState({introModal: true});
+    } else if (count === 5) {
+      this.setState({nextOrClose: "Close"});
+    } else {
+      this.toggleIntro();
+    }
+  }
+
   render() {
     return (
       <div className="container">
@@ -230,7 +254,9 @@ class Login extends Component {
         )}
     <InstructionsModal
       show={this.state.introModal}
-      onHide={() => this.setState({introModal: false})}
+      page={this.state.page}
+      nextOrClose={this.state.nextOrClose}
+      onHide={this.introNextorClose}
     />
       </div>
     );
