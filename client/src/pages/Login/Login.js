@@ -3,7 +3,7 @@ import API from "../../utils/API";
 import AdminAPI from "../../utils/AdminAPI";
 import { FormBtn, Input } from "../../components/Form";
 import Logo from "../../components/Logo";
-import InstructionsModal from "../../components/InstructionsModal";
+import InstructionsModal from "../../components/instructionsModal";
 
 class Login extends Component {
   // Setting our component's initial state
