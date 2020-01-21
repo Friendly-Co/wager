@@ -1,4 +1,4 @@
-const db = require("../models/AdminAccount");
+const db = require("../models/House");
 
 module.exports = {
   // Find all admin- included for once we expand and have unique admin accounts
