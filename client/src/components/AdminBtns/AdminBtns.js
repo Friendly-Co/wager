@@ -60,7 +60,7 @@ function AdminBtns(props) {
           role="button"
           tabIndex="0"
           onClick={() => {
-            props.handleAnswer("Turnovover");
+            props.handleAnswer("Turnover");
             props.setModalCorrect("Turnover");
           }}
         >
