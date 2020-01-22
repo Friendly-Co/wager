@@ -1,4 +1,5 @@
 const db = require("../models/House");
+const mongoose = require("mongoose");
 
 // Defining methods for the scoresController
 module.exports = {
@@ -36,9 +37,28 @@ module.exports = {
     if (!req.body.currentGuess && !(req.body.length > 1)) {
       //edge case- if only one person votes!!
       console.log("no guess... this is a new user!");
-      db.create(req.body)
+      // db.create(req.body)
+      //   .then(dbModel => res.json(dbModel))
+      //   .catch(err => res.status(422).json(err));
+
+      // retrieve my model
+      // var House = mongoose.model("House");
+
+      // create a blog post
+      var game = new db({
+        players: [...{ playerName: req.body.playerName }]
+      });
+      // game.players.push({ playerName: req.body.playerName });
+
+      // game.save(function(err) {
+      //   if (!err) console.log("Success!");
+      // });
+      game
+        .save()
         .then(dbModel => res.json(dbModel))
         .catch(err => res.status(422).json(err));
+
+      // db.players.save({ playerName: req.body.playerName });
       //save guesses
     } else if (req.body.currentGuess) {
       console.log("nice guess, user!");
