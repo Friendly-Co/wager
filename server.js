@@ -10,11 +10,13 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3001;
 const server = http.createServer(app);
-const io = socket(server);
+const io = require("socket.io")(server);
 
 // This enables CORs and ensures that our frontend,
 // running on a different server can connect to our backend
-io.set("origins", "*:*");
+
+// io.set("origins", "*:*");
+
 // whenever we receive a `connection` event
 // our async function is then called
 io.on("connection", socket => {

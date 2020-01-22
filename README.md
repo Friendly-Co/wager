@@ -4,9 +4,13 @@
 
 Just a Friendly Wager is a betting app, which allows users to login and bet on future events.
 
-![demo](relative link to gif)
+#### The User Page:
+![demo](demo/user.gif)
 
-For a demo of the app, visit: <>
+#### Interaction Between the User Page and the Admin Page:
+![demo](demo/admin.gif)
+
+For a demo of the app, visit: <https://justafriendlywager.herokuapp.com>
 
 ### Prerequisites
 
@@ -23,9 +27,14 @@ To install, access the Github page <https://github.com/itsgoodtobegrant/project3
 Next, you will need to download the required NPM packages.  The required NPM packages include:
 ```
     "axios": "^0.18.1",
+    "bootstrap": "^4.4.1",
+    "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "if-env": "^1.0.4",
     "mongoose": "^5.3.16",
+    "nodemailer": "^6.4.2",
+    "react-bootstrap": "^1.0.0-beta.16",
+    "react-router-dom": "^5.1.2",
     "socket.io": "^2.3.0"
 ```
 Because these packages are listed as dependencies already in the package.json file, you may install these packages by typing `npm install` on the commandline.
