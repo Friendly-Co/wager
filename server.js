@@ -10,7 +10,7 @@ const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3001;
 const server = http.createServer(app);
-const io = require("socket.io").listen(server);
+const io = require("socket.io")(server);
 
 // This enables CORs and ensures that our frontend,
 // running on a different server can connect to our backend
