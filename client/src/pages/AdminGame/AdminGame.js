@@ -19,7 +19,7 @@ class AdminGame extends Component {
       currentGuess: ""
     };
 
-    this.socket = io("https://justafriendlywager.herokuapp.com/");
+    this.socket = io("https://justafriendlywager.herokuapp.com/", {transports: ["websocket"]});
 
     //when socket receives a current bet from a user, update the scoreSeed state
     this.socket.on("RECIEVE_MESSAGE", function(data) {

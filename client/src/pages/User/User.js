@@ -30,7 +30,7 @@ class User extends Component {
       rightOrWrong: " "
     };
 
-    this.socket = io("https://justafriendlywager.herokuapp.com/");
+    this.socket = io("https://justafriendlywager.herokuapp.com/", {transports: ["websocket"]});
 
     this.socket.on("modal_on", (data) => {
       // this.setState({setModalHalt: true})
