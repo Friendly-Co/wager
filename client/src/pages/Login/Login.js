@@ -16,18 +16,32 @@ class Login extends Component {
     adminEmail: "",
     adminName: "",
     emailButton: false,
-    emailBody: "",
-    emailHref: "",
-    emailSubject: "",
+    //all games pulled from the database (array of objects):
+    games: [],
+    // ex: Bears v. Packers, entered by admin:
+    gameInfo: "",
+    // Unique id of game from dropdown selection:
+    gameId: "",
+    // Game name, selected from dropdown:
+    gameName: "",
     introModal: false,
     page: 1,
     nextOrClose: "Next"
   };
 
   componentDidMount() {
-    this.setState({introModal: true});
+    this.setState({ introModal: true });
+    // this.loadScores();
+    // console.log(this.state.games);
   }
 
+  loadScores = () => {
+    console.log("button clicked");
+    API.getScores().then(res => {
+      this.setState({ games: res.data });
+      console.log(this.state.games);
+    });
+  };
   //handles form input change for all fields
   handleInputChange = event => {
     const value = event.target.value;
@@ -35,6 +49,20 @@ class Login extends Component {
       ...this.state,
       [event.target.name]: value
     });
+  };
+
+  // handleChange = event => {
+  //   this.setState({ gameId: event.target.value });
+  //   this.setState({ gameName: event.target.name });
+  //   console.log(this.state.gameName);
+  //   console.log(this.state.gameId);
+  // };
+
+  setGameInfo = (name, id) => {
+    this.setState({ gameId: id });
+    this.setState({ gameName: name });
+    console.log(this.state.gameName);
+    console.log(this.state.gameId);
   };
 
   //search the database for any matching usernames.
@@ -106,20 +134,6 @@ class Login extends Component {
               });
               //email username option...add button to email
               this.setState({ emailButton: true });
-              // this.setState(state => {
-              //   // state.emailButton = true;
-              //   state.emailBody = encodeURIComponent(
-              //     `Dear ${res.data[0].adminName}, This is a courtesy email reminder. If you did not request this email, please disregard. Your username is: ${res.data[0].adminName}`
-              //   );
-              //   state.emailSubject = encodeURIComponent(
-              //     `Your Requested Login Information`
-              //   );
-
-              //   state.emailHref = `mailto:${res.data[0].adminEmail}?subject=${state.emailSubject}&body=hey`;
-              // });
-              // console.log(this.state.emailSubject);
-              // console.log(this.state.emailBody);
-              // console.log(this.state.emailHref);
               return false;
             }
 
@@ -145,7 +159,8 @@ class Login extends Component {
           else if (!res.data.length) {
             var toSave = {
               adminName: this.state.adminName,
-              adminEmail: this.state.adminEmail
+              adminEmail: this.state.adminEmail,
+              gameInfo: this.state.gameInfo
             };
             AdminAPI.saveAdmin(toSave).then(res => {
               console.log(
@@ -156,7 +171,8 @@ class Login extends Component {
                 message: alert("Your username and email have been saved")
               });
 
-              window.location = "/admingame/admin/" + this.state.adminName;
+              window.location =
+                "/admingame/" + res.data._id + "/admin/" + this.state.adminName;
             });
           }
         })
@@ -185,23 +201,23 @@ class Login extends Component {
 
   toggleIntro = () => {
     if (this.state.introModal) {
-      this.setState({introModal: false});
+      this.setState({ introModal: false });
     } else {
-      this.setState({introModal: true})
+      this.setState({ introModal: true });
     }
   };
 
   introNextorClose = () => {
     count++;
-    this.setState({page: count});
-    if(count < 5) {
-      this.setState({introModal: true});
+    this.setState({ page: count });
+    if (count < 5) {
+      this.setState({ introModal: true });
     } else if (count === 5) {
-      this.setState({nextOrClose: "Close"});
+      this.setState({ nextOrClose: "Close" });
     } else {
       this.toggleIntro();
     }
-  }
+  };
 
   render() {
     return (
@@ -209,6 +225,43 @@ class Login extends Component {
         <Logo />
         {!this.state.adminLoginBoolean ? (
           <form className="form-inline">
+            <div class="dropdown show">
+              <a
+                class="btn btn-secondary dropdown-toggle"
+                href="#"
+                role="button"
+                id="dropdownMenuLink"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                onClick={this.loadScores}
+              >
+                {/* bug- doesn't change button text on select */}
+                {this.state.gameName || "Select Your Session"}
+              </a>
+
+              <div
+                class="dropdown-menu"
+                aria-labelledby="dropdownMenuLink"
+                name={this.state.gameName}
+                value={this.state.gameId}
+                // onChange={this.handleChange}
+              >
+                {this.state.games.map(game => (
+                  <a
+                    class="dropdown-item"
+                    key={game._id}
+                    // name={game.gameInfo}
+                    value={game._id}
+                    onClick={() => {
+                      this.setGameInfo(game.gameInfo, game._id);
+                    }}
+                  >
+                    {game.gameInfo}
+                  </a>
+                ))}
+              </div>
+            </div>
             <Input
               value={this.state.username}
               onChange={this.handleInputChange}
@@ -222,6 +275,28 @@ class Login extends Component {
           </form>
         ) : (
           <form className="form-inline">
+            {/* <Input
+              value={this.state.gameInfo}
+              onChange={this.handleInputChange}
+              name="gameInfo"
+              placeholder="Ex: Packers vs. Bears"
+            ></Input> */}
+            <input
+              type="text"
+              list="games"
+              value={this.state.gameInfo}
+              onChange={this.handleInputChange}
+              name="gameInfo"
+              placeholder="Type or Select a Game"
+              onClick={this.loadScores}
+            />
+            <datalist id="games">
+              {this.state.games.map(game => (
+                <option class="dropdown-item" key={game._id} value={game._id}>
+                  {game.gameInfo}
+                </option>
+              ))}
+            </datalist>
             <Input
               value={this.state.adminName}
               onChange={this.handleInputChange}
@@ -237,7 +312,6 @@ class Login extends Component {
             {this.state.emailButton ? (
               <p>
                 Forgot your username?{" "}
-                {/* <a href={this.state.emailHref}>Email Login Info</a> */}
                 <button onClick={this.emailUsername}>Email Login Info</button>
               </p>
             ) : (
@@ -252,12 +326,12 @@ class Login extends Component {
             <button onClick={this.toggleLogin}>Login as Player</button>
           </form>
         )}
-    <InstructionsModal
-      show={this.state.introModal}
-      page={this.state.page}
-      nextOrClose={this.state.nextOrClose}
-      onHide={this.introNextorClose}
-    />
+        <InstructionsModal
+          show={this.state.introModal}
+          page={this.state.page}
+          nextOrClose={this.state.nextOrClose}
+          onHide={this.introNextorClose}
+        />
       </div>
     );
   }
