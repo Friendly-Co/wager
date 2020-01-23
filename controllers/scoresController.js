@@ -45,18 +45,22 @@ module.exports = {
       // var House = mongoose.model("House");
 
       // create a blog post
-      var game = new db({
-        players: [...{ playerName: req.body.playerName }]
-      });
+      // var game = new db({
+      //   players: [...{ playerName: req.body.playerName }]
+      // });
       // game.players.push({ playerName: req.body.playerName });
 
       // game.save(function(err) {
       //   if (!err) console.log("Success!");
       // });
-      game
-        .save()
-        .then(dbModel => res.json(dbModel))
-        .catch(err => res.status(422).json(err));
+      // game
+      //   .save()
+      //   .then(dbModel => res.json(dbModel))
+      //   .catch(err => res.status(422).json(err));
+      db.findOne({ _id: req.body._id }).then(function(player) {
+        player.players.push({ playerName: req.body.playerName });
+        player.save();
+      });
 
       // db.players.save({ playerName: req.body.playerName });
       //save guesses
