@@ -23,7 +23,7 @@ class Login extends Component {
     // Unique id of game from dropdown selection:
     gameId: "",
     // Game name, selected from dropdown:
-    gameName: "",
+    // gameName: "",
     introModal: false,
     page: 1,
     nextOrClose: "Next"
@@ -60,8 +60,10 @@ class Login extends Component {
 
   setGameInfo = (name, id) => {
     this.setState({ gameId: id });
-    this.setState({ gameName: name });
-    console.log(this.state.gameName);
+    // this.setState({ gameName: name });
+    this.setState({ gameInfo: name });
+    // console.log(this.state.gameName);
+    console.log(this.state.gameInfo);
     console.log(this.state.gameId);
   };
 
@@ -70,7 +72,7 @@ class Login extends Component {
   handleSave = event => {
     event.preventDefault();
     //verify unique username
-    if (this.state.username) {
+    if (this.state.username && this.state.gameId) {
       API.getScores()
         .then(res => {
           console.log(res.data);
@@ -81,18 +83,25 @@ class Login extends Component {
                   "This username has been taken. Please enter a unique name."
                 )
               });
+              //player name must be unique for leaderboard use and awards from admin
               //clear field
               return false;
             }
           }
           //handle save
           var toSave = {
-            playerName: this.state.username
+            playerName: this.state.username,
+            _id: this.state.gameId
           };
           API.saveScore(toSave).then(
-            this.setState({ message: alert("Your username has been saved") })
+            this.setState({
+              message: alert(
+                "Your username has been saved! Click OK to redirect to your game page."
+              )
+            })
           );
-          window.location = "/user/" + this.state.username;
+          window.location =
+            "/game/" + this.state.gameId + "/user/" + this.state.username;
         })
         .catch(err => console.log(err));
     }
@@ -103,7 +112,7 @@ class Login extends Component {
   handleAdminSave = event => {
     event.preventDefault();
     //verify unique username
-    if (this.state.adminName) {
+    if (this.state.adminName && this.state.adminEmail && this.state.gameInfo) {
       console.log("this.state.adminName: ");
       console.log(this.state.adminName);
       AdminAPI.getAllAdmin()
@@ -113,68 +122,113 @@ class Login extends Component {
           // make sure their email and name match the database
           //then log them back in
           if (res.data.length) {
-            if (
-              this.state.adminName !== res.data[0].adminName &&
-              this.state.adminEmail !== res.data[0].adminEmail
-            ) {
-              this.setState({
-                message: alert(
-                  "This username and email do not match our database. Please try again"
-                )
-              });
-              //email username option...add button to email
-              return false;
-            }
+            for (let i = 0; i < res.data.length; i++) {
+              // if (
+              //   this.state.adminName !== res.data[0].adminName &&
+              //   this.state.adminEmail !== res.data[0].adminEmail
+              // ) {
+              //   this.setState({
+              //     message: alert(
+              //       "This username and email do not match our database. Please try again"
+              //     )
+              //   });
+              //   //email username option...add button to email
+              //   return false;
+              // }
 
-            if (this.state.adminName !== res.data[0].adminName) {
-              this.setState({
-                message: alert(
-                  'This username does not match our database. Please try again. If you would like an email reminder of your username, click "Email Login Info"'
-                )
-              });
-              //email username option...add button to email
-              this.setState({ emailButton: true });
-              return false;
-            }
+              //consider saving the admin info in a separate collection, queryting the collection, then adding that info to the corresponding game
+              if (
+                this.state.adminEmail === res.data[i].adminEmail &&
+                this.state.gameId === res.data[i]._id &&
+                this.state.adminName !== res.data[0].adminName
+              ) {
+                this.setState({
+                  message: alert(
+                    'This username does not match our database for this game. Please try again. If you would like an email reminder of your username, click "Email Login Info"'
+                  )
+                });
+                //email username option...add button to email
+                this.setState({ emailButton: true });
+                return false;
+              }
+              if (
+                this.state.adminName === res.data[i].adminName &&
+                this.state.gameId === res.data[i]._id &&
+                this.state.adminEmail !== res.data[0].adminEmail
+              ) {
+                this.setState({
+                  message: alert(
+                    "This email does not match the admin name in our database for this game. Please try again"
+                  )
+                });
+                //change email option?
+                return false;
+              }
 
-            if (this.state.adminEmail !== res.data[0].adminEmail) {
-              this.setState({
-                message: alert(
-                  "This email does not match our database. Please try again"
-                )
-              });
-              //change email option?
-              return false;
-            }
+              // if already in the database and their input matches, load the admin page
+              //either save a new game instance or log back in to see the old game stats
+              else if (
+                this.state.adminName === res.data[i].adminName &&
+                this.state.adminEmail === res.data[i].adminEmail &&
+                this.state.gameId === res.data[i]._id
+              ) {
+                window.location =
+                  "/admingame/" +
+                  res.data._id +
+                  "/admin/" +
+                  this.state.adminName;
+              }
+              //if a new game is being created (there wouldn't be a game id!!)
+              // else if (
+              //   // this.state.adminName === res.data[i].adminName &&
+              //   // this.state.adminEmail === res.data[i].adminEmail &&
+              //   this.state.gameId !== res.data[i]._id
+              // ) {
+              //   var toSave = {
+              //     adminName: this.state.adminName,
+              //     adminEmail: this.state.adminEmail,
+              //     gameInfo: this.state.gameInfo
+              //   };
+              //   AdminAPI.saveAdmin(toSave).then(res => {
+              //     console.log(
+              //       "this is the response we got back after saving your login: "
+              //     );
+              //     console.log(res.data);
+              //     this.setState({
+              //       message: alert("Your username and email have been saved")
+              //     });
 
-            // if already in the database and their input matches, load the admin page
-            else if (
-              this.state.adminName === res.data[0].adminName &&
-              this.state.adminEmail === res.data[0].adminEmail
-            ) {
-              window.location = "/admingame/admin/" + this.state.adminName;
+              //     window.location =
+              //       "/admingame/" +
+              //       res.data._id +
+              //       "/admin/" +
+              //       this.state.adminName;
+              //   });
             }
           }
-          // if no admin are in the database, save info and log in
-          else if (!res.data.length) {
-            var toSave = {
-              adminName: this.state.adminName,
-              adminEmail: this.state.adminEmail,
-              gameInfo: this.state.gameInfo
-            };
-            AdminAPI.saveAdmin(toSave).then(res => {
-              console.log(
-                "this is the response we got back after saving your login: "
-              );
-              console.log(res.data);
-              this.setState({
-                message: alert("Your username and email have been saved")
-              });
-
-              window.location =
-                "/admingame/" + res.data._id + "/admin/" + this.state.adminName;
+          // if no games are in the database, save info and log in
+          // if (!res.data.length) {
+          var toSave = {
+            adminName: this.state.adminName,
+            adminEmail: this.state.adminEmail,
+            gameInfo: this.state.gameInfo
+          };
+          AdminAPI.saveAdmin(toSave).then(res => {
+            console.log(
+              "this is the response we got back after saving your login: "
+            );
+            console.log(res.data);
+            this.setState({
+              message: alert(
+                `A new ${this.state.gameInfo} game has been created with ther username ${this.state.adminName} and associated email ${this.state.adminEmail}.`
+              )
             });
-          }
+
+            window.location =
+              "/admingame/" + res.data._id + "/admin/" + this.state.adminName;
+          });
+          // }
+          // }
         })
         .catch(err => console.log(err));
     }
@@ -236,14 +290,15 @@ class Login extends Component {
                 aria-expanded="false"
                 onClick={this.loadScores}
               >
-                {/* bug- doesn't change button text on select */}
-                {this.state.gameName || "Select Your Session"}
+                {/* {this.state.gameName || "Select Your Session"} */}
+                {this.state.gameInfo || "Select Your Session"}
               </a>
 
               <div
                 class="dropdown-menu"
                 aria-labelledby="dropdownMenuLink"
-                name={this.state.gameName}
+                // name={this.state.gameName}
+                name={this.state.gameInfo}
                 value={this.state.gameId}
                 // onChange={this.handleChange}
               >
@@ -268,7 +323,10 @@ class Login extends Component {
               name="username"
               placeholder="Username (required)"
             ></Input>
-            <FormBtn disabled={!this.state.username} onClick={this.handleSave}>
+            <FormBtn
+              disabled={!this.state.username || !this.state.gameId}
+              onClick={this.handleSave}
+            >
               Submit
             </FormBtn>
             <button onClick={this.toggleLogin}>Login as Admin</button>
@@ -292,7 +350,14 @@ class Login extends Component {
             />
             <datalist id="games">
               {this.state.games.map(game => (
-                <option class="dropdown-item" key={game._id} value={game._id}>
+                <option
+                  class="dropdown-item"
+                  key={game._id}
+                  value={game._id}
+                  onClick={() => {
+                    this.setGameInfo(game.gameInfo, game._id);
+                  }}
+                >
                   {game.gameInfo}
                 </option>
               ))}
@@ -318,7 +383,11 @@ class Login extends Component {
               <p></p>
             )}
             <FormBtn
-              disabled={!this.state.adminName || !this.state.adminEmail}
+              disabled={
+                !this.state.adminName ||
+                !this.state.adminEmail ||
+                !this.state.gameInfo
+              }
               onClick={this.handleAdminSave}
             >
               Submit
