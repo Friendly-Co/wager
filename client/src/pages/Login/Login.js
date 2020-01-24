@@ -22,8 +22,6 @@ class Login extends Component {
     gameInfo: "",
     // Unique id of game from dropdown selection:
     gameId: "",
-    // Game name, selected from dropdown:
-    // gameName: "",
     introModal: false,
     page: 1,
     nextOrClose: "Next"
@@ -42,6 +40,20 @@ class Login extends Component {
       console.log(this.state.games);
     });
   };
+
+  //handles form input change for all admin game dropdown
+  handleDropdownInputChange = event => {
+    this.setState({
+      ...this.state,
+      gameInfo: event.target.value,
+      gameId: event.target.name
+    });
+    console.log("this.state.gameInfo: ");
+    console.log(this.state.gameInfo);
+    console.log("this.state.gameId: ");
+    console.log(this.state.gameId);
+  };
+
   //handles form input change for all fields
   handleInputChange = event => {
     const value = event.target.value;
@@ -51,21 +63,24 @@ class Login extends Component {
     });
   };
 
-  // handleChange = event => {
-  //   this.setState({ gameId: event.target.value });
-  //   this.setState({ gameName: event.target.name });
-  //   console.log(this.state.gameName);
-  //   console.log(this.state.gameId);
-  // };
-
   setGameInfo = (name, id) => {
-    this.setState({ gameId: id });
-    // this.setState({ gameName: name });
+    console.log("dropdown clicked");
     this.setState({ gameInfo: name });
-    // console.log(this.state.gameName);
-    console.log(this.state.gameInfo);
-    console.log(this.state.gameId);
+    //If there is an id, this was selected by a player
+    if (id) {
+      this.setState({ gameId: id });
+      console.log(this.state.gameInfo);
+      console.log(this.state.gameId);
+    }
+    // else {
+    //   const toFind = {};
+    //   API.getScores().then(res => {});
+    // }
   };
+
+  // change = event => {
+  //   this.setState({ gameId: event.target.value });
+  // };
 
   //search the database for any matching usernames.
   //If matching, alert the user to change their name
@@ -77,6 +92,7 @@ class Login extends Component {
         .then(res => {
           console.log(res.data);
           for (let i = 0; i < res.data.length; i++) {
+            //needs to be just for his game though...
             if (this.state.username === res.data[i].playerName) {
               this.setState({
                 message: alert(
@@ -111,6 +127,12 @@ class Login extends Component {
 
   handleAdminSave = event => {
     event.preventDefault();
+
+    //need to add:
+    //if this.state.gameInfo this is a new game to save. Accept all fields and save
+
+    // if this.state.gameId && !this.state.gameInfo, this is a previously created game. Go to the page after checking admin credentials.
+
     //verify unique username
     if (this.state.adminName && this.state.adminEmail && this.state.gameInfo) {
       console.log("this.state.adminName: ");
@@ -136,11 +158,12 @@ class Login extends Component {
               //   return false;
               // }
 
-              //consider saving the admin info in a separate collection, queryting the collection, then adding that info to the corresponding game
+              //consider saving the admin info in a separate collection, querying the collection, then adding that info (gameInfo and _id) to the corresponding game
               if (
                 this.state.adminEmail === res.data[i].adminEmail &&
+                //but the id may not be present if they choose their own- use caution with this.state.gameId in the admin side
                 this.state.gameId === res.data[i]._id &&
-                this.state.adminName !== res.data[0].adminName
+                this.state.adminName !== res.data[i].adminName
               ) {
                 this.setState({
                   message: alert(
@@ -154,7 +177,7 @@ class Login extends Component {
               if (
                 this.state.adminName === res.data[i].adminName &&
                 this.state.gameId === res.data[i]._id &&
-                this.state.adminEmail !== res.data[0].adminEmail
+                this.state.adminEmail !== res.data[i].adminEmail
               ) {
                 this.setState({
                   message: alert(
@@ -208,6 +231,15 @@ class Login extends Component {
           }
           // if no games are in the database, save info and log in
           // if (!res.data.length) {
+          console.log("circumventing the if statements because there is no id");
+          console.log("this.state.adminName");
+          console.log(this.state.adminName);
+          console.log("this.state.adminEmail");
+          console.log(this.state.adminEmail);
+          console.log("this.state.gameInfo");
+          console.log(this.state.gameInfo);
+          console.log("this.state.gameId");
+          console.log(this.state.gameId);
           var toSave = {
             adminName: this.state.adminName,
             adminEmail: this.state.adminEmail,
@@ -220,7 +252,7 @@ class Login extends Component {
             console.log(res.data);
             this.setState({
               message: alert(
-                `A new ${this.state.gameInfo} game has been created with ther username ${this.state.adminName} and associated email ${this.state.adminEmail}.`
+                `A new ${this.state.gameInfo} game has been created with the username ${this.state.adminName} and associated email ${this.state.adminEmail}.`
               )
             });
 
@@ -234,9 +266,12 @@ class Login extends Component {
     }
   };
 
+  //need tp verify that this.state.gameId does not have a bug- ex: selecting from dropdown, then typing a new
   emailUsername = event => {
     event.preventDefault();
-    AdminAPI.getAllAdmin().then(res => {
+    // AdminAPI.getAllAdmin().then(res => {
+    const toUse = this.state.gameId;
+    AdminAPI.getAdminInfo(toUse).then(res => {
       console.log(res.data);
       const toSend = {
         adminName: res.data[0].adminName,
@@ -279,9 +314,9 @@ class Login extends Component {
         <Logo />
         {!this.state.adminLoginBoolean ? (
           <form className="form-inline">
-            <div class="dropdown show">
+            <div className="dropdown show">
               <a
-                class="btn btn-secondary dropdown-toggle"
+                className="btn btn-secondary dropdown-toggle"
                 href="#"
                 role="button"
                 id="dropdownMenuLink"
@@ -291,7 +326,7 @@ class Login extends Component {
                 onClick={this.loadScores}
               >
                 {/* {this.state.gameName || "Select Your Session"} */}
-                {this.state.gameInfo || "Select Your Session"}
+                {this.state.gameInfo || "Select Your Game"}
               </a>
 
               <div
@@ -304,7 +339,7 @@ class Login extends Component {
               >
                 {this.state.games.map(game => (
                   <a
-                    class="dropdown-item"
+                    className="dropdown-item"
                     key={game._id}
                     // name={game.gameInfo}
                     value={game._id}
@@ -337,26 +372,71 @@ class Login extends Component {
               value={this.state.gameInfo}
               onChange={this.handleInputChange}
               name="gameInfo"
-              placeholder="Ex: Packers vs. Bears"
+              placeholder="Create New Ex: Cat v. Dog"
             ></Input> */}
+
+            {/* <div className="dropdown show">
+              <a
+                className="btn btn-secondary dropdown-toggle"
+                href="#"
+                role="button"
+                id="dropdownMenuLink"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                onClick={this.loadScores}
+              >
+                {this.state.gameInfo || "Select a Game"}
+              </a> */}
+
+            {/* <div
+                class="dropdown-menu"
+                aria-labelledby="dropdownMenuLink"
+                name={this.state.gameInfo}
+                value={this.state.gameId}
+              >
+                {this.state.games.map(game => (
+                  <a
+                    className="dropdown-item"
+                    key={game._id}
+                    value={game._id}
+                    onClick={() => {
+                      this.setGameInfo(game.gameInfo, game._id);
+                    }}
+                  >
+                    {game.gameInfo}
+                  </a>
+                ))}
+              </div>
+            </div> */}
+
             <input
               type="text"
               list="games"
               value={this.state.gameInfo}
-              onChange={this.handleInputChange}
-              name="gameInfo"
+              // onChange={this.handleInputChange}
+              onChange={this.handleDropdownInputChange}
+              // name="gameInfo"
+              name={this.state.gameId}
               placeholder="Type or Select a Game"
               onClick={this.loadScores}
             />
-            <datalist id="games">
+            <datalist
+              id="games"
+              // onChange={this.change}
+              // value={this.state.gameId}
+            >
               {this.state.games.map(game => (
                 <option
                   class="dropdown-item"
                   key={game._id}
+                  name={game.gameInfo}
                   value={game._id}
-                  onClick={() => {
-                    this.setGameInfo(game.gameInfo, game._id);
-                  }}
+                  // onClick={() => {
+                  // onSelect={() => {
+                  // bug-sending the game-_id in the argument does not work, because of the manual input option to create a name
+                  //   this.setGameInfo(game.gameInfo, game._id);
+                  // }}
                 >
                   {game.gameInfo}
                 </option>
@@ -377,7 +457,16 @@ class Login extends Component {
             {this.state.emailButton ? (
               <p>
                 Forgot your username?{" "}
-                <button onClick={this.emailUsername}>Email Login Info</button>
+                <button
+                  onClick={() => {
+                    this.emailUsername(
+                      this.state.gameId,
+                      this.state.adminEmail
+                    );
+                  }}
+                >
+                  Email Login Info
+                </button>
               </p>
             ) : (
               <p></p>
