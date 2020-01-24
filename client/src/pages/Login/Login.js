@@ -19,6 +19,7 @@ class Login extends Component {
     //all games pulled from the database (array of objects):
     games: [],
     // ex: Bears v. Packers, entered by admin:
+    newGame: "",
     gameInfo: "",
     // Unique id of game from dropdown selection:
     gameId: "",
@@ -46,7 +47,7 @@ class Login extends Component {
     this.setState({
       ...this.state,
       gameInfo: event.target.value,
-      gameId: event.target.name
+      gameId: event.target.id
     });
     console.log("this.state.gameInfo: ");
     console.log(this.state.gameInfo);
@@ -72,15 +73,7 @@ class Login extends Component {
       console.log(this.state.gameInfo);
       console.log(this.state.gameId);
     }
-    // else {
-    //   const toFind = {};
-    //   API.getScores().then(res => {});
-    // }
   };
-
-  // change = event => {
-  //   this.setState({ gameId: event.target.value });
-  // };
 
   //search the database for any matching usernames.
   //If matching, alert the user to change their name
@@ -128,16 +121,13 @@ class Login extends Component {
   handleAdminSave = event => {
     event.preventDefault();
 
-    //need to add:
-    //if this.state.gameInfo this is a new game to save. Accept all fields and save
-
-    // if this.state.gameId && !this.state.gameInfo, this is a previously created game. Go to the page after checking admin credentials.
-
+    // if this.state.gameId && this.state.gameInfo, this is a previously created game. Go to the page after checking admin credentials.
     //verify unique username
     if (this.state.adminName && this.state.adminEmail && this.state.gameInfo) {
       console.log("this.state.adminName: ");
       console.log(this.state.adminName);
-      AdminAPI.getAllAdmin()
+      //needs to just get the game by id
+      AdminAPI.getAllGames()
         .then(res => {
           console.log(res.data);
           //if there is an admin already in the system, they were logged out
@@ -145,23 +135,23 @@ class Login extends Component {
           //then log them back in
           if (res.data.length) {
             for (let i = 0; i < res.data.length; i++) {
-              // if (
-              //   this.state.adminName !== res.data[0].adminName &&
-              //   this.state.adminEmail !== res.data[0].adminEmail
-              // ) {
-              //   this.setState({
-              //     message: alert(
-              //       "This username and email do not match our database. Please try again"
-              //     )
-              //   });
-              //   //email username option...add button to email
-              //   return false;
-              // }
+              //probablu don't need a loop here
+              if (
+                this.state.adminName !== res.data[0].adminName &&
+                this.state.adminEmail !== res.data[0].adminEmail
+              ) {
+                this.setState({
+                  message: alert(
+                    "This username and email do not match our database. Please try again"
+                  )
+                });
+                //email username option...add button to email
+                return false;
+              }
 
-              //consider saving the admin info in a separate collection, querying the collection, then adding that info (gameInfo and _id) to the corresponding game
+              // consider saving the admin info in a separate collection, querying the collection, then adding that info (gameInfo and _id) to the corresponding game
               if (
                 this.state.adminEmail === res.data[i].adminEmail &&
-                //but the id may not be present if they choose their own- use caution with this.state.gameId in the admin side
                 this.state.gameId === res.data[i]._id &&
                 this.state.adminName !== res.data[i].adminName
               ) {
@@ -201,72 +191,36 @@ class Login extends Component {
                   "/admin/" +
                   this.state.adminName;
               }
-              //if a new game is being created (there wouldn't be a game id!!)
-              // else if (
-              //   // this.state.adminName === res.data[i].adminName &&
-              //   // this.state.adminEmail === res.data[i].adminEmail &&
-              //   this.state.gameId !== res.data[i]._id
-              // ) {
-              //   var toSave = {
-              //     adminName: this.state.adminName,
-              //     adminEmail: this.state.adminEmail,
-              //     gameInfo: this.state.gameInfo
-              //   };
-              //   AdminAPI.saveAdmin(toSave).then(res => {
-              //     console.log(
-              //       "this is the response we got back after saving your login: "
-              //     );
-              //     console.log(res.data);
-              //     this.setState({
-              //       message: alert("Your username and email have been saved")
-              //     });
-
-              //     window.location =
-              //       "/admingame/" +
-              //       res.data._id +
-              //       "/admin/" +
-              //       this.state.adminName;
-              //   });
             }
           }
-          // if no games are in the database, save info and log in
-          // if (!res.data.length) {
-          console.log("circumventing the if statements because there is no id");
-          console.log("this.state.adminName");
-          console.log(this.state.adminName);
-          console.log("this.state.adminEmail");
-          console.log(this.state.adminEmail);
-          console.log("this.state.gameInfo");
-          console.log(this.state.gameInfo);
-          console.log("this.state.gameId");
-          console.log(this.state.gameId);
-          var toSave = {
-            adminName: this.state.adminName,
-            adminEmail: this.state.adminEmail,
-            gameInfo: this.state.gameInfo
-          };
-          AdminAPI.saveAdmin(toSave).then(res => {
-            console.log(
-              "this is the response we got back after saving your login: "
-            );
-            console.log(res.data);
-            this.setState({
-              message: alert(
-                `A new ${this.state.gameInfo} game has been created with the username ${this.state.adminName} and associated email ${this.state.adminEmail}.`
-              )
-            });
-
-            window.location =
-              "/admingame/" + res.data._id + "/admin/" + this.state.adminName;
-          });
-          // }
           // }
         })
         .catch(err => console.log(err));
+      //if this.state.newGame this is a new game to save. Accept all fields and save
+    } else if (this.state.newGame) {
+      console.log("circumventing the if statements because there is no id");
+      var toSave = {
+        adminName: this.state.adminName,
+        adminEmail: this.state.adminEmail,
+        gameInfo: this.state.newGame
+      };
+      AdminAPI.saveGame(toSave).then(res => {
+        console.log(
+          "this is the response we got back after saving your login: "
+        );
+        console.log(res.data);
+        this.setState({
+          message: alert(
+            `A new ${this.state.newGame} game has been created with the username ${this.state.adminName} and associated email ${this.state.adminEmail}.`
+          )
+        });
+
+        window.location =
+          "/admingame/" + res.data._id + "/admin/" + this.state.adminName;
+      });
     }
   };
 
-  //need tp verify that this.state.gameId does not have a bug- ex: selecting from dropdown, then typing a new
   emailUsername = event => {
     event.preventDefault();
     // AdminAPI.getAllAdmin().then(res => {
@@ -325,14 +279,12 @@ class Login extends Component {
                 aria-expanded="false"
                 onClick={this.loadScores}
               >
-                {/* {this.state.gameName || "Select Your Session"} */}
                 {this.state.gameInfo || "Select Your Game"}
               </a>
 
               <div
                 class="dropdown-menu"
                 aria-labelledby="dropdownMenuLink"
-                // name={this.state.gameName}
                 name={this.state.gameInfo}
                 value={this.state.gameId}
                 // onChange={this.handleChange}
@@ -341,7 +293,6 @@ class Login extends Component {
                   <a
                     className="dropdown-item"
                     key={game._id}
-                    // name={game.gameInfo}
                     value={game._id}
                     onClick={() => {
                       this.setGameInfo(game.gameInfo, game._id);
@@ -367,15 +318,18 @@ class Login extends Component {
             <button onClick={this.toggleLogin}>Login as Admin</button>
           </form>
         ) : (
+          // admin rendering =========================================================================================
+          // create new game
           <form className="form-inline">
-            {/* <Input
-              value={this.state.gameInfo}
+            <Input
+              value={this.state.newGame}
               onChange={this.handleInputChange}
-              name="gameInfo"
+              name="newGame"
               placeholder="Create New Ex: Cat v. Dog"
-            ></Input> */}
+            ></Input>
 
-            {/* <div className="dropdown show">
+            {/* select existing game */}
+            <div className="dropdown show">
               <a
                 className="btn btn-secondary dropdown-toggle"
                 href="#"
@@ -386,15 +340,25 @@ class Login extends Component {
                 aria-expanded="false"
                 onClick={this.loadScores}
               >
-                {this.state.gameInfo || "Select a Game"}
-              </a> */}
+                {this.state.gameInfo || "Select Existing Game"}
+              </a>
 
-            {/* <div
-                class="dropdown-menu"
+              <div
+                className="dropdown-menu"
                 aria-labelledby="dropdownMenuLink"
                 name={this.state.gameInfo}
                 value={this.state.gameId}
               >
+                {/* maybe create an option to make your own game in the dropdown? */}
+                <a
+                  className="dropdown-item"
+                  key={"no answer"}
+                  onClick={() => {
+                    this.setGameInfo("", "");
+                  }}
+                >
+                  {"Select Existing Game"}
+                </a>
                 {this.state.games.map(game => (
                   <a
                     className="dropdown-item"
@@ -408,12 +372,13 @@ class Login extends Component {
                   </a>
                 ))}
               </div>
-            </div> */}
-
+            </div>
+            {/* 
             <input
               type="text"
               list="games"
               value={this.state.gameInfo}
+              id={this.state.gameId}
               // onChange={this.handleInputChange}
               onChange={this.handleDropdownInputChange}
               // name="gameInfo"
@@ -430,18 +395,19 @@ class Login extends Component {
                 <option
                   class="dropdown-item"
                   key={game._id}
-                  name={game.gameInfo}
-                  value={game._id}
+                  id={game._id}
+                  value={game.gameInfo}
+                  name={game._id}
                   // onClick={() => {
                   // onSelect={() => {
                   // bug-sending the game-_id in the argument does not work, because of the manual input option to create a name
-                  //   this.setGameInfo(game.gameInfo, game._id);
+                  // this.setGameId(game._id);
                   // }}
                 >
                   {game.gameInfo}
                 </option>
               ))}
-            </datalist>
+            </datalist> */}
             <Input
               value={this.state.adminName}
               onChange={this.handleInputChange}
@@ -475,7 +441,7 @@ class Login extends Component {
               disabled={
                 !this.state.adminName ||
                 !this.state.adminEmail ||
-                !this.state.gameInfo
+                (!this.state.gameInfo && !this.state.newGame)
               }
               onClick={this.handleAdminSave}
             >
