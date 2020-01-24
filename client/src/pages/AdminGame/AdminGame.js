@@ -4,6 +4,7 @@ import Leaderboard from "../../components/Leaderboard";
 import AdminBtns from "../../components/AdminBtns";
 import { Col, Row, Container } from "../../components/Grid";
 import API from "../../utils/API";
+import AdminAPI from "../../utils/AdminAPI";
 import io from "socket.io-client";
 import Logo from "../../components/Logo";
 
@@ -16,10 +17,21 @@ class AdminGame extends Component {
     this.state = {
       scoreSeed: [],
       answer: " ",
-      currentGuess: ""
+      currentGuess: "",
+      gameId: ""
     };
 
-    this.socket = io("https://justafriendlywager.herokuapp.com/", {transports: ["websocket"]});
+    this.socket = io("https://justafriendlywager.herokuapp.com/", {
+      transports: ["websocket"]
+    });
+
+    this.componentDidMount = () => {
+      this.setState({ gameId: this.props.match.params.gameId });
+      AdminAPI.getGameInfo(this.props.match.params.gameId).then(res => {
+        console.log(res.data.players);
+        this.setState({ scoreSeed: res.data.players });
+      });
+    };
 
     //when socket receives a current bet from a user, update the scoreSeed state
     this.socket.on("RECIEVE_MESSAGE", function(data) {
@@ -37,7 +49,10 @@ class AdminGame extends Component {
     });
 
     const addUserInfo = data => {
-      // console.log(data); // {playerName: "Tarzan", currentGuess: " "}
+      console.log("here's the data sent from users by socket");
+      console.log(data); // {playerName: "Tarzan", currentGuess: " "}
+      console.log("here's the scoreseed: ");
+      console.log(this.state.scoreSeed);
       this.setState(state => {
         var playerIndex = -1;
         var alreadyHere = false;
@@ -100,15 +115,15 @@ class AdminGame extends Component {
 
   //send house answer and player guesses to the server for calculation
   handleAnswer = value => {
-    const houseAnswer = { answer: value };
-    const toSend = this.state.scoreSeed.concat(houseAnswer);
+    const toSend = [{ answer: value }, { _id: this.state.gameId }];
+    // const toSend = this.state.scoreSeed.concat(houseAnswer);
     console.log(toSend);
     API.calculateScores(toSend).then(res => {
       console.log("scores saved");
       console.log("after that, ...");
       console.log(res.data);
       this.setState({
-        scoreSeed: [...res.data]
+        scoreSeed: res.data.players
       });
       console.log("this.state.scoreSeed is now: ");
       console.log(this.state.scoreSeed);
@@ -137,6 +152,7 @@ class AdminGame extends Component {
             {/* <div className="wrapper"> */}
             <Leaderboard
               scoreSeed={this.state.scoreSeed}
+              gameId={this.state.gameId}
               currentGuess={this.state.currentGuess}
               deleteAllPlayers={this.deleteAllPlayers}
             />
