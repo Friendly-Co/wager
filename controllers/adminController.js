@@ -12,10 +12,10 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
   // Find the admin by username
-  findByName: function(req, res) {
-    console.log(req.params.adminName);
-    console.log("findByName function in adminController.js");
-    db.find({ adminName: req.params.adminName })
+  findById: function(req, res) {
+    console.log("findById function in adminController.js");
+    console.log(req.params.Id);
+    db.findOne({ _id: req.params.Id })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
