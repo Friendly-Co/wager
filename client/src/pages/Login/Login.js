@@ -16,7 +16,7 @@ class Login extends Component {
     adminEmail: "",
     adminName: "",
     emailButton: false,
-    //all games pulled from the database (array of objects):
+    //all games pulled from the database (array of objects), used for rendering dropdowns:
     games: [],
     // ex: Bears v. Packers, entered by admin:
     newGame: "",
@@ -157,7 +157,7 @@ class Login extends Component {
       console.log("we are retrieving a previously created game.");
       const toFind = this.state.gameId;
 
-      AdminAPI.getAdminInfo(toFind)
+      AdminAPI.getGameInfo(toFind)
         .then(res => {
           console.log(res.data);
           //if there is an admin already in the system, they were logged out
@@ -226,7 +226,7 @@ class Login extends Component {
       message: alert("What's this strange error??")
     });
     const toFind = this.state.gameId;
-    AdminAPI.getAdminInfo(toFind).then(res => {
+    AdminAPI.getGameInfo(toFind).then(res => {
       console.log(res.data);
       const toSend = {
         adminName: res.data.adminName,
