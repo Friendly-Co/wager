@@ -4,8 +4,9 @@ const sendEmailController = require("../../controllers/sendEmailController");
 
 // Matches with "/api/admin/login/:adminName"
 router
-  .route("/:adminName")
-  .get(adminController.findByName)
+  .route("/:Id")
+  // .route("/login")
+  .get(adminController.findById)
 
   .post(adminController.create)
   .put(adminController.update);
