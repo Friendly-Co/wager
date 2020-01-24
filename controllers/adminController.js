@@ -23,7 +23,26 @@ module.exports = {
   create: function(req, res) {
     console.log("create function in adminController.js");
     console.log(req.body);
-    db.create(req.body)
+    // const toSave = {
+    //   gameInfo: req.body.gameInfo,
+    //   adminName: req.body.adminName,
+    //   adminEmail: req.body.adminEmail
+    // };
+    // db.create(toSave)
+    //   .then(dbModel => res.json(dbModel))
+    //   .catch(err => res.status(422).json(err));
+    const newGame = new db({
+      gameInfo: req.body.gameInfo,
+      adminName: req.body.adminName,
+      adminEmail: req.body.adminEmail,
+      players: []
+    });
+
+    // newGame.save().then(function() {
+    //   console.log("done!");
+    // });
+    newGame
+      .save()
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
