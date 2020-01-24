@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 const Players = new Schema({
   playerName: {
     type: String,
-    required: [true, "must provide a player name"],
+    // required: [true, "must provide a player name"],
     unique: true,
     maxlength: 32
   },
@@ -16,14 +16,14 @@ const Players = new Schema({
 const gameSchema = new Schema({
   gameInfo: {
     type: String,
-    // required: true,
+    required: true,
     unique: true
   },
   date: { type: Date, default: Date.now },
   adminName: {
     type: String,
     required: [true, "must provide a username"],
-    unique: true,
+    // unique: true,
     maxlength: 32
   },
   adminEmail: {
