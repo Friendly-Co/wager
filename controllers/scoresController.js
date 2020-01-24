@@ -77,10 +77,14 @@ module.exports = {
   },
   update: function(req, res) {
     console.log("update function in scoresController.js");
-    console.log(req.body);
-    var answer = req.body.pop();
-    answer = answer.answer.toUpperCase();
-    console.log(req.body); //[ { playerName: 'Dexter', currentGuess: 'PASS' } ]
+    console.log(req.body); // [ { answer: 'Run' }, { _id: '5e2b2777a464d05cc8623bc8' } ]
+    var answer = req.body[0].answer;
+    answer = answer.toUpperCase();
+    console.log("answer is: ");
+    console.log(answer);
+    var gameId = req.body[1]._id;
+    console.log("game id is:");
+    console.log(gameId);
     //should be according to the user's guess, not the answer!
     var toAddOrSubtract = 0;
 
@@ -101,37 +105,77 @@ module.exports = {
         toAddOrSubtract = 0;
     }
 
+    // db.findOne({ _id: req.body._id })
+    //   .then(function(player) {
+    //     player.players.updateMany(
+    //       { currentGuess: " " },
+    //       { $inc: { currScore: -1 }, $set: { currentGuess: " " } },
+    //       { multi: true }
+    //     );
+    //     player.save();
+    //   })
+
     //Subtract 1 from scores when unanswered
-    db.updateMany(
-      { currentGuess: " " },
-      { $inc: { currScore: -1 }, $set: { currentGuess: " " } },
-      { multi: true }
-    )
-      .then(() => {
-        // increase scores of correct guesses
-        return db.updateMany(
-          { currentGuess: answer },
-          {
-            $inc: { currScore: +toAddOrSubtract },
-            $set: { currentGuess: " " }
-          },
-          { multi: true }
-        );
+    // db.updateMany(
+    //   { $and: [{ _id: gameId }, { "players.currentGuess": " " }] },
+    //   {
+    //     $inc: { "players.currScore": -1 },
+    //     $set: { "players.currentGuess": " " }
+    //   },
+    //   { multi: true }
+    // )
+
+    db.findOne({ _id: gameId })
+      .then(function(player) {
+        // console.log("player before for loop");
+        // console.log(player);
+        for (let i = 0; i < player.players.length; i++) {
+          if (player.players[i].currentGuess === " ") {
+            player.players[i].currScore -= 1;
+          } else if (player.players[i].currentGuess !== answer) {
+            player.players[i].currScore - toAddOrSubtract;
+            player.players[i].currentGuess = " ";
+          } else if (player.players[i].currentGuess === answer) {
+            player.players[i].currScore + toAddOrSubtract;
+            player.players[i].currentGuess = " ";
+          }
+        }
+        console.log("player after for loop");
+        console.log(player);
+        // player.save();
+        db.update({ _id: gameId }, { $set: { "players.$": player } });
       })
-      .then(() => {
-        // if a player answered the question, but incorrectly - will be much more complex if subtracting by player's answer...
-        return db.updateMany(
-          { currentGuess: { $nin: [answer, " "] } },
-          {
-            $inc: { currScore: -toAddOrSubtract },
-            $set: { currentGuess: " " }
-          },
-          { multi: true }
-        );
-      })
+
+      // db.updateMany(
+      //   { currentGuess: " " },
+      //   { $inc: { currScore: -1 }, $set: { currentGuess: " " } },
+      //   { multi: true }
+      // )
+      // .then(() => {
+      //   // increase scores of correct guesses
+      //   return db.updateMany(
+      //     { currentGuess: answer },
+      //     {
+      //       $inc: { currScore: +toAddOrSubtract },
+      //       $set: { currentGuess: " " }
+      //     },
+      //     { multi: true }
+      //   );
+      // })
+      // .then(() => {
+      // if a player answered the question, but incorrectly - will be much more complex if subtracting by player's answer...
+      //   return db.updateMany(
+      //     { currentGuess: { $nin: [answer, " "] } },
+      //     {
+      //       $inc: { currScore: -toAddOrSubtract },
+      //       $set: { currentGuess: " " }
+      //     },
+      //     { multi: true }
+      //   );
+      // })
       .then(() => {
         return db
-          .find({})
+          .findOne({ _id: gameId })
 
           .then(dbModel => {
             console.log(dbModel);

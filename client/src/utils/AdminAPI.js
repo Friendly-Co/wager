@@ -16,8 +16,8 @@ export default {
   //     return axios.get("/api/admin/" + id);
   //   },
   // Gets the admin with the given adminName and gameId
-  getAdminInfo: function(id) {
-    console.log("getAdminInfo from AdminAPI.js- game id");
+  getGameInfo: function(id) {
+    console.log("getGameInfo from AdminAPI.js- game id");
     console.log(id);
     // return axios.get("/api/admin/login" + id);
     return axios.get("/api/admin/" + id);
