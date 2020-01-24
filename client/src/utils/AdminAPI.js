@@ -18,7 +18,9 @@ export default {
   // Gets the admin with the given adminName and gameId
   getAdminInfo: function(id) {
     console.log("getAdminInfo from AdminAPI.js- game id");
-    return axios.get("/api/admin/login", id);
+    console.log(id);
+    // return axios.get("/api/admin/login" + id);
+    return axios.get("/api/admin/" + id);
   },
   // Deletes the player with the given id
   // deletePlayer: function(id) {
