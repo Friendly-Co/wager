@@ -42,7 +42,8 @@ class Login extends Component {
     });
   };
 
-  //handles form input change for all admin game dropdown
+  // Did handle form input change for all admin game dropdown, until I changed it
+  //bug: If this function is removed, at times you are unable to type in the form input areas...????!!!!
   handleDropdownInputChange = event => {
     this.setState({
       ...this.state,
@@ -75,6 +76,7 @@ class Login extends Component {
     }
   };
 
+  //================================= Player Login Function ====================================
   //search the database for any matching usernames.
   //If matching, alert the user to change their name
   handleSave = event => {
@@ -116,88 +118,18 @@ class Login extends Component {
     }
   };
 
-  //======================Admin Function ====================================
+  //================================ Admin Login Function ====================================
+  // consider saving the admin info in a separate collection, querying the collection, then adding that info (gameInfo and _id) to the corresponding game
 
   handleAdminSave = event => {
     event.preventDefault();
 
-    // if this.state.gameId && this.state.gameInfo, this is a previously created game. Go to the page after checking admin credentials.
-    //verify unique username
-    if (this.state.adminName && this.state.adminEmail && this.state.gameInfo) {
-      console.log("this.state.adminName: ");
-      console.log(this.state.adminName);
-      //needs to just get the game by id
-      AdminAPI.getAllGames()
-        .then(res => {
-          console.log(res.data);
-          //if there is an admin already in the system, they were logged out
-          // make sure their email and name match the database
-          //then log them back in
-          if (res.data.length) {
-            for (let i = 0; i < res.data.length; i++) {
-              //probablu don't need a loop here
-              if (
-                this.state.adminName !== res.data[0].adminName &&
-                this.state.adminEmail !== res.data[0].adminEmail
-              ) {
-                this.setState({
-                  message: alert(
-                    "This username and email do not match our database. Please try again"
-                  )
-                });
-                //email username option...add button to email
-                return false;
-              }
-
-              // consider saving the admin info in a separate collection, querying the collection, then adding that info (gameInfo and _id) to the corresponding game
-              if (
-                this.state.adminEmail === res.data[i].adminEmail &&
-                this.state.gameId === res.data[i]._id &&
-                this.state.adminName !== res.data[i].adminName
-              ) {
-                this.setState({
-                  message: alert(
-                    'This username does not match our database for this game. Please try again. If you would like an email reminder of your username, click "Email Login Info"'
-                  )
-                });
-                //email username option...add button to email
-                this.setState({ emailButton: true });
-                return false;
-              }
-              if (
-                this.state.adminName === res.data[i].adminName &&
-                this.state.gameId === res.data[i]._id &&
-                this.state.adminEmail !== res.data[i].adminEmail
-              ) {
-                this.setState({
-                  message: alert(
-                    "This email does not match the admin name in our database for this game. Please try again"
-                  )
-                });
-                //change email option?
-                return false;
-              }
-
-              // if already in the database and their input matches, load the admin page
-              //either save a new game instance or log back in to see the old game stats
-              else if (
-                this.state.adminName === res.data[i].adminName &&
-                this.state.adminEmail === res.data[i].adminEmail &&
-                this.state.gameId === res.data[i]._id
-              ) {
-                window.location =
-                  "/admingame/" +
-                  res.data._id +
-                  "/admin/" +
-                  this.state.adminName;
-              }
-            }
-          }
-          // }
-        })
-        .catch(err => console.log(err));
-      //if this.state.newGame this is a new game to save. Accept all fields and save
-    } else if (this.state.newGame) {
+    // This is a new game to save. Accept all fields and save
+    if (this.state.newGame) {
+      this.setState(state => {
+        state.gameInfo = "";
+        state.gameId = "";
+      });
       console.log("circumventing the if statements because there is no id");
       var toSave = {
         adminName: this.state.adminName,
@@ -205,10 +137,6 @@ class Login extends Component {
         gameInfo: this.state.newGame
       };
       AdminAPI.saveGame(toSave).then(res => {
-        console.log(
-          "this is the response we got back after saving your login: "
-        );
-        console.log(res.data);
         this.setState({
           message: alert(
             `A new ${this.state.newGame} game has been created with the username ${this.state.adminName} and associated email ${this.state.adminEmail}.`
@@ -219,23 +147,97 @@ class Login extends Component {
           "/admingame/" + res.data._id + "/admin/" + this.state.adminName;
       });
     }
+
+    // this is a previously created game. Go to the page after checking admin credentials.
+    else if (
+      this.state.adminName &&
+      this.state.adminEmail &&
+      this.state.gameInfo
+    ) {
+      console.log("we are retrieving a previously created game.");
+      const toFind = this.state.gameId;
+
+      AdminAPI.getAdminInfo(toFind)
+        .then(res => {
+          console.log(res.data);
+          //if there is an admin already in the system, they were logged out
+          // make sure their email and name match the database then log them back in
+          if (res.data) {
+            if (
+              this.state.adminName !== res.data.adminName &&
+              this.state.adminEmail !== res.data.adminEmail
+            ) {
+              this.setState({
+                message: alert(
+                  "This username and email do not match our database. Please try again"
+                )
+              });
+              return false;
+            } else if (
+              this.state.adminEmail === res.data.adminEmail &&
+              this.state.gameId === res.data._id &&
+              this.state.adminName !== res.data.adminName
+            ) {
+              this.setState({
+                message: alert(
+                  'This username does not match our database for this game. Please try again. If you would like an email reminder of your username, click "Email Login Info"'
+                )
+              });
+              //email username option...add button to email
+              this.setState({ emailButton: true });
+              return false;
+            } else if (
+              this.state.adminName === res.data.adminName &&
+              this.state.gameId === res.data._id &&
+              this.state.adminEmail !== res.data.adminEmail
+            ) {
+              this.setState({
+                message: alert(
+                  "This email does not match the admin name in our database for this game. Please try again"
+                )
+              });
+              return false;
+            }
+
+            // if already in the database and their input matches, load the admin page
+            else if (
+              this.state.adminName === res.data.adminName &&
+              this.state.adminEmail === res.data.adminEmail &&
+              this.state.gameId === res.data._id
+            ) {
+              this.setState({
+                message: alert("Welcome Back!")
+              });
+              window.location =
+                "/admingame/" +
+                this.state.gameId +
+                "/admin/" +
+                this.state.adminName;
+            }
+          }
+        })
+        .catch(err => console.log(err));
+    }
   };
 
   emailUsername = event => {
     event.preventDefault();
-    // AdminAPI.getAllAdmin().then(res => {
-    const toUse = this.state.gameId;
-    AdminAPI.getAdminInfo(toUse).then(res => {
+    this.setState({
+      message: alert("What's this strange error??")
+    });
+    const toFind = this.state.gameId;
+    AdminAPI.getAdminInfo(toFind).then(res => {
       console.log(res.data);
       const toSend = {
-        adminName: res.data[0].adminName,
-        adminEmail: res.data[0].adminEmail
+        adminName: res.data.adminName,
+        adminEmail: res.data.adminEmail
       };
       AdminAPI.sendEmail(toSend).then(res => console.log(res));
     });
+    return;
   };
 
-  //boolean to control rendering for login as admin and login as user
+  // ============================== Modal Controls and Conditional Rendering ======================================
   toggleLogin = event => {
     this.setState(prevState => ({
       adminLoginBoolean: !prevState.adminLoginBoolean
@@ -267,6 +269,7 @@ class Login extends Component {
       <div className="container">
         <Logo />
         {!this.state.adminLoginBoolean ? (
+          //  ============================================ Player Rendering =============================================
           <form className="form-inline">
             <div className="dropdown show">
               <a
@@ -287,7 +290,6 @@ class Login extends Component {
                 aria-labelledby="dropdownMenuLink"
                 name={this.state.gameInfo}
                 value={this.state.gameId}
-                // onChange={this.handleChange}
               >
                 {this.state.games.map(game => (
                   <a
@@ -318,7 +320,7 @@ class Login extends Component {
             <button onClick={this.toggleLogin}>Login as Admin</button>
           </form>
         ) : (
-          // admin rendering =========================================================================================
+          //  ============================================ Admin Rendering =============================================
           // create new game
           <form className="form-inline">
             <Input
@@ -423,16 +425,7 @@ class Login extends Component {
             {this.state.emailButton ? (
               <p>
                 Forgot your username?{" "}
-                <button
-                  onClick={() => {
-                    this.emailUsername(
-                      this.state.gameId,
-                      this.state.adminEmail
-                    );
-                  }}
-                >
-                  Email Login Info
-                </button>
+                <button onClick={this.emailUsername}>Email Login Info</button>
               </p>
             ) : (
               <p></p>
