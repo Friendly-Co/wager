@@ -43,8 +43,6 @@ module.exports = {
           var newPlayer = dbModel.players.filter(
             index => index.playerName === req.body.playerName
           );
-          console.log(newPlayer);
-          console.log(newPlayer[0]._id);
           res.json(newPlayer);
         });
       });
@@ -52,13 +50,112 @@ module.exports = {
     } else if (req.body.currentGuess) {
       console.log("nice guess, user!");
       console.log(req.body);
+      // db.findOneAndUpdate(
+      //   { playerName: req.body.playerName },
+      //   { currentGuess: req.body.currentGuess }
+      // )
+
       db.findOneAndUpdate(
-        { playerName: req.body.playerName },
-        { currentGuess: req.body.currentGuess }
-      )
-        // .then(dbModel => res.json(dbModel))
-        .catch(err => res.status(422).json(err));
-      console.log("guess saved!");
+        {
+          // $and: [
+          // _id: req.body.gameId,
+          "players._id": req.body.playerId
+          // ]
+        },
+        { $set: { "$.currentGuess": req.body.currentGuess } }
+        // function(err) {
+        //   console.log(err);
+        // }
+      );
+
+      // db.update(
+      //   {
+      //     _id: ObjectId(req.body.gameId),
+      //     "players._id": ObjectId(req.body.playerId)
+      //   },
+      //   { $set: { "players.$.currentGuess": req.body.currentGuess } }
+      // )
+
+        // function(e, data) {
+        // console.log("here's e!!!");
+        // if (e) console.log(e);
+        // console.log("here's the data: ");
+        // console.log(data);
+        // data.players.id(req.body.playerId).currentGuess = req.body.currentGuess;
+
+        // or if you want to change more then one field -
+        //=> var t = data.sub1.id(_id1).sub2.id(_id2);
+        //=> t.field = req.body.something;
+
+        // data.save();
+        // });
+
+        // db.findById(req.body.gameId).then(function(player) {
+        //   // player.players.push({ playerName: req.body.playerName });
+        //   player
+        //     .findOneAndUpdate(
+        //       { "players.$._id": req.body._id },
+        //       { currentGuess: req.body.currentGuess }
+        //     )
+
+        //     .then(dbModel => {
+        //       console.log(dbModel);
+        // var newPlayer = dbModel.players.filter(
+        //   index => index.playerName === req.body.playerName
+        // );
+        // res.json(newPlayer);
+        // });
+        // });
+
+        // db.findOneAndUpdate(
+        //   { _id: req.body.gameId, "players.$._id": req.body.playerId },
+        //   {
+        //     $set: {
+        //       "players.$.currentGuess": req.body.currentGuess
+        //     }
+        //   }
+        // );
+
+        // db.updateOne(
+        //   { _id: req.body.gameId, "players.$._id": req.body.playerId },
+        //   { $set: { "players.$.currentGuess": req.body.currentGuess } }
+        // );
+
+        // db.updateOne(
+        //   {
+        //     _id: req.body.gameId,
+        //     players: { $elemMatch: { _id: req.body.playerId } }
+        //   },
+        //   { $set: { "players.$[elem].currentGuess": req.body.currentGuess } }
+        // )
+
+        .findOneAndUpdate(
+          { _id: req.body.gameId, "players._id": req.body.playerId },
+          {
+            $set: {
+              "players.$.currentGuess": req.body.currentGuess
+            }
+          },
+          function(err, doc) {
+            console.log(err);
+            console.log(doc);
+          }
+        );
+
+      // db.updateOne(
+      //   {
+      //     "players.$._id": req.body.playerId
+      //     // players: { $elemMatch: { _id: req.body.playerId } }
+      //   },
+      //   { $set: { "players.$.currentGuess": req.body.currentGuess } }
+      // )
+
+      //   .then(dbModel => {
+      //     console.log(dbModel);
+      //     res.json(dbModel);
+      //   })
+      //   .catch(err => res.status(422).json(err));
+      // console.log("guess saved!");
     }
   },
   update: function(req, res) {
