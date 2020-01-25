@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import API from "../../utils/API";
-import AdminAPI from "../../utils/AdminAPI";
+import HouseAPI from "../../utils/HouseAPI";
 import DeleteBtn from "../DeleteBtn";
 import { List, ListItem } from "../List";
 // import io from "socket.io-client";
@@ -34,7 +34,7 @@ class Leaderboard extends Component {
     // if (!this.props.scoreSeed.length) {
     console.log("here is the game id");
     console.log(this.state.gameId);
-    AdminAPI.getGameInfo(this.state.gameId)
+    HouseAPI.getGameInfo(this.state.gameId)
       // API.getScores()
       .then(res => {
         console.log(res.data);

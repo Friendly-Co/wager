@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import API from "../../utils/API";
-import AdminAPI from "../../utils/AdminAPI";
+import HouseAPI from "../../utils/HouseAPI";
 import { FormBtn, Input } from "../../components/Form";
 import Logo from "../../components/Logo";
 import InstructionsModal from "../../components/instructionsModal";
@@ -146,7 +146,7 @@ class Login extends Component {
         adminEmail: this.state.adminEmail,
         gameInfo: this.state.newGame
       };
-      AdminAPI.saveGame(toSave).then(res => {
+      HouseAPI.saveGame(toSave).then(res => {
         this.setState({
           message: alert(
             `A new ${this.state.newGame} game has been created with the username ${this.state.adminName} and associated email ${this.state.adminEmail}.`
@@ -167,7 +167,7 @@ class Login extends Component {
       console.log("we are retrieving a previously created game.");
       const toFind = this.state.gameId;
 
-      AdminAPI.getGameInfo(toFind)
+      HouseAPI.getGameInfo(toFind)
         .then(res => {
           console.log(res.data);
           //if there is an admin already in the system, they were logged out
@@ -236,13 +236,13 @@ class Login extends Component {
       message: alert("What's this strange error??")
     });
     const toFind = this.state.gameId;
-    AdminAPI.getGameInfo(toFind).then(res => {
+    HouseAPI.getGameInfo(toFind).then(res => {
       console.log(res.data);
       const toSend = {
         adminName: res.data.adminName,
         adminEmail: res.data.adminEmail
       };
-      AdminAPI.sendEmail(toSend).then(res => console.log(res));
+      HouseAPI.sendEmail(toSend).then(res => console.log(res));
     });
     return;
   };

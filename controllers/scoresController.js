@@ -1,4 +1,5 @@
-const db = require("../models/House");
+const House = require("../models/House");
+const Players = require("../models/Players");
 const mongoose = require("mongoose");
 
 // Defining methods for the scoresController
@@ -6,7 +7,7 @@ module.exports = {
   // Find and return all scores and player info
   findAll: function(req, res) {
     console.log("findAll function in scoresController.js");
-    db.find(req.query)
+    House.find(req.query)
       .sort({ currScore: -1 })
       .then(dbModel => {
         // console.log(dbModel);
@@ -17,7 +18,7 @@ module.exports = {
   // Find a player by their _id
   findById: function(req, res) {
     console.log("findById function in scoresController.js");
-    db.findById(req.params.id)
+    House.findById(req.params.id)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
@@ -25,7 +26,7 @@ module.exports = {
   findByName: function(req, res) {
     console.log(req.params.playerName);
     console.log("findByName function in scoresController.js");
-    db.find({ playerName: req.params.playerName })
+    House.find({ playerName: req.params.playerName })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
@@ -36,7 +37,7 @@ module.exports = {
     //save login/ username
     if (!req.body.currentGuess && !(req.body.length > 1)) {
       console.log("no guess... this is a new user!");
-      db.findOne({ _id: req.body._id }).then(function(player) {
+      House.findOne({ _id: req.body._id }).then(function(player) {
         player.players.push({ playerName: req.body.playerName });
         player.save().then(dbModel => {
           console.log(dbModel);
@@ -55,7 +56,7 @@ module.exports = {
       //   { currentGuess: req.body.currentGuess }
       // )
 
-      db.findOneAndUpdate(
+      House.findOneAndUpdate(
         {
           // $and: [
           // _id: req.body.gameId,
@@ -76,71 +77,71 @@ module.exports = {
       //   { $set: { "players.$.currentGuess": req.body.currentGuess } }
       // )
 
-        // function(e, data) {
-        // console.log("here's e!!!");
-        // if (e) console.log(e);
-        // console.log("here's the data: ");
-        // console.log(data);
-        // data.players.id(req.body.playerId).currentGuess = req.body.currentGuess;
+      // function(e, data) {
+      // console.log("here's e!!!");
+      // if (e) console.log(e);
+      // console.log("here's the data: ");
+      // console.log(data);
+      // data.players.id(req.body.playerId).currentGuess = req.body.currentGuess;
 
-        // or if you want to change more then one field -
-        //=> var t = data.sub1.id(_id1).sub2.id(_id2);
-        //=> t.field = req.body.something;
+      // or if you want to change more then one field -
+      //=> var t = data.sub1.id(_id1).sub2.id(_id2);
+      //=> t.field = req.body.something;
 
-        // data.save();
-        // });
+      // data.save();
+      // });
 
-        // db.findById(req.body.gameId).then(function(player) {
-        //   // player.players.push({ playerName: req.body.playerName });
-        //   player
-        //     .findOneAndUpdate(
-        //       { "players.$._id": req.body._id },
-        //       { currentGuess: req.body.currentGuess }
-        //     )
+      // db.findById(req.body.gameId).then(function(player) {
+      //   // player.players.push({ playerName: req.body.playerName });
+      //   player
+      //     .findOneAndUpdate(
+      //       { "players.$._id": req.body._id },
+      //       { currentGuess: req.body.currentGuess }
+      //     )
 
-        //     .then(dbModel => {
-        //       console.log(dbModel);
-        // var newPlayer = dbModel.players.filter(
-        //   index => index.playerName === req.body.playerName
-        // );
-        // res.json(newPlayer);
-        // });
-        // });
+      //     .then(dbModel => {
+      //       console.log(dbModel);
+      // var newPlayer = dbModel.players.filter(
+      //   index => index.playerName === req.body.playerName
+      // );
+      // res.json(newPlayer);
+      // });
+      // });
 
-        // db.findOneAndUpdate(
-        //   { _id: req.body.gameId, "players.$._id": req.body.playerId },
-        //   {
-        //     $set: {
-        //       "players.$.currentGuess": req.body.currentGuess
-        //     }
-        //   }
-        // );
+      // db.findOneAndUpdate(
+      //   { _id: req.body.gameId, "players.$._id": req.body.playerId },
+      //   {
+      //     $set: {
+      //       "players.$.currentGuess": req.body.currentGuess
+      //     }
+      //   }
+      // );
 
-        // db.updateOne(
-        //   { _id: req.body.gameId, "players.$._id": req.body.playerId },
-        //   { $set: { "players.$.currentGuess": req.body.currentGuess } }
-        // );
+      // db.updateOne(
+      //   { _id: req.body.gameId, "players.$._id": req.body.playerId },
+      //   { $set: { "players.$.currentGuess": req.body.currentGuess } }
+      // );
 
-        // db.updateOne(
-        //   {
-        //     _id: req.body.gameId,
-        //     players: { $elemMatch: { _id: req.body.playerId } }
-        //   },
-        //   { $set: { "players.$[elem].currentGuess": req.body.currentGuess } }
-        // )
+      // db.updateOne(
+      //   {
+      //     _id: req.body.gameId,
+      //     players: { $elemMatch: { _id: req.body.playerId } }
+      //   },
+      //   { $set: { "players.$[elem].currentGuess": req.body.currentGuess } }
+      // )
 
-        .findOneAndUpdate(
-          { _id: req.body.gameId, "players._id": req.body.playerId },
-          {
-            $set: {
-              "players.$.currentGuess": req.body.currentGuess
-            }
-          },
-          function(err, doc) {
-            console.log(err);
-            console.log(doc);
+      House.findOneAndUpdate(
+        { _id: req.body.gameId, "players._id": req.body.playerId },
+        {
+          $set: {
+            "players.$.currentGuess": req.body.currentGuess
           }
-        );
+        },
+        function(err, doc) {
+          console.log(err);
+          console.log(doc);
+        }
+      );
 
       // db.updateOne(
       //   {
@@ -208,7 +209,7 @@ module.exports = {
     //   { multi: true }
     // )
 
-    db.findOne({ _id: gameId })
+    House.findOne({ _id: gameId })
       .then(function(player) {
         console.log("player before for loop");
         console.log(player.players);
@@ -228,7 +229,7 @@ module.exports = {
         // player.save();
         // db.update(
         var toSave = player.players;
-        db.update(
+        House.update(
           { _id: gameId },
           // gameId,
           // { $set: { "players.$": toSave } }
@@ -268,19 +269,17 @@ module.exports = {
       //   );
       // })
       .then(() => {
-        return db
-          .findOne({ _id: gameId })
-
-          .then(dbModel => {
-            console.log(dbModel);
-            res.json(dbModel);
-          });
+        return House.findOne({ _id: gameId })
+        .then(dbModel => {
+          console.log(dbModel);
+          res.json(dbModel);
+        });
       })
       .catch(err => res.status(422).json(err));
   },
   removeAll: function(req, res) {
     console.log("removeAll function in scoresController.js");
-    db.deleteMany({}, function(err) {
+    House.deleteMany({}, function(err) {
       if (err) {
         console.log(err);
       }
