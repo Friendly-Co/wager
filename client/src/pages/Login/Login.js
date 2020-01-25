@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import API from "../../utils/API";
+import PlayerAPI from "../../utils/PlayerAPI";
 import HouseAPI from "../../utils/HouseAPI";
 import { FormBtn, Input } from "../../components/Form";
 import Logo from "../../components/Logo";
@@ -30,13 +30,13 @@ class Login extends Component {
 
   componentDidMount() {
     this.setState({ introModal: true });
-    // this.loadScores();
+    // this.loadGames();
     // console.log(this.state.games);
   }
 
-  loadScores = () => {
+  loadGames = () => {
     console.log("button clicked");
-    API.getScores().then(res => {
+    PlayerAPI.getPlayers().then(res => {
       this.setState({ games: res.data });
       console.log(this.state.games);
     });
@@ -83,7 +83,7 @@ class Login extends Component {
     event.preventDefault();
     //verify unique username
     if (this.state.username && this.state.gameId) {
-      API.getScores()
+      PlayerAPI.getPlayers(this.state.gameId)
         .then(res => {
           console.log(res.data);
           for (let i = 0; i < res.data.length; i++) {
@@ -103,7 +103,7 @@ class Login extends Component {
             playerName: this.state.username,
             _id: this.state.gameId
           };
-          API.saveScore(toSave).then(res => {
+          PlayerAPI.saveScore(toSave).then(res => {
             console.log(res.data);
             //ex: [ { currScore: 50,
             //     currentGuess: ' ',
@@ -290,7 +290,7 @@ class Login extends Component {
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
-                onClick={this.loadScores}
+                onClick={this.loadGames}
               >
                 {this.state.gameInfo || "Select Your Game"}
               </a>
@@ -350,7 +350,7 @@ class Login extends Component {
                 data-toggle="dropdown"
                 aria-haspopup="true"
                 aria-expanded="false"
-                onClick={this.loadScores}
+                onClick={this.loadGames}
               >
                 {this.state.gameInfo || "Select Existing Game"}
               </a>
@@ -396,7 +396,7 @@ class Login extends Component {
               // name="gameInfo"
               name={this.state.gameId}
               placeholder="Type or Select a Game"
-              onClick={this.loadScores}
+              onClick={this.loadGames}
             />
             <datalist
               id="games"

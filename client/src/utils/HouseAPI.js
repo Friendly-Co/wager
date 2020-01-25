@@ -24,7 +24,7 @@ export default {
   },
   // Deletes the player with the given id
   // deletePlayer: function(id) {
-  //   return axios.delete("/api/scores/" + id);
+  //   return axios.delete("/api/player/" + id);
   // },
   // Saves admin to the database
   saveGame: function(toSave) {

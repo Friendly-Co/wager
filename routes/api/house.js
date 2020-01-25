@@ -2,7 +2,7 @@ const router = require("express").Router();
 const houseController = require("../../controllers/houseController");
 const sendEmailController = require("../../controllers/sendEmailController");
 
-// Matches with "/api/admin/login/:adminName"
+// Matches with "/api/house/login/:adminName"
 router
   .route("/:Id")
   // .route("/login")
@@ -11,11 +11,11 @@ router
   .post(houseController.create)
   .put(houseController.update);
 
-// Matches with "/api/admin/mail"
+// Matches with "/api/house/mail"
 // router.route("/:mail").post(sendEmailController.create);
 router.route("/mail/moremail").post(sendEmailController.create);
 
-// Matches with "/api/admin"
+// Matches with "/api/house"
 router
   .route("/")
   .get(houseController.findAll)

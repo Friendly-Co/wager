@@ -2,11 +2,11 @@ const House = require("../models/House");
 const Players = require("../models/Players");
 const mongoose = require("mongoose");
 
-// Defining methods for the scoresController
+// Defining methods for the playerController
 module.exports = {
   // Find and return all scores and player info
   findAll: function(req, res) {
-    console.log("findAll function in scoresController.js");
+    console.log("findAll function in playerController.js");
     House.find(req.query)
       .sort({ currScore: -1 })
       .then(dbModel => {
@@ -17,22 +17,22 @@ module.exports = {
   },
   // Find a player by their _id
   findById: function(req, res) {
-    console.log("findById function in scoresController.js");
-    House.findById(req.params.id)
+    console.log("findById function in playerController.js");
+    Players.findById(req.params.id)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
   // Find a player by username
   findByName: function(req, res) {
     console.log(req.params.playerName);
-    console.log("findByName function in scoresController.js");
+    console.log("findByName function in playerController.js");
     House.find({ playerName: req.params.playerName })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
   // Create a new user in the database, and update their currentGuess
   create: function(req, res) {
-    console.log("create function in scoresController.js");
+    console.log("create function in playerController.js");
     console.log(req.body);
     //save login/ username
     if (!req.body.currentGuess && !(req.body.length > 1)) {
@@ -160,7 +160,7 @@ module.exports = {
     }
   },
   update: function(req, res) {
-    console.log("update function in scoresController.js");
+    console.log("update function in playerController.js");
     console.log(req.body); // [ { answer: 'Run' }, { _id: '5e2b2777a464d05cc8623bc8' } ]
     var answer = req.body[0].answer;
     answer = answer.toUpperCase();
@@ -269,8 +269,7 @@ module.exports = {
       //   );
       // })
       .then(() => {
-        return House.findOne({ _id: gameId })
-        .then(dbModel => {
+        return House.findOne({ _id: gameId }).then(dbModel => {
           console.log(dbModel);
           res.json(dbModel);
         });
@@ -278,7 +277,7 @@ module.exports = {
       .catch(err => res.status(422).json(err));
   },
   removeAll: function(req, res) {
-    console.log("removeAll function in scoresController.js");
+    console.log("removeAll function in playerController.js");
     House.deleteMany({}, function(err) {
       if (err) {
         console.log(err);

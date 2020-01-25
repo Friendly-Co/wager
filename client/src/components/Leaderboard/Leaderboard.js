@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import API from "../../utils/API";
+import PlayerAPI from "../../utils/PlayerAPI";
 import HouseAPI from "../../utils/HouseAPI";
 import DeleteBtn from "../DeleteBtn";
 import { List, ListItem } from "../List";
@@ -35,7 +35,7 @@ class Leaderboard extends Component {
     console.log("here is the game id");
     console.log(this.state.gameId);
     HouseAPI.getGameInfo(this.state.gameId)
-      // API.getScores()
+      // PlayerAPI.getPlayers()
       .then(res => {
         console.log(res.data);
         // this.setState({ dbScores: res.data.players });

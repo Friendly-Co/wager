@@ -1,9 +1,9 @@
 const router = require("express").Router();
-const scoreRoutes = require("./scores");
+const playerRoutes = require("./player");
 const houseRoutes = require("./house");
 
 // Score routes
-router.use("/scores", scoreRoutes);
+router.use("/player", playerRoutes);
 
 // house routes
 router.use("/house", houseRoutes);

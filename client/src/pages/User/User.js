@@ -4,7 +4,7 @@ import Logo from "../../components/Logo";
 import GuessButtons from "../../components/GuessButtons";
 import GuessState from "../../components/GuessState";
 import Score from "../../components/Score";
-import API from "../../utils/API";
+import PlayerAPI from "../../utils/PlayerAPI";
 import LeaderModal from "../../components/LeaderModal/LeaderModal";
 import CorrectModal from "../../components/CorrectModal/CorrectModal";
 import HaltModal from "../../components/HaltModal/HaltModal";
@@ -88,7 +88,7 @@ class User extends Component {
 
   // Loads score and sets them to this.state.scores
   loadScore = () => {
-    API.getPlayerScore(username)
+    PlayerAPI.getPlayerScore(username)
       .then(res => {
         // console.log(res.data);
         this.setState({
@@ -101,7 +101,7 @@ class User extends Component {
 
   loadLeaderboard = () => {
     this.loadScore();
-    API.getScores()
+    PlayerAPI.getPlayers()
       .then(res => {
         this.setState({ leaderboard: res.data.splice(0, 10) });
         // console.log(this.state.leaderboard);
@@ -162,7 +162,7 @@ class User extends Component {
 
   // function that saves players' guesses to the database
   savePlayerGuess = toSave => {
-    API.saveScore(toSave)
+    PlayerAPI.saveScore(toSave)
       .then(res =>
         this.setState({
           score: res.data.currScore

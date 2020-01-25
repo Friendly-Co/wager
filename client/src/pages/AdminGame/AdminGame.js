@@ -3,8 +3,8 @@ import React, { Component } from "react";
 import Leaderboard from "../../components/Leaderboard";
 import AdminBtns from "../../components/AdminBtns";
 import { Col, Row, Container } from "../../components/Grid";
-import API from "../../utils/API";
-import AdminAPI from "../../utils/AdminAPI";
+import PlayerAPI from "../../utils/PlayerAPI";
+import HouseAPI from "../../utils/HouseAPI";
 import io from "socket.io-client";
 import Logo from "../../components/Logo";
 
@@ -27,7 +27,7 @@ class AdminGame extends Component {
 
     this.componentDidMount = () => {
       this.setState({ gameId: this.props.match.params.gameId });
-      AdminAPI.getGameInfo(this.props.match.params.gameId).then(res => {
+      HouseAPI.getGameInfo(this.props.match.params.gameId).then(res => {
         console.log(res.data.players);
         this.setState({ scoreSeed: res.data.players });
       });
@@ -118,7 +118,7 @@ class AdminGame extends Component {
     const toSend = [{ answer: value }, { _id: this.state.gameId }];
     // const toSend = this.state.scoreSeed.concat(houseAnswer);
     console.log(toSend);
-    API.calculateScores(toSend).then(res => {
+    PlayerAPI.calculateScores(toSend).then(res => {
       console.log("scores saved");
       console.log("after that, ...");
       console.log(res.data);
@@ -132,7 +132,7 @@ class AdminGame extends Component {
 
   deleteAllPlayers = () => {
     //function does not work as is. Shows up as undefined in Leaderboard.js line 52
-    API.deleteAllPlayers().then(res => {
+    PlayerAPI.deleteAllPlayers().then(res => {
       this.setState(state => {
         state.scoreSeed = [];
       }); //Bug: completely breaks

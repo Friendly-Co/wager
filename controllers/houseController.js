@@ -29,10 +29,10 @@ module.exports = {
     //   adminName: req.body.adminName,
     //   adminEmail: req.body.adminEmail
     // };
-    // db.create(toSave)
+    // House.create(toSave)
     //   .then(dbModel => res.json(dbModel))
     //   .catch(err => res.status(422).json(err));
-    const newGame = new db({
+    const newGame = new House({
       gameInfo: req.body.gameInfo,
       adminName: req.body.adminName,
       adminEmail: req.body.adminEmail,
@@ -59,7 +59,7 @@ module.exports = {
   },
   //Clear the database of all accounts
   removeAll: function(req, res) {
-    console.log("removeAll function in scoresController.js");
+    console.log("removeAll function in houseController.js");
     House.deleteMany({}, function(err) {
       if (err) {
         console.log(err);

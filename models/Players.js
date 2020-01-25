@@ -17,11 +17,11 @@ const playerSchema = new Schema({
   currScore: { type: Number, default: 50 },
   currentGuess: { type: String, default: " " },
 
-  playerEmail: {
-    type: String,
-    // required: [true, "must provide an email"],
-    match: [/.+@.+\..+/, "Please enter a valid e-mail address"]
-  },
+  // playerEmail: {
+  //   type: String,
+  //   // required: [true, "must provide an email"],
+  //   match: [/.+@.+\..+/, "Please enter a valid e-mail address"]
+  // },
   date: { type: Date, default: Date.now }
 });
 
