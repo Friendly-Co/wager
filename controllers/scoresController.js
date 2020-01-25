@@ -35,37 +35,23 @@ module.exports = {
     console.log(req.body);
     //save login/ username
     if (!req.body.currentGuess && !(req.body.length > 1)) {
-      //edge case- if only one person votes!!
       console.log("no guess... this is a new user!");
-      // db.create(req.body)
-      //   .then(dbModel => res.json(dbModel))
-      //   .catch(err => res.status(422).json(err));
-
-      // retrieve my model
-      // var House = mongoose.model("House");
-
-      // create a blog post
-      // var game = new db({
-      //   players: [...{ playerName: req.body.playerName }]
-      // });
-      // game.players.push({ playerName: req.body.playerName });
-
-      // game.save(function(err) {
-      //   if (!err) console.log("Success!");
-      // });
-      // game
-      //   .save()
-      //   .then(dbModel => res.json(dbModel))
-      //   .catch(err => res.status(422).json(err));
       db.findOne({ _id: req.body._id }).then(function(player) {
         player.players.push({ playerName: req.body.playerName });
-        player.save();
+        player.save().then(dbModel => {
+          console.log(dbModel);
+          var newPlayer = dbModel.players.filter(
+            index => index.playerName === req.body.playerName
+          );
+          console.log(newPlayer);
+          console.log(newPlayer[0]._id);
+          res.json(newPlayer);
+        });
       });
-
-      // db.players.save({ playerName: req.body.playerName });
       //save guesses
     } else if (req.body.currentGuess) {
       console.log("nice guess, user!");
+      console.log(req.body);
       db.findOneAndUpdate(
         { playerName: req.body.playerName },
         { currentGuess: req.body.currentGuess }
@@ -127,23 +113,34 @@ module.exports = {
 
     db.findOne({ _id: gameId })
       .then(function(player) {
-        // console.log("player before for loop");
-        // console.log(player);
+        console.log("player before for loop");
+        console.log(player.players);
         for (let i = 0; i < player.players.length; i++) {
-          if (player.players[i].currentGuess === " ") {
+          if (player.players[i].currentGuess == " ") {
             player.players[i].currScore -= 1;
-          } else if (player.players[i].currentGuess !== answer) {
-            player.players[i].currScore - toAddOrSubtract;
+          } else if (player.players[i].currentGuess != answer) {
+            player.players[i].currScore -= toAddOrSubtract;
             player.players[i].currentGuess = " ";
-          } else if (player.players[i].currentGuess === answer) {
-            player.players[i].currScore + toAddOrSubtract;
+          } else if (player.players[i].currentGuess == answer) {
+            player.players[i].currScore += toAddOrSubtract;
             player.players[i].currentGuess = " ";
           }
         }
         console.log("player after for loop");
-        console.log(player);
+        console.log(player.players);
         // player.save();
-        db.update({ _id: gameId }, { $set: { "players.$": player } });
+        // db.update(
+        var toSave = player.players;
+        db.update(
+          { _id: gameId },
+          // gameId,
+          // { $set: { "players.$": toSave } }
+          { $set: { players: toSave } },
+          { new: true }
+          // ,
+          // { upsert: true }
+          // { multi: true }
+        );
       })
 
       // db.updateMany(

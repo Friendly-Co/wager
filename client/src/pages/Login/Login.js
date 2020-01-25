@@ -42,7 +42,7 @@ class Login extends Component {
     });
   };
 
-  // Did handle form input change for all admin game dropdown, until I changed it
+  // This ONCE handled form input change for all admin game dropdown, until I changed it, now it is unused
   //bug: If this function is removed, at times you are unable to type in the form input areas...????!!!!
   handleDropdownInputChange = event => {
     this.setState({
@@ -87,7 +87,6 @@ class Login extends Component {
         .then(res => {
           console.log(res.data);
           for (let i = 0; i < res.data.length; i++) {
-            //needs to be just for his game though...
             if (this.state.username === res.data[i].playerName) {
               this.setState({
                 message: alert(
@@ -104,15 +103,26 @@ class Login extends Component {
             playerName: this.state.username,
             _id: this.state.gameId
           };
-          API.saveScore(toSave).then(
-            this.setState({
-              message: alert(
-                "Your username has been saved! Click OK to redirect to your game page."
-              )
-            })
-          );
+          API.saveScore(toSave).then(res => {
+            console.log(res.data);
+            //ex: [ { currScore: 50,
+            //     currentGuess: ' ',
+            //    _id: 5e2b96b6f4212007b4cdc069,
+            //    playerName: 'Rolando' } ]
+          });
+          this.setState({
+            message: alert(
+              "Your username has been saved! Click OK to redirect to your game page." +
+                res.data[0]._id
+            )
+          });
           window.location =
-            "/game/" + this.state.gameId + "/user/" + this.state.username;
+            "/game/" +
+            this.state.gameId +
+            "/user/" +
+            this.state.username +
+            "/userid/" +
+            res.data[0]._id;
         })
         .catch(err => console.log(err));
     }
