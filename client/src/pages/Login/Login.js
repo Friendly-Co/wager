@@ -11,6 +11,7 @@ class Login extends Component {
   // Setting our component's initial state
   state = {
     username: "",
+    playerEmail: "",
     message: "",
     adminLoginBoolean: false,
     adminEmail: "",
@@ -36,7 +37,8 @@ class Login extends Component {
 
   loadGames = () => {
     console.log("button clicked");
-    PlayerAPI.getPlayers().then(res => {
+    // PlayerAPI.getPlayers().then(res => {
+    HouseAPI.getAllGames().then(res => {
       this.setState({ games: res.data });
       console.log(this.state.games);
     });
@@ -79,50 +81,49 @@ class Login extends Component {
   //================================= Player Login Function ====================================
   //search the database for any matching usernames.
   //If matching, alert the user to change their name
-  handleSave = event => {
+  handlePlayerSave = event => {
     event.preventDefault();
     //verify unique username
     if (this.state.username && this.state.gameId) {
       PlayerAPI.getPlayers(this.state.gameId)
         .then(res => {
           console.log(res.data);
-          for (let i = 0; i < res.data.length; i++) {
-            if (this.state.username === res.data[i].playerName) {
-              this.setState({
-                message: alert(
-                  "This username has been taken. Please enter a unique name."
-                )
-              });
-              //player name must be unique for leaderboard use and awards from admin
-              //clear field
-              return false;
+          // if there is data, make sure the username is unique
+          if (res.data.length) {
+            for (let i = 0; i < res.data.length; i++) {
+              if (this.state.username === res.data[i].playerName) {
+                this.setState({
+                  message: alert(
+                    "This username has been taken. Please enter a unique name."
+                  )
+                });
+                //player name must be unique for leaderboard use and awards from admin
+                //clear field
+                return false;
+              }
             }
           }
           //handle save
           var toSave = {
             playerName: this.state.username,
-            _id: this.state.gameId
+            gameId: this.state.gameId
           };
-          PlayerAPI.saveScore(toSave).then(res => {
+          PlayerAPI.savePlayer(toSave).then(res => {
             console.log(res.data);
-            //ex: [ { currScore: 50,
-            //     currentGuess: ' ',
-            //    _id: 5e2b96b6f4212007b4cdc069,
-            //    playerName: 'Rolando' } ]
+            this.setState({
+              message: alert(
+                "Your username has been saved! Click OK to redirect to your game page." +
+                  res.data._id
+              )
+            });
+            window.location =
+              "/game/" +
+              this.state.gameId +
+              "/user/" +
+              this.state.username +
+              "/userid/" +
+              res.data._id;
           });
-          this.setState({
-            message: alert(
-              "Your username has been saved! Click OK to redirect to your game page." +
-                res.data[0]._id
-            )
-          });
-          window.location =
-            "/game/" +
-            this.state.gameId +
-            "/user/" +
-            this.state.username +
-            "/userid/" +
-            res.data[0]._id;
         })
         .catch(err => console.log(err));
     }
@@ -312,15 +313,24 @@ class Login extends Component {
                 ))}
               </div>
             </div>
+
             <Input
               value={this.state.username}
               onChange={this.handleInputChange}
               name="username"
               placeholder="Username (required)"
             ></Input>
+
+            <Input
+              value={this.state.playerEmail}
+              onChange={this.handleInputChange}
+              name="playerEmail"
+              placeholder="Email (required)"
+            ></Input>
+
             <FormBtn
               disabled={!this.state.username || !this.state.gameId}
-              onClick={this.handleSave}
+              onClick={this.handlePlayerSave}
             >
               Submit
             </FormBtn>

@@ -5,13 +5,11 @@ const Schema = mongoose.Schema;
 const playerSchema = new Schema({
   gameId: {
     type: String,
-    required: [true, "must provide a gameId"],
-    unique: true
+    required: [true, "must provide a gameId"]
   },
   playerName: {
     type: String,
-    // required: [true, "must provide a player name"],
-    unique: true,
+    required: [true, "must provide a player name"],
     maxlength: 32
   },
   currScore: { type: Number, default: 50 },

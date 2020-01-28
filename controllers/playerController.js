@@ -7,7 +7,7 @@ module.exports = {
   // Find and return all scores and player info
   findAll: function(req, res) {
     console.log("findAll function in playerController.js");
-    House.find(req.query)
+    Players.find(req.query)
       .sort({ currScore: -1 })
       .then(dbModel => {
         // console.log(dbModel);
@@ -18,16 +18,21 @@ module.exports = {
   // Find a player by their _id
   findById: function(req, res) {
     console.log("findById function in playerController.js");
-    Players.findById(req.params.id)
+    console.log(req.params.gameInfo);
+    Players.findById(req.params.gameInfo)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
   // Find a player by username
   findByName: function(req, res) {
-    console.log(req.params.playerName);
     console.log("findByName function in playerController.js");
-    House.find({ playerName: req.params.playerName })
-      .then(dbModel => res.json(dbModel))
+    console.log(req.params);
+    // House.find({ playerName: req.params.playerName })
+    Players.find(req.params)
+      .then(dbModel => {
+        console.log(dbModel);
+        res.json(dbModel);
+      })
       .catch(err => res.status(422).json(err));
   },
   // Create a new user in the database, and update their currentGuess
@@ -37,16 +42,32 @@ module.exports = {
     //save login/ username
     if (!req.body.currentGuess && !(req.body.length > 1)) {
       console.log("no guess... this is a new user!");
-      House.findOne({ _id: req.body._id }).then(function(player) {
-        player.players.push({ playerName: req.body.playerName });
-        player.save().then(dbModel => {
+      console.log(req.body);
+      const toSave = {
+        playerName: req.body.playerName,
+        gameId: req.body.gameId
+        // playerEmail: req.body.playerEmail
+      };
+      // console.log("here's what we're saving:");
+      // console.log(toSave);
+      // Players.create(toSave)
+      Players.create(req.body)
+        .then(dbModel => {
           console.log(dbModel);
-          var newPlayer = dbModel.players.filter(
-            index => index.playerName === req.body.playerName
-          );
-          res.json(newPlayer);
-        });
-      });
+          res.json(dbModel);
+        })
+        .catch(err => res.status(422).json(err));
+
+      // House.findOne({ gameId: req.body.gameId }).then(function(player) {
+      //   // player.players.push({ playerName: req.body.playerName });
+      //   player.save().then(dbModel => {
+      //     console.log(dbModel);
+      //     var newPlayer = dbModel.players.filter(
+      //       index => index.playerName === req.body.playerName
+      //     );
+      //     res.json(newPlayer);
+      //   });
+      // });
       //save guesses
     } else if (req.body.currentGuess) {
       console.log("nice guess, user!");
