@@ -5,6 +5,7 @@ module.exports = {
   // Find all admin- included for once we expand and have unique admin accounts
   findAll: function(req, res) {
     console.log("findAll function in houseController.js");
+    console.log(req.query);
     House.find(req.query)
       .then(dbModel => {
         console.log(dbModel);
@@ -15,46 +16,25 @@ module.exports = {
   // Find the admin by username
   findById: function(req, res) {
     console.log("findById function in houseController.js");
-    console.log(req.params.Id);
-    House.findOne({ _id: req.params.Id })
-      .then(dbModel => res.json(dbModel))
+    console.log(req.params.gameInfo);
+    House.findOne({ _id: req.params.gameInfo })
+      .then(dbModel => {
+        console.log(dbModel);
+        res.json(dbModel);
+      })
       .catch(err => res.status(422).json(err));
   },
   // Create a new admin in the database
   create: function(req, res) {
     console.log("create function in houseController.js");
     console.log(req.body);
-    // const toSave = {
-    //   gameInfo: req.body.gameInfo,
-    //   adminName: req.body.adminName,
-    //   adminEmail: req.body.adminEmail
-    // };
-    // House.create(toSave)
-    //   .then(dbModel => res.json(dbModel))
-    //   .catch(err => res.status(422).json(err));
-    const newGame = new House({
+    const toSave = {
       gameInfo: req.body.gameInfo,
       adminName: req.body.adminName,
-      adminEmail: req.body.adminEmail,
-      players: []
-    });
-
-    // newGame.save().then(function() {
-    //   console.log("done!");
-    // });
-    newGame
-      .save()
+      adminEmail: req.body.adminEmail
+    };
+    House.create(toSave)
       .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
-  },
-  //admin can update their email info
-  update: function(req, res) {
-    console.log("update function in houseController.js");
-    House.findOneAndUpdate(
-      { playerName: req.body.playerName },
-      { currentGuess: req.body.currentGuess }
-    )
-      // .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
   //Clear the database of all accounts

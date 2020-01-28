@@ -2,17 +2,13 @@ const router = require("express").Router();
 const houseController = require("../../controllers/houseController");
 const sendEmailController = require("../../controllers/sendEmailController");
 
-// Matches with "/api/house/login/:adminName"
+// Matches with "/api/house/:adminName"
 router
-  .route("/:Id")
-  // .route("/login")
+  .route("/:gameInfo")
   .get(houseController.findById)
-
-  .post(houseController.create)
-  .put(houseController.update);
+  .post(houseController.create);
 
 // Matches with "/api/house/mail"
-// router.route("/:mail").post(sendEmailController.create);
 router.route("/mail/moremail").post(sendEmailController.create);
 
 // Matches with "/api/house"

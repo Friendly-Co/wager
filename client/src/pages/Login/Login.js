@@ -158,7 +158,7 @@ class Login extends Component {
       });
     }
 
-    // this is a previously created game. Go to the page after checking admin credentials.
+    // This is a previously created game. Go to the page after checking admin credentials.
     else if (
       this.state.adminName &&
       this.state.adminEmail &&
@@ -170,8 +170,8 @@ class Login extends Component {
       HouseAPI.getGameInfo(toFind)
         .then(res => {
           console.log(res.data);
-          //if there is an admin already in the system, they were logged out
-          // make sure their email and name match the database then log them back in
+          // If there is an admin already in the system, they were logged out
+          // Make sure their email and name match the database then log them back in
           if (res.data) {
             if (
               this.state.adminName !== res.data.adminName &&
@@ -232,9 +232,6 @@ class Login extends Component {
 
   emailUsername = event => {
     event.preventDefault();
-    this.setState({
-      message: alert("What's this strange error??")
-    });
     const toFind = this.state.gameId;
     HouseAPI.getGameInfo(toFind).then(res => {
       console.log(res.data);
