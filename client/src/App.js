@@ -32,7 +32,7 @@ class App extends Component {
             />
             <Route
               exact
-              path="/game/:gameId/user/:username/userid/:id"
+              path="/game/:gameId/user/:username/userId/:playerId"
               component={User}
             />
           </Switch>

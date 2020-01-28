@@ -27,8 +27,11 @@ class AdminGame extends Component {
 
     this.componentDidMount = () => {
       this.setState({ gameId: this.props.match.params.gameId });
-      //potentially unnecessary. Leaderboard will be pulling from the APi and Admin Game is already receiving data vis socket
-      if (this.state.gameId) {
+      // Potentially unnecessary. Leaderboard will be pulling from the API and Admin Game is already receiving data via socket
+      if (this.state.gameId != "") {
+        console.log(
+          "componentdidmount is firing... we have a this.state.gameId alread!"
+        );
         HouseAPI.getGameInfo(this.props.match.params.gameId).then(res => {
           if (res.data.players) {
             console.log(res.data.players);
@@ -38,9 +41,9 @@ class AdminGame extends Component {
       }
     };
 
-    //when socket receives a current bet from a user, update the scoreSeed state
+    //When socket receives a current bet from a user, update the scoreSeed state
     this.socket.on("RECIEVE_MESSAGE", function(data) {
-      //if there is a currentGuess, render to the page
+      //If there is a currentGuess, render to the page
       if (data.playerName) {
         console.log(data.playerName);
         addUserInfo(data);

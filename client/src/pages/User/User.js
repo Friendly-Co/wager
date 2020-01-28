@@ -71,28 +71,25 @@ class User extends Component {
 
   componentDidMount = () => {
     username = this.props.match.params.username;
-    playerId = this.props.match.params.id;
+    playerId = this.props.match.params.playerId;
     gameId = this.props.match.params.gameId;
     this.setState(state => {
       state.username = username;
       state.playerId = playerId;
       state.gameId = gameId;
     });
-
-    // console.log(username);
-    this.loadScore(); //does not fire on page reload
+    this.loadScore();
     this.loadLeaderboard();
-    // console.log("this.scoreSeed is console logging: ");
-    // console.log(this.scoreSeed); //undefined
   };
 
   // Loads score and sets them to this.state.scores
   loadScore = () => {
-    PlayerAPI.getPlayerScore(username)
+    console.log("loadscore function");
+    PlayerAPI.getPlayerScore(playerId)
       .then(res => {
-        // console.log(res.data);
+        console.log(res.data);
         this.setState({
-          score: res.data[0].currScore
+          score: res.data.currScore
         });
       })
 
@@ -100,8 +97,10 @@ class User extends Component {
   };
 
   loadLeaderboard = () => {
+    console.log("loadLeaderboard function, about to call load score function");
     this.loadScore();
-    PlayerAPI.getPlayers()
+    console.log("calling PlayerAPI.getPlayers");
+    PlayerAPI.getPlayers(gameId)
       .then(res => {
         this.setState({ leaderboard: res.data.splice(0, 10) });
         // console.log(this.state.leaderboard);
@@ -110,7 +109,6 @@ class User extends Component {
   };
 
   // all the Modal Functions
-
   toggleModal = () => {
     if (!this.state.setModalShow) {
       this.loadLeaderboard();
@@ -145,9 +143,7 @@ class User extends Component {
       guess: value
     });
     const toSave = {
-      gameId: this.state.gameId,
-      playerId: this.state.playerId,
-      playerName: this.state.username,
+      playerId: playerId,
       currentGuess: value
     };
     console.log(toSave);
@@ -155,14 +151,12 @@ class User extends Component {
       name: username,
       guess: value
     });
-    console.log(this.state.playerId);
-    console.log(this.state.gameId);
     this.savePlayerGuess(toSave);
   };
 
   // function that saves players' guesses to the database
   savePlayerGuess = toSave => {
-    PlayerAPI.saveScore(toSave)
+    PlayerAPI.savePlayer(toSave)
       .then(res =>
         this.setState({
           score: res.data.currScore
