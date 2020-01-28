@@ -104,16 +104,23 @@ class Login extends Component {
             }
           }
           //handle save
-          var toSave = {
-            playerName: this.state.username,
-            gameId: this.state.gameId
-          };
+          if (this.state.playerEmail) {
+            var toSave = {
+              playerName: this.state.username,
+              gameId: this.state.gameId,
+              playerEmail: this.state.playerEmail
+            };
+          } else {
+            var toSave = {
+              playerName: this.state.username,
+              gameId: this.state.gameId
+            };
+          }
           PlayerAPI.savePlayer(toSave).then(res => {
             console.log(res.data);
             this.setState({
               message: alert(
-                "Your username has been saved! Click OK to redirect to your game page." +
-                  res.data._id
+                "Your username has been saved! Click OK to redirect to your game page."
               )
             });
             window.location =
@@ -325,7 +332,7 @@ class Login extends Component {
               value={this.state.playerEmail}
               onChange={this.handleInputChange}
               name="playerEmail"
-              placeholder="Email (required)"
+              placeholder="Email (optional)"
             ></Input>
 
             <FormBtn
