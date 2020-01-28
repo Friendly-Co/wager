@@ -27,10 +27,15 @@ class AdminGame extends Component {
 
     this.componentDidMount = () => {
       this.setState({ gameId: this.props.match.params.gameId });
-      HouseAPI.getGameInfo(this.props.match.params.gameId).then(res => {
-        console.log(res.data.players);
-        this.setState({ scoreSeed: res.data.players });
-      });
+      //potentially unnecessary. Leaderboard will be pulling from the APi and Admin Game is already receiving data vis socket
+      if (this.state.gameId) {
+        HouseAPI.getGameInfo(this.props.match.params.gameId).then(res => {
+          if (res.data.players) {
+            console.log(res.data.players);
+            this.setState({ scoreSeed: res.data.players });
+          }
+        });
+      }
     };
 
     //when socket receives a current bet from a user, update the scoreSeed state

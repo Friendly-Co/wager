@@ -23,7 +23,7 @@ class Leaderboard extends Component {
     console.log("component Mounting. Hereis this.state.scoreseed");
     console.log(this.state.scoreSeed);
     console.log(this.state.gameId);
-    this.getFromDb();
+    // this.getFromDb();
   }
 
   getFromDb = () => {
