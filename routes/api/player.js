@@ -11,7 +11,7 @@ router
   .post(playerController.create)
   // .get(playerController.findAll)
   // create a new player- should take in playerName and gameId
-  // .put(playerController.update)
+  .put(playerController.update)
   .delete(playerController.removeAll);
 
 // Matches with "/api/player/:id" this is the id of the player

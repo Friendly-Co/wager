@@ -27,18 +27,6 @@ class AdminGame extends Component {
 
     this.componentDidMount = () => {
       this.setState({ gameId: this.props.match.params.gameId });
-      // Potentially unnecessary. Leaderboard will be pulling from the API and Admin Game is already receiving data via socket
-      if (this.state.gameId != "") {
-        console.log(
-          "componentdidmount is firing... we have a this.state.gameId alread!"
-        );
-        HouseAPI.getGameInfo(this.props.match.params.gameId).then(res => {
-          if (res.data.players) {
-            console.log(res.data.players);
-            this.setState({ scoreSeed: res.data.players });
-          }
-        });
-      }
     };
 
     //When socket receives a current bet from a user, update the scoreSeed state
@@ -123,7 +111,7 @@ class AdminGame extends Component {
 
   //send house answer and player guesses to the server for calculation
   handleAnswer = value => {
-    const toSend = [{ answer: value }, { _id: this.state.gameId }];
+    const toSend = [{ answer: value }, { gameId: this.state.gameId }];
     // const toSend = this.state.scoreSeed.concat(houseAnswer);
     console.log(toSend);
     PlayerAPI.calculateScores(toSend).then(res => {
@@ -131,7 +119,7 @@ class AdminGame extends Component {
       console.log("after that, ...");
       console.log(res.data);
       this.setState({
-        scoreSeed: res.data.players
+        scoreSeed: res.data
       });
       console.log("this.state.scoreSeed is now: ");
       console.log(this.state.scoreSeed);
