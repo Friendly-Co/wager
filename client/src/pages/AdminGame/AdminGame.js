@@ -4,7 +4,7 @@ import Leaderboard from "../../components/Leaderboard";
 import AdminBtns from "../../components/AdminBtns";
 import { Col, Row, Container } from "../../components/Grid";
 import PlayerAPI from "../../utils/PlayerAPI";
-// import HouseAPI from "../../utils/HouseAPI";
+import HouseAPI from "../../utils/HouseAPI";
 import io from "socket.io-client";
 import Logo from "../../components/Logo";
 
@@ -123,18 +123,24 @@ class AdminGame extends Component {
     });
   };
 
-  deleteAllPlayers = () => {
-    //function does not work as is. Shows up as undefined in Leaderboard.js line 52
-    PlayerAPI.deleteAllPlayers().then(res => {
-      this.setState(state => {
-        state.scoreSeed = [];
-      }); //Bug: completely breaks
+  // deleteAllPlayers = () => {
+  //   PlayerAPI.deleteAllPlayers().then(res => {
+  //     this.setState(state => {
+  //       state.scoreSeed = [];
+  //     });
+  //   });
+  //   console.log("deletingggggg");
+  //   window.location.reload();
+  // };
+
+  endGame = () => {
+    const toSave = { _id: this.state.gameId, gameOver: true };
+    HouseAPI.saveGame(toSave).then(res => {
+      console.log(res.data);
     });
-    console.log("deletingggggg");
-    window.location.reload();
   };
 
-  //only render if the admin in the database matches the admin params
+  //Maybe add: only render if the admin in the database matches the admin params
   //create message with link to login if this is not the case
 
   render() {
@@ -147,7 +153,8 @@ class AdminGame extends Component {
               scoreSeed={this.state.scoreSeed}
               gameId={this.props.match.params.gameId} //this.props.match.params.gameId;
               currentGuess={this.state.currentGuess}
-              deleteAllPlayers={this.deleteAllPlayers}
+              // deleteAllPlayers={this.deleteAllPlayers}
+              endGame={this.endGame}
             />
             {/* </div> */}
           </Col>

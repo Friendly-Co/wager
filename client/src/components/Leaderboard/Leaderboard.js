@@ -85,9 +85,8 @@ class Leaderboard extends Component {
           ) : (
             <h3>No Players to Display</h3>
           )}
-          <DeleteBtn onClick={() => this.props.deleteAllPlayers()}>
-            END GAME/Clear Data
-          </DeleteBtn>
+          {/* <DeleteBtn onClick={() => this.props.deleteAllPlayers()}> */}
+          <DeleteBtn onClick={() => this.props.endGame()}>END GAME</DeleteBtn>
         </div>
       </div>
     );

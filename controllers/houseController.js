@@ -28,14 +28,23 @@ module.exports = {
   create: function(req, res) {
     console.log("create function in houseController.js");
     console.log(req.body);
-    const toSave = {
-      gameInfo: req.body.gameInfo,
-      adminName: req.body.adminName,
-      adminEmail: req.body.adminEmail
-    };
-    House.create(toSave)
-      .then(dbModel => res.json(dbModel))
-      .catch(err => res.status(422).json(err));
+
+    // if the game is over, record it in the database
+    if (req.body.gameOver) {
+      console.log("gameOver");
+      House.findOneAndUpdate({ _id: req.body._id }, { gameOver: true })
+        .then(dbModel => res.json(dbModel))
+        .catch(err => res.status(422).json(err));
+    } else {
+      const toSave = {
+        gameInfo: req.body.gameInfo,
+        adminName: req.body.adminName,
+        adminEmail: req.body.adminEmail
+      };
+      House.create(toSave)
+        .then(dbModel => res.json(dbModel))
+        .catch(err => res.status(422).json(err));
+    }
   },
   //Clear the database of all accounts
   removeAll: function(req, res) {
