@@ -1,11 +1,13 @@
-const db = require("../models/House");
+const House = require("../models/House");
+const Players = require("../models/Players");
+const mongoose = require("mongoose");
 
-// Defining methods for the scoresController
+// Defining methods for the playerController
 module.exports = {
   // Find and return all scores and player info
   findAll: function(req, res) {
-    console.log("findAll function in scoresController.js");
-    db.find(req.query)
+    console.log("findAll function in playerController.js");
+    Players.find(req.query)
       .sort({ currScore: -1 })
       .then(dbModel => {
         // console.log(dbModel);
@@ -15,48 +17,69 @@ module.exports = {
   },
   // Find a player by their _id
   findById: function(req, res) {
-    console.log("findById function in scoresController.js");
-    db.findById(req.params.id)
+    console.log("findById function in playerController.js");
+    console.log(req.params);
+    Players.findById(req.params.playerId)
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
   // Find a player by username
   findByName: function(req, res) {
-    console.log(req.params.playerName);
-    console.log("findByName function in scoresController.js");
-    db.find({ playerName: req.params.playerName })
-      .then(dbModel => res.json(dbModel))
+    console.log("findByName function in playerController.js");
+    console.log(req.params);
+    // House.find({ playerName: req.params.playerName })
+    Players.find(req.params)
+      .then(dbModel => {
+        console.log(dbModel);
+        res.json(dbModel);
+      })
       .catch(err => res.status(422).json(err));
   },
   // Create a new user in the database, and update their currentGuess
   create: function(req, res) {
-    console.log("create function in scoresController.js");
+    console.log("create function in playerController.js");
     console.log(req.body);
     //save login/ username
     if (!req.body.currentGuess && !(req.body.length > 1)) {
-      //edge case- if only one person votes!!
       console.log("no guess... this is a new user!");
-      db.create(req.body)
-        .then(dbModel => res.json(dbModel))
+      console.log(req.body);
+      Players.create(req.body)
+        .then(dbModel => {
+          console.log(dbModel);
+          res.json(dbModel);
+        })
         .catch(err => res.status(422).json(err));
-      //save guesses
+      //create guesses
     } else if (req.body.currentGuess) {
       console.log("nice guess, user!");
-      db.findOneAndUpdate(
-        { playerName: req.body.playerName },
+      console.log(req.body);
+      Players.findOneAndUpdate(
+        { _id: req.body.playerId },
         { currentGuess: req.body.currentGuess }
       )
-        // .then(dbModel => res.json(dbModel))
+        .then(dbModel => res.json(dbModel))
         .catch(err => res.status(422).json(err));
       console.log("guess saved!");
     }
   },
+  // Change kickedOut to true
+  updateOne: function(req, res) {
+    console.log("oh dang, this person is getting kicked out!");
+    console.log(req.body);
+    const kickedOut = req.body[0];
+    const conditions = [...req.body[1], ...req.body[2]];
+    Players.findOneAndUpdate(conditions, kickedOut)
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
+  // calculate all scores
   update: function(req, res) {
     console.log("update function in scoresController.js");
     console.log(req.body);
-    var answer = req.body.pop();
-    answer = answer.answer.toUpperCase();
-    console.log(req.body); //[ { playerName: 'Dexter', currentGuess: 'PASS' } ]
+    var answer = req.body[0].answer;
+    answer = answer.toUpperCase();
+    var gameId = req.body[1].gameId;
+    console.log(req.body);
     //should be according to the user's guess, not the answer!
     var toAddOrSubtract = 0;
 
@@ -78,15 +101,15 @@ module.exports = {
     }
 
     //Subtract 1 from scores when unanswered
-    db.updateMany(
-      { currentGuess: " " },
+    Players.updateMany(
+      { currentGuess: " ", gameId: gameId },
       { $inc: { currScore: -1 }, $set: { currentGuess: " " } },
       { multi: true }
     )
       .then(() => {
         // increase scores of correct guesses
-        return db.updateMany(
-          { currentGuess: answer },
+        return Players.updateMany(
+          { currentGuess: answer, gameId: gameId },
           {
             $inc: { currScore: +toAddOrSubtract },
             $set: { currentGuess: " " }
@@ -96,8 +119,8 @@ module.exports = {
       })
       .then(() => {
         // if a player answered the question, but incorrectly - will be much more complex if subtracting by player's answer...
-        return db.updateMany(
-          { currentGuess: { $nin: [answer, " "] } },
+        return Players.updateMany(
+          { currentGuess: { $nin: [answer, " "] }, gameId: gameId },
           {
             $inc: { currScore: -toAddOrSubtract },
             $set: { currentGuess: " " }
@@ -106,19 +129,16 @@ module.exports = {
         );
       })
       .then(() => {
-        return db
-          .find({})
-
-          .then(dbModel => {
-            console.log(dbModel);
-            res.json(dbModel);
-          });
+        return Players.find({ gameId: gameId }).then(dbModel => {
+          console.log(dbModel);
+          res.json(dbModel);
+        });
       })
       .catch(err => res.status(422).json(err));
   },
   removeAll: function(req, res) {
-    console.log("removeAll function in scoresController.js");
-    db.deleteMany({}, function(err) {
+    console.log("removeAll function in playerController.js");
+    House.deleteMany({}, function(err) {
       if (err) {
         console.log(err);
       }

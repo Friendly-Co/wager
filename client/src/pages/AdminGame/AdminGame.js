@@ -3,7 +3,8 @@ import React, { Component } from "react";
 import Leaderboard from "../../components/Leaderboard";
 import AdminBtns from "../../components/AdminBtns";
 import { Col, Row, Container } from "../../components/Grid";
-import API from "../../utils/API";
+import PlayerAPI from "../../utils/PlayerAPI";
+import HouseAPI from "../../utils/HouseAPI";
 import io from "socket.io-client";
 import Logo from "../../components/Logo";
 
@@ -16,14 +17,21 @@ class AdminGame extends Component {
     this.state = {
       scoreSeed: [],
       answer: " ",
-      currentGuess: ""
+      currentGuess: "",
+      gameId: ""
     };
 
-    this.socket = io("https://justafriendlywager.herokuapp.com/", {transports: ["websocket"]});
+    this.socket = io("https://justafriendlywager.herokuapp.com/", {
+      transports: ["websocket"]
+    });
 
-    //when socket receives a current bet from a user, update the scoreSeed state
+    this.componentDidMount = () => {
+      this.setState({ gameId: this.props.match.params.gameId });
+    };
+
+    //When socket receives a current bet from a user, update the scoreSeed state
     this.socket.on("RECIEVE_MESSAGE", function(data) {
-      //if there is a currentGuess, render to the page
+      //If there is a currentGuess, render to the page
       if (data.playerName) {
         console.log(data.playerName);
         addUserInfo(data);
@@ -37,7 +45,10 @@ class AdminGame extends Component {
     });
 
     const addUserInfo = data => {
-      // console.log(data); // {playerName: "Tarzan", currentGuess: " "}
+      console.log("here's the data sent from users by socket");
+      console.log(data); // {playerName: "Tarzan", currentGuess: " "}
+      console.log("here's the scoreseed: ");
+      console.log(this.state.scoreSeed);
       this.setState(state => {
         var playerIndex = -1;
         var alreadyHere = false;
@@ -77,24 +88,21 @@ class AdminGame extends Component {
         currentGuess: this.state.scoreSeed.currentGuess
       });
     };
-
-    
   }
 
   setModalHalt = ev => {
     this.socket.emit("toggle_modal", {
-      setModalHalt: true,
+      setModalHalt: true
     });
   };
 
   setModalCorrect = value => {
     this.socket.emit("toggle_modal", {
       setModalHalt: false,
-      setModalCorrect: true, 
-      answer: value,
+      setModalCorrect: true,
+      answer: value
     });
   };
-
 
   haltBets = () => {
     console.log("halt bets button pressed");
@@ -103,26 +111,24 @@ class AdminGame extends Component {
 
   //send house answer and player guesses to the server for calculation
   handleAnswer = value => {
-    const houseAnswer = { answer: value };
-    const toSend = this.state.scoreSeed.concat(houseAnswer);
-    // API.saveScore(toSend).then(res => {
-    API.calculateScores(toSend).then(res => {
+    const toSend = [{ answer: value }, { gameId: this.state.gameId }];
+    // const toSend = this.state.scoreSeed.concat(houseAnswer);
+    console.log(toSend);
+    PlayerAPI.calculateScores(toSend).then(res => {
       console.log("scores saved");
       console.log("after that, ...");
       console.log(res.data);
       this.setState({
-        scoreSeed: [...res.data]
+        scoreSeed: res.data
       });
       console.log("this.state.scoreSeed is now: ");
       console.log(this.state.scoreSeed);
-    })
-
-    }
-
+    });
+  };
 
   deleteAllPlayers = () => {
     //function does not work as is. Shows up as undefined in Leaderboard.js line 52
-    API.deleteAllPlayers().then(res => {
+    PlayerAPI.deleteAllPlayers().then(res => {
       this.setState(state => {
         state.scoreSeed = [];
       }); //Bug: completely breaks
@@ -142,6 +148,7 @@ class AdminGame extends Component {
             {/* <div className="wrapper"> */}
             <Leaderboard
               scoreSeed={this.state.scoreSeed}
+              gameId={this.props.match.params.gameId} //this.props.match.params.gameId;
               currentGuess={this.state.currentGuess}
               deleteAllPlayers={this.deleteAllPlayers}
             />
@@ -149,15 +156,13 @@ class AdminGame extends Component {
           </Col>
 
           <Col size="md-4" className="center-buttons">
+            <Logo />
 
-            <Logo/>
-            
-            <AdminBtns 
-            handleAnswer={this.handleAnswer} 
-            setModalHalt={this.setModalHalt}
-            setModalCorrect={this.setModalCorrect}
+            <AdminBtns
+              handleAnswer={this.handleAnswer}
+              setModalHalt={this.setModalHalt}
+              setModalCorrect={this.setModalCorrect}
             />
-          
           </Col>
         </Row>
       </Container>

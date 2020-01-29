@@ -2,7 +2,7 @@
 import React from "react";
 import "./AdminBtns.css";
 // import io from "socket.io-client";
-// import API from "../../utils/API";
+// import PlayerAPI from "../../utils/PlayerAPI";
 // import Leaderboard from "../../components/Leaderboard";
 // import DeleteBtn from "../DeleteBtn";
 
