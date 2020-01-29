@@ -10,7 +10,7 @@ const playerSchema = new Schema({
   playerName: {
     type: String,
     required: [true, "must provide a player name"],
-    unique: [true, "must be a unique username"],
+    // unique: [true, "must be a unique username"],
     maxlength: 32
   },
   currScore: { type: Number, default: 50 },
