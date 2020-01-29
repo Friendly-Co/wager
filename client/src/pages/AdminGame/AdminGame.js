@@ -4,7 +4,7 @@ import Leaderboard from "../../components/Leaderboard";
 import AdminBtns from "../../components/AdminBtns";
 import { Col, Row, Container } from "../../components/Grid";
 import PlayerAPI from "../../utils/PlayerAPI";
-import HouseAPI from "../../utils/HouseAPI";
+// import HouseAPI from "../../utils/HouseAPI";
 import io from "socket.io-client";
 import Logo from "../../components/Logo";
 
