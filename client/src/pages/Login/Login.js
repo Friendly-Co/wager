@@ -161,6 +161,7 @@ class Login extends Component {
                   "Your username has been saved! Click OK to redirect to your game page."
                 )
               });
+              // to change: if gameOver = true (in House model), take to the stats page
               window.location =
                 "/game/" +
                 this.state.gameId +
@@ -211,7 +212,7 @@ class Login extends Component {
             `A new ${this.state.newGame} game has been created with the username: ${this.state.adminName} and associated email: ${this.state.adminEmail}.`
           )
         });
-
+        // to change: if gameOver = true (in House model), take to the stats page
         window.location =
           "/admingame/" + res.data._id + "/admin/" + this.state.adminName;
       });
@@ -277,6 +278,7 @@ class Login extends Component {
               this.setState({
                 message: alert("Welcome Back!")
               });
+              // to change: if gameOver = true (in House model), take to the stats page
               window.location =
                 "/admingame/" +
                 this.state.gameId +
