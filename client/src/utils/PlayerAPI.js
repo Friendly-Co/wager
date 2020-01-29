@@ -28,13 +28,13 @@ export default {
   },
   // Saves a player to the database, or a new guess to the database- takes in player's unique id OR username
   savePlayer: function(toSave) {
-    console.log("saveScore from API.js- toSave:");
+    console.log("savePlayer from API.js- toSave:");
     console.log(toSave);
     return axios.post("/api/player/new", toSave);
   },
   // Should save a player's guess to the database- doesn't work
   calculateScores: function(toSave) {
-    console.log("saveScore from API.js- toSave:");
+    console.log("calculateScores from API.js- toSave:");
     console.log(toSave);
     return axios.put("/api/player/calculations", toSave);
   },

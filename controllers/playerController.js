@@ -40,7 +40,11 @@ module.exports = {
     console.log("create function in playerController.js");
     console.log(req.body);
     //save login/ username
-    if (!req.body.currentGuess && !(req.body.length > 1)) {
+    if (
+      !req.body.currentGuess &&
+      !(req.body.length > 1) &&
+      !req.body.currScore
+    ) {
       console.log("no guess... this is a new user!");
       console.log(req.body);
       Players.create(req.body)
@@ -55,11 +59,21 @@ module.exports = {
       console.log(req.body);
       Players.findOneAndUpdate(
         { _id: req.body.playerId },
-        { currentGuess: req.body.currentGuess }
+        { $set: { currentGuess: req.body.currentGuess, newPlayer: false } }
       )
         .then(dbModel => res.json(dbModel))
         .catch(err => res.status(422).json(err));
       console.log("guess saved!");
+      //store update beginning score to average for late users
+    } else if (req.body.currScore) {
+      console.log("this is a late user; Let's fix your score to the average");
+      console.log(req.body);
+      Players.findOneAndUpdate(
+        { _id: req.body._id },
+        { $set: { currScore: req.body.currScore, newPlayer: false } }
+      )
+        .then(dbModel => res.json(dbModel))
+        .catch(err => res.status(422).json(err));
     }
   },
   // Change kickedOut to true
