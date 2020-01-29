@@ -66,10 +66,15 @@ module.exports = {
   updateOne: function(req, res) {
     console.log("oh dang, this person is getting kicked out!");
     console.log(req.body);
-    const kickedOut = req.body[0];
-    const conditions = [...req.body[1], ...req.body[2]];
-    Players.findOneAndUpdate(conditions, kickedOut)
-      .then(dbModel => res.json(dbModel))
+    Players.findOneAndUpdate(
+      { _id: req.body._id, gameId: req.body.gameId },
+      { $set: { kickedOut: true } }
+    )
+      .then(dbModel => {
+        console.log(dbModel);
+        res.json(dbModel);
+      })
+
       .catch(err => res.status(422).json(err));
   },
   // calculate all scores
