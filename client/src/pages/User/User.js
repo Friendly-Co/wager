@@ -133,11 +133,8 @@ class User extends Component {
     //       "Your points have dropped below 0. Better luck next time!"
     //     )
     //   });
-    //   var toSave = [
-    //     { kickedOut: true },
-    //     { gameId: gameId },
-    //     { playerId: playerId }
-    //   ];
+    //   var toSave =
+    //     { gameId: gameId, playerId: playerId }
     //   PlayerAPI.kickOutPlayer(toSave);
     //   window.location = "/";
     // }
@@ -187,11 +184,8 @@ class User extends Component {
         //       "Your points have dropped below 0. Better luck next time!"
         //     )
         //   });
-        //   var toSave = [
-        //     { kickedOut: true },
-        //     { gameId: gameId },
-        //     { playerId: playerId }
-        //   ];
+        //   var toSave =
+        //     { gameId: gameId, playerId: playerId }
         //   PlayerAPI.kickOutPlayer(toSave);
         //   window.location = "/";
         // }
