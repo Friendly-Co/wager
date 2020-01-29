@@ -42,5 +42,10 @@ export default {
     console.log("getPlayerScore function in PlayerAPI, playerId: ");
     console.log(playerId);
     return axios.get("/api/player/score/" + playerId);
+  },
+  kickOutPlayer: function(toSave) {
+    console.log("kickOutPlayer function in PlayerAPI, toSave: ");
+    console.log(toSave);
+    return axios.put("/api/player/score/tooBadSoSad", toSave);
   }
 };

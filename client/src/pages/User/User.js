@@ -121,6 +121,20 @@ class User extends Component {
   toggleModalCorrectOff = () => {
     this.loadScore();
     this.setState({ setModalCorrect: false, guess: " " });
+    // if (this.state.currScore < 0) {
+    //   this.setState({
+    //     message: alert(
+    //       "Your points have dropped below 0. Better luck next time!"
+    //     )
+    //   });
+    //   var toSave = [
+    //     { kickedOut: true },
+    //     { gameId: gameId },
+    //     { playerId: playerId }
+    //   ];
+    //   PlayerAPI.kickOutPlayer(toSave);
+    //   window.location = "/";
+    // }
   };
 
   toggleCorrect = () => {
@@ -157,11 +171,25 @@ class User extends Component {
   // function that saves players' guesses to the database
   savePlayerGuess = toSave => {
     PlayerAPI.savePlayer(toSave)
-      .then(res =>
+      .then(res => {
         this.setState({
           score: res.data.currScore
-        })
-      )
+        });
+        // if (res.data.currScore < 0) {
+        //   this.setState({
+        //     message: alert(
+        //       "Your points have dropped below 0. Better luck next time!"
+        //     )
+        //   });
+        //   var toSave = [
+        //     { kickedOut: true },
+        //     { gameId: gameId },
+        //     { playerId: playerId }
+        //   ];
+        //   PlayerAPI.kickOutPlayer(toSave);
+        //   window.location = "/";
+        // }
+      })
       .catch(err => console.log(err));
   };
 

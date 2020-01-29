@@ -67,6 +67,7 @@ class Login extends Component {
     });
   };
 
+  // to add to dropdown: if there are no games set up, send out a message, and redirect to the admin page to create a game
   setGameInfo = (name, id) => {
     console.log("dropdown clicked");
     this.setState({ gameInfo: name });
@@ -79,18 +80,35 @@ class Login extends Component {
   };
 
   //================================= Player Login Function ====================================
+
+  //Consider adding: if username and email match... turn on ability to grab all data associated with this player at the end of the game
+  // Add: if a player is loggin back in to a game, if kickedOut = true, don't let them keep playing.
+
   //search the database for any matching usernames.
   //If matching, alert the user to change their name
   handlePlayerSave = event => {
     event.preventDefault();
     //verify unique username
-    if (this.state.username && this.state.gameId) {
+    if (this.state.username && this.state.gameId && this.state.playerEmail) {
       PlayerAPI.getPlayers(this.state.gameId)
         .then(res => {
           console.log(res.data);
-          // if there is data, make sure the username is unique
           if (res.data.length) {
             for (let i = 0; i < res.data.length; i++) {
+              // if player already exists and was kicked out
+              if (
+                this.state.username === res.data[i].playerName &&
+                this.state.gameId === res.data[i].gameId &&
+                res.data[i].kickedOut === true
+              ) {
+                this.setState({
+                  message: alert(
+                    "This username has dropped below zero points in this game.  Create a new player to continue playing this game. Better luck next time!"
+                  )
+                });
+                return false;
+              }
+              // if there is data, make sure the username is unique
               if (this.state.username === res.data[i].playerName) {
                 this.setState({
                   message: alert(
@@ -103,34 +121,35 @@ class Login extends Component {
               }
             }
           }
-          //handle save
-          if (this.state.playerEmail) {
+          //if player already exists, and kickedOut = false, log in
+          if (
+            this.state.username &&
+            this.state.gameId &&
+            this.state.playerEmail
+          ) {
+            //handle save
             var toSave = {
               playerName: this.state.username,
               gameId: this.state.gameId,
               playerEmail: this.state.playerEmail
             };
-          } else {
-            var toSave = {
-              playerName: this.state.username,
-              gameId: this.state.gameId
-            };
-          }
-          PlayerAPI.savePlayer(toSave).then(res => {
-            console.log(res.data);
-            this.setState({
-              message: alert(
-                "Your username has been saved! Click OK to redirect to your game page."
-              )
+
+            PlayerAPI.savePlayer(toSave).then(res => {
+              console.log(res.data);
+              this.setState({
+                message: alert(
+                  "Your username has been saved! Click OK to redirect to your game page."
+                )
+              });
+              window.location =
+                "/game/" +
+                this.state.gameId +
+                "/user/" +
+                this.state.username +
+                "/userid/" +
+                res.data._id;
             });
-            window.location =
-              "/game/" +
-              this.state.gameId +
-              "/user/" +
-              this.state.username +
-              "/userid/" +
-              res.data._id;
-          });
+          }
         })
         .catch(err => console.log(err));
     }
@@ -332,7 +351,7 @@ class Login extends Component {
               value={this.state.playerEmail}
               onChange={this.handleInputChange}
               name="playerEmail"
-              placeholder="Email (optional)"
+              placeholder="Email (required)"
             ></Input>
 
             <FormBtn

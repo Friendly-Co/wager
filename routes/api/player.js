@@ -21,10 +21,10 @@ router
 router
   // .route("/score/:playerName")
   .route("/score/:playerId")
-  .get(playerController.findById);
-//get all players with an associated gameId
-// .get(playerController.findByName);
-// .post(playerController.create);
-// .put(playerController.update);
+  .get(playerController.findById)
+  //get all players with an associated gameId
+  // .get(playerController.findByName);
+  // .post(playerController.create);
+  .put(playerController.updateOne);
 
 module.exports = router;

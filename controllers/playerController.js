@@ -62,6 +62,17 @@ module.exports = {
       console.log("guess saved!");
     }
   },
+  // Change kickedOut to true
+  updateOne: function(req, res) {
+    console.log("oh dang, this person is getting kicked out!");
+    console.log(req.body);
+    const kickedOut = req.body[0];
+    const conditions = [...req.body[1], ...req.body[2]];
+    Players.findOneAndUpdate(conditions, kickedOut)
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+  },
+  // calculate all scores
   update: function(req, res) {
     console.log("update function in scoresController.js");
     console.log(req.body);

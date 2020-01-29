@@ -148,7 +148,7 @@ class AdminGame extends Component {
             {/* <div className="wrapper"> */}
             <Leaderboard
               scoreSeed={this.state.scoreSeed}
-              gameId={this.state.gameId}
+              gameId={this.props.match.params.gameId} //this.props.match.params.gameId;
               currentGuess={this.state.currentGuess}
               deleteAllPlayers={this.deleteAllPlayers}
             />
