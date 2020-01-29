@@ -20,6 +20,7 @@ module.exports = {
     console.log("findById function in playerController.js");
     console.log(req.params);
     Players.findById(req.params.playerId)
+      .sort({ currScore: -1 })
       .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
   },
