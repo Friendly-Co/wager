@@ -8,9 +8,6 @@ import HouseAPI from "../../utils/HouseAPI";
 import io from "socket.io-client";
 import Logo from "../../components/Logo";
 
-//To do: delete function for admin on page close
-//Possibly, an email scores button
-
 class AdminGame extends Component {
   constructor(props) {
     super(props);

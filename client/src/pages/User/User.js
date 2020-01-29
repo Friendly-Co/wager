@@ -178,17 +178,16 @@ class User extends Component {
         this.setState({
           score: res.data.currScore
         });
-        // if (res.data.currScore < 0) {
-        //   this.setState({
-        //     message: alert(
-        //       "Your points have dropped below 0. Better luck next time!"
-        //     )
-        //   });
-        //   var toSave =
-        //     { gameId: gameId, _id: playerId }
-        //   PlayerAPI.kickOutPlayer(toSave);
-        //   window.location = "/";
-        // }
+        if (res.data.currScore < 0) {
+          this.setState({
+            message: alert(
+              "Your points have dropped below 0. Better luck next time!"
+            )
+          });
+          var toSave = { gameId: gameId, _id: playerId };
+          PlayerAPI.kickOutPlayer(toSave);
+          window.location = "/";
+        }
       })
       .catch(err => console.log(err));
   };
@@ -205,7 +204,7 @@ class User extends Component {
   // function to get player's current rank of all players
   getRank = () => {
     // let names = [];
-    PlayerAPI.getScores(gameId)
+    PlayerAPI.getPlayers(gameId)
       .then(res => {
         let names = res.data.map(obj => obj.playerName);
         const rank = names.indexOf(this.state.username);
