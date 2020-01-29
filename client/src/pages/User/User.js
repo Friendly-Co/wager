@@ -81,11 +81,11 @@ class User extends Component {
     });
     this.loadScore();
     this.loadLeaderboard();
-  };
     this.getRank();
-    // console.log("this.scoreSeed is console logging: ");
-    // console.log(this.scoreSeed); //undefined
-  }
+  };
+  // console.log("this.scoreSeed is console logging: ");
+  // console.log(this.scoreSeed); //undefined
+  // }
 
   // Loads score and sets them to this.state.scores
   loadScore = () => {
@@ -134,7 +134,7 @@ class User extends Component {
     //     )
     //   });
     //   var toSave =
-    //     { gameId: gameId, playerId: playerId }
+    //     { gameId: gameId, _id: playerId }
     //   PlayerAPI.kickOutPlayer(toSave);
     //   window.location = "/";
     // }
@@ -185,7 +185,7 @@ class User extends Component {
         //     )
         //   });
         //   var toSave =
-        //     { gameId: gameId, playerId: playerId }
+        //     { gameId: gameId, _id: playerId }
         //   PlayerAPI.kickOutPlayer(toSave);
         //   window.location = "/";
         // }
@@ -205,16 +205,15 @@ class User extends Component {
   // function to get player's current rank of all players
   getRank = () => {
     // let names = [];
-    API.getScores()
+    PlayerAPI.getScores(gameId)
       .then(res => {
         let names = res.data.map(obj => obj.playerName);
         const rank = names.indexOf(this.state.username);
-            this.setState({currentRank: rank + 1});
-            console.log(this.state.currentRank);
+        this.setState({ currentRank: rank + 1 });
+        console.log(this.state.currentRank);
       })
       .catch(err => console.log(err));
   };
-  
 
   render() {
     var tableBody;
