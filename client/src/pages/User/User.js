@@ -30,7 +30,8 @@ class User extends Component {
       leaderboard: [],
       scoreSeed: [],
       answer: " ",
-      rightOrWrong: " "
+      rightOrWrong: " ",
+      currentRank: 0
     };
 
     this.socket = io("https://justafriendlywager.herokuapp.com/", {
@@ -81,6 +82,10 @@ class User extends Component {
     this.loadScore();
     this.loadLeaderboard();
   };
+    this.getRank();
+    // console.log("this.scoreSeed is console logging: ");
+    // console.log(this.scoreSeed); //undefined
+  }
 
   // Loads score and sets them to this.state.scores
   loadScore = () => {
@@ -111,6 +116,7 @@ class User extends Component {
   // all the Modal Functions
   toggleModal = () => {
     if (!this.state.setModalShow) {
+      this.getRank();
       this.loadLeaderboard();
       this.setState({ setModalShow: true });
     } else {
@@ -202,6 +208,20 @@ class User extends Component {
     }
   };
 
+  // function to get player's current rank of all players
+  getRank = () => {
+    // let names = [];
+    API.getScores()
+      .then(res => {
+        let names = res.data.map(obj => obj.playerName);
+        const rank = names.indexOf(this.state.username);
+            this.setState({currentRank: rank + 1});
+            console.log(this.state.currentRank);
+      })
+      .catch(err => console.log(err));
+  };
+  
+
   render() {
     var tableBody;
     // console.log(Object.keys(this.state.leaderboard).length);
@@ -229,6 +249,7 @@ class User extends Component {
         <LeaderModal
           username={this.state.username}
           score={this.state.score}
+          currentrank={this.state.currentRank}
           show={this.state.setModalShow}
           leaderboard={tableBody}
           onHide={() => this.toggleModal()}
