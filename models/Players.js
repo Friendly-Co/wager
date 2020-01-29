@@ -22,6 +22,7 @@ const playerSchema = new Schema({
     match: [/.+@.+\..+/, "Please enter a valid e-mail address"]
   },
   kickedOut: { type: Boolean, default: false },
+  newPlayer: { type: Boolean, default: true },
   date: { type: Date, default: Date.now }
 });
 

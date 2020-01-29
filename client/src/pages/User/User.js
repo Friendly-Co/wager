@@ -79,13 +79,46 @@ class User extends Component {
       state.playerId = playerId;
       state.gameId = gameId;
     });
-    this.loadScore();
+    // if player scores differ from 50, start player off at the average
+    PlayerAPI.getPlayers(gameId).then(res => {
+      //if the curent array of players has a length > 2 (including the new player, who starts out at 50), then this may be a later player and shoulw start out at the average score
+      if (res.data.length > 2) {
+        // Filter out the all scores of 50 from the array. If there are scores other than 50, the game is in session and this is a late player
+        const aboveOrBelow50 = res.data.filter(
+          person => person.currScore !== 50
+        );
+        if (aboveOrBelow50.length) {
+          PlayerAPI.getPlayerScore(playerId).then(response => {
+            if (response.data.newPlayer === true) {
+              console.log(res.data);
+              //create an array of the currScore properties
+              let getCurrScores = item => item.currScore;
+              const scoreArray = res.data.map(getCurrScores);
+              //find the sum of all scores
+              const addScores = (runningTotal, playerId) =>
+                runningTotal + playerId;
+              const scoreSum = scoreArray.reduce(addScores, 0);
+              //find the average of all scores
+              const averageScore = scoreSum / scoreArray.length;
+              console.log("avarage:" + averageScore);
+              const toSave = { _id: playerId, currScore: averageScore };
+              PlayerAPI.savePlayer(toSave).then(r => {
+                console.log(r);
+                this.setState({
+                  score: averageScore
+                });
+              });
+            }
+          });
+        }
+        //if no player score is above or below 50, this.loadScores
+      } else {
+        this.loadScore();
+      }
+    });
     this.loadLeaderboard();
     this.getRank();
   };
-  // console.log("this.scoreSeed is console logging: ");
-  // console.log(this.scoreSeed); //undefined
-  // }
 
   // Loads score and sets them to this.state.scores
   loadScore = () => {
@@ -178,16 +211,17 @@ class User extends Component {
         this.setState({
           score: res.data.currScore
         });
-        if (res.data.currScore < 0) {
-          this.setState({
-            message: alert(
-              "Your points have dropped below 0. Better luck next time!"
-            )
-          });
-          var toSave = { gameId: gameId, _id: playerId };
-          PlayerAPI.kickOutPlayer(toSave);
-          window.location = "/";
-        }
+        // if (res.data.currScore < 0) {
+        //   this.setState({
+        //     message: alert(
+        //       "Your points have dropped below 0. Better luck next time!"
+        //     )
+        //   });
+        //   var toSave =
+        //     { gameId: gameId, _id: playerId }
+        //   PlayerAPI.kickOutPlayer(toSave);
+        //   window.location = "/";
+        // }
       })
       .catch(err => console.log(err));
   };
