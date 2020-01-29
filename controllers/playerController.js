@@ -21,7 +21,10 @@ module.exports = {
     console.log(req.params);
     Players.findById(req.params.playerId)
       .sort({ currScore: -1 })
-      .then(dbModel => res.json(dbModel))
+      .then(dbModel => {
+        console.log(dbModel);
+        res.json(dbModel);
+      })
       .catch(err => res.status(422).json(err));
   },
   // Find a player by username
@@ -30,6 +33,7 @@ module.exports = {
     console.log(req.params);
     // House.find({ playerName: req.params.playerName })
     Players.find(req.params)
+      .sort({ currScore: -1 })
       .then(dbModel => {
         console.log(dbModel);
         res.json(dbModel);
