@@ -97,11 +97,11 @@ module.exports = {
   },
   // calculate all scores
   update: function(req, res) {
-    console.log("update function in scoresController.js");
+    console.log("update function in playerController.js");
     console.log(req.body);
     var answer = req.body[0].answer;
     answer = answer.toUpperCase();
-    var gameId = req.body[1].gameId;
+    const gameId = req.body[1].gameId;
     console.log(req.body);
     //should be according to the user's guess, not the answer!
     var toAddOrSubtract = 0;

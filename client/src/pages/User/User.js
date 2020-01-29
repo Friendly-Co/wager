@@ -92,7 +92,7 @@ class User extends Component {
             if (response.data.newPlayer === true) {
               console.log(res.data);
               //create an array of the currScore properties
-              let getCurrScores = item => item.currScore;
+              const getCurrScores = item => item.currScore;
               const scoreArray = res.data.map(getCurrScores);
               //find the sum of all scores
               const addScores = (runningTotal, playerId) =>
@@ -166,7 +166,7 @@ class User extends Component {
     //       "Your points have dropped below 0. Better luck next time!"
     //     )
     //   });
-    //   var toSave =
+    //   const toSave =
     //     { gameId: gameId, _id: playerId }
     //   PlayerAPI.kickOutPlayer(toSave);
     //   window.location = "/";
@@ -217,7 +217,7 @@ class User extends Component {
         //       "Your points have dropped below 0. Better luck next time!"
         //     )
         //   });
-        //   var toSave =
+        //   const toSave =
         //     { gameId: gameId, _id: playerId }
         //   PlayerAPI.kickOutPlayer(toSave);
         //   window.location = "/";

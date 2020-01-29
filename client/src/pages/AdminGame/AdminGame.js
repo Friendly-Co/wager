@@ -69,7 +69,7 @@ class AdminGame extends Component {
           const scoreSeed = state.scoreSeed.concat(data);
           return { scoreSeed };
         } else {
-          var scoreSeed = [...state.scoreSeed];
+          const scoreSeed = [...state.scoreSeed];
           scoreSeed[playerIndex].currentGuess = data.currentGuess;
           playerIndex = -1;
           return { scoreSeed };

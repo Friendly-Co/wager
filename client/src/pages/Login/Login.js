@@ -124,22 +124,6 @@ class Login extends Component {
                 this.setState({ playerEmailButton: true });
                 return false;
               }
-              // if this game already has a player with this email, but a different username, Alert that their email is incorrect, or, if this is a taken username, they can pick a new username
-              // Possible bug: currenty, players are not required to have unique emails per gameId - if >1 player enters the same email, it may not send the right username
-              // However, they ARE required to have their emails match their username in the database
-              if (
-                this.state.username !== res.data[i].playerName &&
-                this.state.playerEmail === res.data[i].playerEmail
-              ) {
-                this.setState({ possiblePlayerId: res.data[i]._id });
-                this.setState({
-                  message: alert(
-                    "This username does not match our database for this game. Please try again. If you would like an email reminder of your username, click 'Email Login Info'"
-                  )
-                });
-                this.setState({ playerEmailButton: true });
-                return false;
-              }
             }
           }
           //if player already exists and kickedOut = false and all data matches (or if the data is all new), log in
@@ -149,7 +133,7 @@ class Login extends Component {
             this.state.playerEmail
           ) {
             //handle save
-            var toSave = {
+            const toSave = {
               playerName: this.state.username,
               gameId: this.state.gameId,
               playerEmail: this.state.playerEmail
@@ -201,7 +185,7 @@ class Login extends Component {
         state.gameInfo = "";
         state.gameId = "";
       });
-      var toSave = {
+      const toSave = {
         adminName: this.state.adminName,
         adminEmail: this.state.adminEmail,
         gameInfo: this.state.newGame
