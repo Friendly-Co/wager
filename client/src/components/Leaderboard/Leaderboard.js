@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PlayerAPI from "../../utils/PlayerAPI";
-import HouseAPI from "../../utils/HouseAPI";
+// import HouseAPI from "../../utils/HouseAPI";
 import DeleteBtn from "../DeleteBtn";
 import { List, ListItem } from "../List";
 // import io from "socket.io-client";
