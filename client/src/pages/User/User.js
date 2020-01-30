@@ -105,7 +105,7 @@ class User extends Component {
               PlayerAPI.savePlayer(toSave).then(r => {
                 console.log(r);
                 this.setState({
-                  score: averageScore
+                  score: Math.floor(averageScore)
                 });
               });
             }
