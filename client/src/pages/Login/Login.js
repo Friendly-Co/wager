@@ -71,8 +71,6 @@ class Login extends Component {
 
   //================================= Player Login Function ====================================
 
-  //Consider adding: if username and email match... turn on ability to grab all data associated with this player at the end of the game ( check gameOver boolean in House model)
-
   //search the database for any matching usernames.
   //If matching, alert the user to change their name
   handlePlayerSave = event => {
@@ -81,52 +79,60 @@ class Login extends Component {
     if (this.state.username && this.state.gameId && this.state.playerEmail) {
       PlayerAPI.getPlayers(this.state.gameId)
         .then(res => {
-          if (res.data.length) {
-            for (let i = 0; i < res.data.length; i++) {
-              // if player already exists and was kicked out
-              // Will need to change to load leaderboard for later data access
-              if (
-                this.state.username === res.data[i].playerName &&
-                this.state.gameId === res.data[i].gameId &&
-                res.data[i].kickedOut === true
-              ) {
-                this.setState({
-                  message: alert(
-                    "This username has dropped below zero points in this game.  Create a new player to continue playing this game. Better luck next time!"
-                  )
-                });
-                return false;
-              }
-
-              if (
-                this.state.playerName !== res.data[i].playerName &&
-                this.state.playerEmail !== res.data[i].playerEmail
-              ) {
-                this.setState({
-                  message: alert(
-                    "This username and email do not match our database. Please try again"
-                  )
-                });
-                return false;
-              }
-
-              // if this game already has a player with this playername, but a different email, Alert that their email is incorrect, or, if this is a taken username, they can pick a new username
-              if (
-                this.state.username === res.data[i].playerName &&
-                this.state.playerEmail !== res.data[i].playerEmail
-              ) {
-                this.setState({ possiblePlayerId: res.data[i]._id });
-                this.setState({
-                  message: alert(
-                    "This email does not match our database for this user's game. Please try again. If you would like an email sent to your registered account, click 'Email Login Info'"
-                  )
-                });
-                this.setState({ playerEmailButton: true });
-                return false;
-              }
+          for (let i = 0; i < res.data.length; i++) {
+            // if player already exists and was kicked out
+            // Will need to change to load leaderboard for later data access
+            if (
+              this.state.username === res.data[i].playerName &&
+              this.state.gameId === res.data[i].gameId &&
+              res.data[i].kickedOut === true
+            ) {
+              this.setState({
+                message: alert(
+                  "This username has dropped below zero points in this game.  Create a new player to continue playing this game. Better luck next time!"
+                )
+              });
+              return;
+            }
+            //if player already exists and kickedOut = false and all data matches, log in
+            if (
+              this.state.username === res.data[i].playerName &&
+              this.state.playerEmail === res.data[i].playerEmail &&
+              res.data[i].kickedOut === false
+            ) {
+              this.setState({
+                message: alert("Welcome back")
+              });
+              // to change: if gameOver = true (in House model), take to the stats page
+              window.location =
+                "/game/" +
+                this.state.gameId +
+                "/user/" +
+                this.state.username +
+                "/userid/" +
+                res.data._id;
+              return;
+              // });
+            }
+            // if this game already has a player with this playername, but a different email, Alert that their email is incorrect, or, if this is a taken username, they can pick a new username
+            if (
+              this.state.username === res.data[i].playerName &&
+              this.state.playerEmail !== res.data[i].playerEmail
+              //   ||
+              // (this.state.username !== res.data[i].playerName &&
+              //   this.state.playerEmail === res.data[i].playerEmail)
+            ) {
+              this.setState({ possiblePlayerId: res.data[i]._id });
+              this.setState({
+                message: alert(
+                  "This email or username does not match our database for this game. Please try again. If you would like an email sent to your registered account, click 'Email Login Info'"
+                )
+              });
+              this.setState({ playerEmailButton: true });
+              return;
             }
           }
-          //if player already exists and kickedOut = false and all data matches (or if the data is all new), log in
+          // if the data is all new, save and log in
           if (
             this.state.username &&
             this.state.gameId &&
@@ -138,8 +144,8 @@ class Login extends Component {
               gameId: this.state.gameId,
               playerEmail: this.state.playerEmail
             };
-
             PlayerAPI.savePlayer(toSave).then(res => {
+              console.log(res.data);
               this.setState({
                 message: alert(
                   "Your username has been saved! Click OK to redirect to your game page."
@@ -224,7 +230,7 @@ class Login extends Component {
                   "This username and email do not match our database. Please try again"
                 )
               });
-              return false;
+              return;
             } else if (
               this.state.adminEmail === res.data.adminEmail &&
               this.state.gameId === res.data._id &&
@@ -237,7 +243,7 @@ class Login extends Component {
               });
               //email username option...add button to email
               this.setState({ emailButton: true });
-              return false;
+              return;
             } else if (
               this.state.adminName === res.data.adminName &&
               this.state.gameId === res.data._id &&
@@ -250,7 +256,7 @@ class Login extends Component {
               });
               //email username option...add button to email
               this.setState({ emailButton: true });
-              return false;
+              return;
             }
 
             // if already in the database and their input matches, load the admin page
