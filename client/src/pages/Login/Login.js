@@ -110,7 +110,7 @@ class Login extends Component {
                 "/user/" +
                 this.state.username +
                 "/userid/" +
-                res.data._id;
+                res.data[i]._id;
               return;
               // });
             }
