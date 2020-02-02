@@ -8,8 +8,8 @@ body {
 
 .scoreName {
     line-height: 5vh;
-    margin: .5rem 0rem 0rem 0rem;
-    color: #93c8e8 !important;
+    /* margin: .5rem 0rem 0rem 0rem; */
+    /* color: #93c8e8; */
 }
 
 strong {

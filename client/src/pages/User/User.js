@@ -9,6 +9,7 @@ import LeaderModal from "../../components/LeaderModal/LeaderModal";
 import CorrectModal from "../../components/CorrectModal/CorrectModal";
 import HaltModal from "../../components/HaltModal/HaltModal";
 import io from "socket.io-client";
+import { Container, Row, Col } from "../../components/Grid";
 
 
 let score;
@@ -186,13 +187,51 @@ class User extends Component {
     }
     return (
       <div>
-        <Logo />
-        <Score user={this.state.username} score={this.state.score} />
-        <GuessState onChange={this.sendGuess()} guess={this.state.guess} />
-        <GuessButtons
-          guessUpdate={this.guessUpdate}
-          toggleModalOn={this.toggleModal}
-        />
+        <Row>
+          <Col size='12'>
+            <div className='wrapper bglayer2'>
+
+              <Row>
+                <Col size='lg-4 md-2'></Col>
+                <div className='col-lg-4 col-md-8 col-m-12' >
+                  <Logo />
+                </div>
+                <Col size="lg-4 md-2"></Col>
+              </Row>
+              
+              <Row>
+                {/* <Col size='lg-4 md-2'></Col> */}
+                  <Col size='12'>
+                    <Score user={this.state.username} score={this.state.score} />
+                  </Col>
+                {/* <Col size='lg-4 md-2'></Col> */}
+              </Row>
+        
+              <Row>
+                <Col size='12'>
+                  <GuessState onChange={this.sendGuess()} guess={this.state.guess} />
+                </Col>
+              </Row>
+        
+              <Row>
+                  {/* <Col size='lg-4 md-2'>
+                  </Col>
+                  <Col size='lg-4 md-8 sm-12'> */}
+                      <div className="btnformat">
+                      <GuessButtons
+                        guessUpdate={this.guessUpdate}
+                        toggleModalOn={this.toggleModal}
+                      />
+                      </div>
+                  {/* </Col>
+                  <Col size='lg-4 md-2'>
+                  </Col> */}
+              </Row>
+            </div>
+              
+          </Col>
+          
+        </Row>
         <LeaderModal
           username={this.state.username}
           score={this.state.score}
@@ -211,7 +250,9 @@ class User extends Component {
             show={this.state.setModalHalt}
             onHide={() => this.toggleHaltOff()}
             />
+      
       </div>
+      
     );
   }
 }

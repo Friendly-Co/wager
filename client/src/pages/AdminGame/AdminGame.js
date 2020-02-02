@@ -136,6 +136,7 @@ class AdminGame extends Component {
 
   render() {
     return (
+      <div className="bglayer">
       <Container fluid>
         <Row>
           <Col size="md-8">
@@ -161,6 +162,7 @@ class AdminGame extends Component {
           </Col>
         </Row>
       </Container>
+      </div>
     );
   }
 }

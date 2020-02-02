@@ -1,10 +1,10 @@
 import React from "react";
 import "./style.css";
-import photo from "../../img/FWlogo@2x.png";
+import photo from "../../img/NewFWlogo02.png";
 
 function Logo() {
     return(
-        <div>
+        <div className="alignimg">
             <img src={photo} alt="Logo"></img>
         </div>
     );
