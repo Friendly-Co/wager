@@ -36,3 +36,10 @@
     transform: rotate(360deg);
   }
 }
+
+.bglayer {
+  height: 200vh;
+  width: 200 vw;
+  background-size: 100% 110%;
+
+}
