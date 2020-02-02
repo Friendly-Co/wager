@@ -90,6 +90,13 @@ class Login extends Component {
         });
         return;
       }
+      if (this.state.username.length > 32) {
+        this.setState({
+          message: 10,
+          alertVisible: true
+        });
+        return;
+      }
       PlayerAPI.getPlayers(this.state.gameId)
         .then(res => {
           for (let i = 0; i < res.data.length; i++) {
@@ -206,6 +213,13 @@ class Login extends Component {
     ) {
       this.setState({
         message: 9,
+        alertVisible: true
+      });
+      return;
+    }
+    if (this.state.adminName.length > 32) {
+      this.setState({
+        message: 10,
         alertVisible: true
       });
       return;
