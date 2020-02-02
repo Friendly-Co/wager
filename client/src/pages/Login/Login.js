@@ -106,9 +106,7 @@ class Login extends Component {
                 alertVisible: true
               });
               // to change: if gameOver = true (in House model), take to the stats page
-              setInterval(() => {
-      
-                if(!this.state.alertVisible) {
+              setTimeout(() => {
                   window.location =
                   "/game/" +
                   this.state.gameId +
@@ -117,8 +115,7 @@ class Login extends Component {
                   "/userid/" +
                   res.data[i]._id;
                   return;
-                };
-              }, 100);
+              }, 3000);
               // });
             }
             // if this game already has a player with this playername, but a different email, Alert that their email is incorrect, or, if this is a taken username, they can pick a new username
@@ -155,9 +152,7 @@ class Login extends Component {
                 message: 4, alertVisible: true
               });
               // to change: if gameOver = true (in House model), take to the stats page
-              setInterval(() => {
-      
-                if(!this.state.alertVisible) {
+              setTimeout(() => {
                   window.location =
                   "/game/" +
                   this.state.gameId +
@@ -165,8 +160,7 @@ class Login extends Component {
                   this.state.username +
                   "/userid/" +
                   res.data._id;
-                }
-              }, 100);
+              }, 3000);
             });
           }
         })
@@ -209,12 +203,10 @@ class Login extends Component {
           message: 5, alertVisible: true
         })
         // to change: if gameOver = true (in House model), take to the stats page
-        setInterval(() => {
-          if(!this.state.alertVisible) {
+        setTimeout(() => {
             window.location =
             "/admingame/" + res.data._id + "/admin/" + this.state.adminName;
-          }
-        }, 100);
+        }, 3000);
         });
     }
 
@@ -273,15 +265,13 @@ class Login extends Component {
                 message: 2, alertVisible: true
               })
               // to change: if gameOver = true (in House model), take to the stats page
-              setInterval(() => {
-                if(!this.state.alertVisible) {
+              setTimeout(() => {
                 window.location =
                   "/admingame/" +
                   this.state.gameId +
                   "/admin/" +
                   this.state.adminName;
-                }
-              }, 100);
+              }, 3000);
             }
           }
         })
@@ -541,9 +531,9 @@ class Login extends Component {
           page={this.state.page}
           nextOrClose={this.state.nextOrClose}
           onHide={this.introNextorClose}
+          toggleIntro={this.toggleIntro}
         />
         <AlertMessages 
-    
           message={this.state.message}
           newGame={this.state.newGame}
           adminName={this.state.adminName}
