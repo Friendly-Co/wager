@@ -4,10 +4,11 @@
     text-shadow: grey 2px 2px 2px;
   }
   
-  /* #leaderTitle {
+  
+  #leaderTitle h2 {
     margin-left: 90px;
-    box-shadow: #0443a4 1px 6px 55px;
-} */
+    text-shadow: #007BFF 2px 2px 5px;
+}
 
 #leaderboard {
     text-align: center;

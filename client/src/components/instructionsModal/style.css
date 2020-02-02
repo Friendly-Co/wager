@@ -7,8 +7,8 @@
 }
 
 #contained-modal-title-vcenter h1 {
-    padding: 2px 50px 5px 50px;
+    /* padding: 2px 50px 5px 50px; */
     margin-left: 10px;
-
-
+    text-shadow: #007BFF 2px 2px 5px;
 }
+
