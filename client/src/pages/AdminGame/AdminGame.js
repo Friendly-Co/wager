@@ -8,9 +8,6 @@ import HouseAPI from "../../utils/HouseAPI";
 import io from "socket.io-client";
 import Logo from "../../components/Logo";
 
-//To do: delete function for admin on page close
-//Possibly, an email scores button
-
 class AdminGame extends Component {
   constructor(props) {
     super(props);
@@ -74,7 +71,7 @@ class AdminGame extends Component {
           const scoreSeed = state.scoreSeed.concat(data);
           return { scoreSeed };
         } else {
-          var scoreSeed = [...state.scoreSeed];
+          const scoreSeed = [...state.scoreSeed];
           scoreSeed[playerIndex].currentGuess = data.currentGuess;
           playerIndex = -1;
           return { scoreSeed };
@@ -128,22 +125,29 @@ class AdminGame extends Component {
     });
   };
 
-  deleteAllPlayers = () => {
-    //function does not work as is. Shows up as undefined in Leaderboard.js line 52
-    PlayerAPI.deleteAllPlayers().then(res => {
-      this.setState(state => {
-        state.scoreSeed = [];
-      }); //Bug: completely breaks
+  // deleteAllPlayers = () => {
+  //   PlayerAPI.deleteAllPlayers().then(res => {
+  //     this.setState(state => {
+  //       state.scoreSeed = [];
+  //     });
+  //   });
+  //   console.log("deletingggggg");
+  //   window.location.reload();
+  // };
+
+  endGame = () => {
+    const toSave = { _id: this.state.gameId, gameOver: true };
+    HouseAPI.saveGame(toSave).then(res => {
+      console.log(res.data);
     });
-    console.log("deletingggggg");
-    window.location.reload();
   };
 
-  //only render if the admin in the database matches the admin params
+  //Maybe add: only render if the admin in the database matches the admin params
   //create message with link to login if this is not the case
 
   render() {
     return (
+      <div className="bglayer">
       <Container fluid>
         <Row>
           <Col size="md-8">
@@ -152,7 +156,8 @@ class AdminGame extends Component {
               scoreSeed={this.state.scoreSeed}
               gameId={this.props.match.params.gameId}
               currentGuess={this.state.currentGuess}
-              deleteAllPlayers={this.deleteAllPlayers}
+              // deleteAllPlayers={this.deleteAllPlayers}
+              endGame={this.endGame}
             />
             {/* </div> */}
           </Col>
@@ -168,6 +173,7 @@ class AdminGame extends Component {
           </Col>
         </Row>
       </Container>
+      </div>
     );
   }
 }

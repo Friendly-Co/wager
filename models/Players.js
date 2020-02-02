@@ -10,7 +10,7 @@ const playerSchema = new Schema({
   playerName: {
     type: String,
     required: [true, "must provide a player name"],
-    unique: [true, "must be a unique username"],
+    // unique: [true, "must be a unique username"],
     maxlength: 32
   },
   currScore: { type: Number, default: 50 },
@@ -22,6 +22,7 @@ const playerSchema = new Schema({
     match: [/.+@.+\..+/, "Please enter a valid e-mail address"]
   },
   kickedOut: { type: Boolean, default: false },
+  newPlayer: { type: Boolean, default: true },
   date: { type: Date, default: Date.now }
 });
 

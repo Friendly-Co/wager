@@ -1,42 +1,52 @@
 import React from "react";
 import "./style.css";
+import { Container, Row, Col } from "../Grid";
 
 function GuessButtons(props) {
     return(
         <div>
-
-        <div className="guessButton" onClick={() => {
-            props.guessUpdate("RUN");
-        }}>
-            <button value="RUN" id="runBttn">Run</button>
-        </div>
-        <div className="guessButton" onClick={() => {
-            // insert onclick functions here 
-            props.guessUpdate("PASS");
-        }}>
-            <button value="PASS" id="passBttn">Pass</button>
-        </div>
-        <div className="guessButton" onClick={() => {
+            <Row>
+                {/* <Col size='lg-4 md-6'> */}
+                    <div className="guessButton squishy btn-1" onClick={() => {
+                        props.guessUpdate("RUN");
+                    }}>
+                        <span value="RUN" id="runBttn">RUN</span>
+                    </div>
+                {/* </Col> */}
+                
+                {/* <Col size='lg-4 md-6'>     */}
+                        <div className="guessButton squishy btn-1" onClick={() => {
+                            // insert onclick functions here 
+                            props.guessUpdate("PASS");
+                        }}>
+                            <span value="PASS" id="passBttn">PASS</span>
+                        </div>
+                {/* </Col>  */}
+            
+            </Row>
+            <Row>
+        <div className="guessButton squishy btn-1" onClick={() => {
             // insert onclick functions here 
             props.guessUpdate("KICK");
         }}>
-            <button value="KICK" id="kickBttn">Kick</button>
+            <span value="KICK" id="kickBttn">KICK</span>
         </div>
-        <div className="guessButton" onClick={() => {
+        <div className="guessButton squishy btn-1" onClick={() => {
             // insert onclick functions here
             props.guessUpdate("TURNOVER");
             // props.toggleModalOn();
 
         }}>
-            <button value="TURNOVER" id="turnoverBttn">Turnover</button>
+            <span value="TURNOVER" id="turnoverBttn">TURNOVER</span>
         </div>
-        <div className="guessButton" onClick={() => {
+        </Row>
+        <div className="guessButton squishy btn-3" onClick={() => {
             // insert onclick functions here
             props.toggleModalOn();
             console.log("leaderboard clicked");
 
         }}>
-            <button id="leaderboardBttn">Leaderboard</button>
+            <span>LEADERBOARD</span>
         </div>
         </div>
     );

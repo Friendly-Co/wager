@@ -6,6 +6,7 @@ import User from "./pages/User/User";
 // import Chat from "./components/Chat";
 import "./App.css";
 import { connect } from "./api/api.js";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <div className="bglayer">
         <Router>
           <Switch>
             <Route exact path="/" component={Login} />

@@ -20,17 +20,21 @@ module.exports = {
     console.log("findById function in playerController.js");
     console.log(req.params);
     Players.findById(req.params.playerId)
-      .then(dbModel => res.json(dbModel))
+      .sort({ currScore: -1 })
+      .then(dbModel => {
+        // console.log(dbModel);
+        res.json(dbModel);
+      })
       .catch(err => res.status(422).json(err));
   },
   // Find a player by username
   findByName: function(req, res) {
     console.log("findByName function in playerController.js");
     console.log(req.params);
-    // House.find({ playerName: req.params.playerName })
     Players.find(req.params)
+      .sort({ currScore: -1 })
       .then(dbModel => {
-        console.log(dbModel);
+        // console.log(dbModel);
         res.json(dbModel);
       })
       .catch(err => res.status(422).json(err));
@@ -40,7 +44,11 @@ module.exports = {
     console.log("create function in playerController.js");
     console.log(req.body);
     //save login/ username
-    if (!req.body.currentGuess && !(req.body.length > 1)) {
+    if (
+      !req.body.currentGuess &&
+      !(req.body.length > 1) &&
+      !req.body.currScore
+    ) {
       console.log("no guess... this is a new user!");
       console.log(req.body);
       Players.create(req.body)
@@ -55,11 +63,21 @@ module.exports = {
       console.log(req.body);
       Players.findOneAndUpdate(
         { _id: req.body.playerId },
-        { currentGuess: req.body.currentGuess }
+        { $set: { currentGuess: req.body.currentGuess, newPlayer: false } }
       )
         .then(dbModel => res.json(dbModel))
         .catch(err => res.status(422).json(err));
       console.log("guess saved!");
+      //store update beginning score to average for late users
+    } else if (req.body.currScore) {
+      console.log("this is a late user; Let's fix your score to the average");
+      console.log(req.body);
+      Players.findOneAndUpdate(
+        { _id: req.body._id },
+        { $set: { currScore: req.body.currScore, newPlayer: false } }
+      )
+        .then(dbModel => res.json(dbModel))
+        .catch(err => res.status(422).json(err));
     }
   },
   // Change kickedOut to true
@@ -79,11 +97,11 @@ module.exports = {
   },
   // calculate all scores
   update: function(req, res) {
-    console.log("update function in scoresController.js");
+    console.log("update function in playerController.js");
     console.log(req.body);
     var answer = req.body[0].answer;
     answer = answer.toUpperCase();
-    var gameId = req.body[1].gameId;
+    const gameId = req.body[1].gameId;
     console.log(req.body);
     //should be according to the user's guess, not the answer!
     var toAddOrSubtract = 0;

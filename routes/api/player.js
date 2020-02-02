@@ -3,7 +3,7 @@ const playerController = require("../../controllers/playerController");
 
 //may need to change routes to api/player/:playerId/game/:gameId
 
-// Matches with "/api/player"
+// Matches with "/api/player/:gameId"
 router
   .route("/:gameId")
   // find all players

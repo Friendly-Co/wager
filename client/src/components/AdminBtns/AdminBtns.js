@@ -1,6 +1,7 @@
 // import React, { Component } from "react";
 import React from "react";
 import "./AdminBtns.css";
+import Button from 'react-bootstrap/Button';
 // import io from "socket.io-client";
 // import PlayerAPI from "../../utils/PlayerAPI";
 // import Leaderboard from "../../components/Leaderboard";
@@ -10,8 +11,8 @@ function AdminBtns(props) {
   // render() {
   return (
     <div className="center-buttons">
-      <span
-        className="btn btn-dark halt-bets"
+      <Button
+        // className="btn btn-dark halt-bets"
         role="button"
         tabIndex="0"
         onClick={() => {
@@ -20,10 +21,10 @@ function AdminBtns(props) {
         }}
       >
         Halt Bets
-      </span>
+      </Button>
       <div>
-        <span
-          className="btn btn-main"
+        <Button
+          // className="btn btn-main"
           role="button"
           tabIndex="0"
           onClick={() => {
@@ -32,9 +33,9 @@ function AdminBtns(props) {
           }}
         >
           Run
-        </span>
-        <span
-          className="btn btn-main"
+        </Button>
+        <Button
+          // className="btn btn-main"
           role="button"
           tabIndex="0"
           onClick={() => {
@@ -43,9 +44,9 @@ function AdminBtns(props) {
           }}
         >
           Pass
-        </span>
-        <span
-          className="btn btn-main"
+        </Button>
+        <Button
+          // className="btn btn-main"
           role="button"
           tabIndex="0"
           onClick={() => {
@@ -54,9 +55,9 @@ function AdminBtns(props) {
           }}
         >
           Kick
-        </span>
-        <span
-          className="btn btn-main"
+        </Button>
+        <Button
+          // className="btn btn-main"
           role="button"
           tabIndex="0"
           onClick={() => {
@@ -65,7 +66,7 @@ function AdminBtns(props) {
           }}
         >
           Turnover
-        </span>
+        </Button>
       </div>
     </div>
   );

@@ -1,7 +1,13 @@
 img {
-   width: 100%; 
+   width: 80%; 
    margin: 0;
+   /* padding: 0% 0% 0% 15px; */
    border-bottom-style: solid;
    border-color: #93c8e8;
-   box-shadow: .1rem .2rem .5rem black;
+   /* box-shadow: .1rem .2rem .5rem black; */
+}
+
+.alignimg {
+   align-self: center;
+   padding-left: 15%;
 }
