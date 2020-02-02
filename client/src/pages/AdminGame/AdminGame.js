@@ -91,12 +91,14 @@ class AdminGame extends Component {
 
   setModalHalt = ev => {
     this.socket.emit("toggle_modal", {
+      gameId: this.state.gameId,
       setModalHalt: true
     });
   };
 
   setModalCorrect = value => {
     this.socket.emit("toggle_modal", {
+      gameId: this.state.gameId,
       setModalHalt: false,
       setModalCorrect: true,
       answer: value
@@ -148,31 +150,31 @@ class AdminGame extends Component {
   render() {
     return (
       <div className="bglayer">
-      <Container fluid>
-        <Row>
-          <Col size="md-8">
-            {/* <div className="wrapper"> */}
-            <Leaderboard
-              scoreSeed={this.state.scoreSeed}
-              gameId={this.props.match.params.gameId}
-              currentGuess={this.state.currentGuess}
-              // deleteAllPlayers={this.deleteAllPlayers}
-              endGame={this.endGame}
-            />
-            {/* </div> */}
-          </Col>
+        <Container fluid>
+          <Row>
+            <Col size="md-8">
+              {/* <div className="wrapper"> */}
+              <Leaderboard
+                scoreSeed={this.state.scoreSeed}
+                gameId={this.props.match.params.gameId}
+                currentGuess={this.state.currentGuess}
+                // deleteAllPlayers={this.deleteAllPlayers}
+                endGame={this.endGame}
+              />
+              {/* </div> */}
+            </Col>
 
-          <Col size="md-4" className="center-buttons">
-            <Logo />
+            <Col size="md-4" className="center-buttons">
+              <Logo />
 
-            <AdminBtns
-              handleAnswer={this.handleAnswer}
-              setModalHalt={this.setModalHalt}
-              setModalCorrect={this.setModalCorrect}
-            />
-          </Col>
-        </Row>
-      </Container>
+              <AdminBtns
+                handleAnswer={this.handleAnswer}
+                setModalHalt={this.setModalHalt}
+                setModalCorrect={this.setModalCorrect}
+              />
+            </Col>
+          </Row>
+        </Container>
       </div>
     );
   }

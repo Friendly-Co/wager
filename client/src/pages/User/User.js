@@ -42,9 +42,9 @@ class User extends Component {
     this.socket.on("modal_on", data => {
       // this.setState({setModalHalt: true})
       // console.log(this.state.setModalHalt);
-      if (data.setModalHalt) {
+      if (data.setModalHalt && gameId === data.gameId) {
         this.toggleHalt();
-      } else {
+      } else if (gameId === data.gameId) {
         this.acceptAnswer(data.answer);
         this.lastGuess();
         this.toggleCorrect();
@@ -256,49 +256,49 @@ class User extends Component {
     return (
       <div>
         <Row>
-          <Col size='12'>
-            <div className='wrapper bglayer2'>
-
+          <Col size="12">
+            <div className="wrapper bglayer2">
               <Row>
-                <Col size='lg-4 md-2'></Col>
-                <div className='col-lg-4 col-md-8 col-m-12' >
+                <Col size="lg-4 md-2"></Col>
+                <div className="col-lg-4 col-md-8 col-m-12">
                   <Logo />
                 </div>
                 <Col size="lg-4 md-2"></Col>
               </Row>
-              
+
               <Row>
                 {/* <Col size='lg-4 md-2'></Col> */}
-                  <Col size='12'>
-                    <Score user={this.state.username} score={this.state.score} />
-                  </Col>
+                <Col size="12">
+                  <Score user={this.state.username} score={this.state.score} />
+                </Col>
                 {/* <Col size='lg-4 md-2'></Col> */}
               </Row>
-        
+
               <Row>
-                <Col size='12'>
-                  <GuessState onChange={this.sendGuess()} guess={this.state.guess} />
+                <Col size="12">
+                  <GuessState
+                    onChange={this.sendGuess()}
+                    guess={this.state.guess}
+                  />
                 </Col>
               </Row>
-        
+
               <Row>
-                  {/* <Col size='lg-4 md-2'>
+                {/* <Col size='lg-4 md-2'>
                   </Col>
                   <Col size='lg-4 md-8 sm-12'> */}
-                      <div className="btnformat">
-                      <GuessButtons
-                        guessUpdate={this.guessUpdate}
-                        toggleModalOn={this.toggleModal}
-                      />
-                      </div>
-                  {/* </Col>
+                <div className="btnformat">
+                  <GuessButtons
+                    guessUpdate={this.guessUpdate}
+                    toggleModalOn={this.toggleModal}
+                  />
+                </div>
+                {/* </Col>
                   <Col size='lg-4 md-2'>
                   </Col> */}
               </Row>
             </div>
-              
           </Col>
-          
         </Row>
         <LeaderModal
           username={this.state.username}
@@ -319,9 +319,7 @@ class User extends Component {
           show={this.state.setModalHalt}
           onHide={() => this.toggleHaltOff()}
         />
-
       </div>
-      
     );
   }
 }
