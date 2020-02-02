@@ -4,6 +4,7 @@ import HouseAPI from "../../utils/HouseAPI";
 import { FormBtn, Input } from "../../components/Form";
 import Logo from "../../components/Logo";
 import InstructionsModal from "../../components/instructionsModal";
+import AlertMessages from "../../components/Alerts";
 
 let count = 1;
 
@@ -13,7 +14,7 @@ class Login extends Component {
     username: "",
     playerEmail: "",
     possiblePlayerId: "",
-    message: "",
+    message: 0,
     adminLoginBoolean: false,
     adminEmail: "",
     adminName: "",
@@ -28,7 +29,8 @@ class Login extends Component {
     gameId: "",
     introModal: false,
     page: 1,
-    nextOrClose: "Next"
+    nextOrClose: "Next",
+    alertVisible: false,
   };
 
   componentDidMount() {
@@ -88,9 +90,8 @@ class Login extends Component {
               res.data[i].kickedOut === true
             ) {
               this.setState({
-                message: alert(
-                  "This username has dropped below zero points in this game.  Create a new player to continue playing this game. Better luck next time!"
-                )
+                message: 1,
+                alertVisible: true
               });
               return;
             }
@@ -101,17 +102,23 @@ class Login extends Component {
               res.data[i].kickedOut === false
             ) {
               this.setState({
-                message: alert("Welcome back")
+                message: 2,
+                alertVisible: true
               });
               // to change: if gameOver = true (in House model), take to the stats page
-              window.location =
-                "/game/" +
-                this.state.gameId +
-                "/user/" +
-                this.state.username +
-                "/userid/" +
-                res.data[i]._id;
-              return;
+              setInterval(() => {
+      
+                if(!this.state.alertVisible) {
+                  window.location =
+                  "/game/" +
+                  this.state.gameId +
+                  "/user/" +
+                  this.state.username +
+                  "/userid/" +
+                  res.data[i]._id;
+                  return;
+                };
+              }, 100);
               // });
             }
             // if this game already has a player with this playername, but a different email, Alert that their email is incorrect, or, if this is a taken username, they can pick a new username
@@ -124,9 +131,7 @@ class Login extends Component {
             ) {
               this.setState({ possiblePlayerId: res.data[i]._id });
               this.setState({
-                message: alert(
-                  "This email or username does not match our database for this game. Please try again. If you would like an email sent to your registered account, click 'Email Login Info'"
-                )
+                message: 3, alertVisible: true
               });
               this.setState({ playerEmailButton: true });
               return;
@@ -147,18 +152,21 @@ class Login extends Component {
             PlayerAPI.savePlayer(toSave).then(res => {
               console.log(res.data);
               this.setState({
-                message: alert(
-                  "Your username has been saved! Click OK to redirect to your game page."
-                )
+                message: 4, alertVisible: true
               });
               // to change: if gameOver = true (in House model), take to the stats page
-              window.location =
-                "/game/" +
-                this.state.gameId +
-                "/user/" +
-                this.state.username +
-                "/userid/" +
-                res.data._id;
+              setInterval(() => {
+      
+                if(!this.state.alertVisible) {
+                  window.location =
+                  "/game/" +
+                  this.state.gameId +
+                  "/user/" +
+                  this.state.username +
+                  "/userid/" +
+                  res.data._id;
+                }
+              }, 100);
             });
           }
         })
@@ -198,14 +206,16 @@ class Login extends Component {
       };
       HouseAPI.saveGame(toSave).then(res => {
         this.setState({
-          message: alert(
-            `A new ${this.state.newGame} game has been created with the username: ${this.state.adminName} and associated email: ${this.state.adminEmail}.`
-          )
-        });
+          message: 5, alertVisible: true
+        })
         // to change: if gameOver = true (in House model), take to the stats page
-        window.location =
-          "/admingame/" + res.data._id + "/admin/" + this.state.adminName;
-      });
+        setInterval(() => {
+          if(!this.state.alertVisible) {
+            window.location =
+            "/admingame/" + res.data._id + "/admin/" + this.state.adminName;
+          }
+        }, 100);
+        });
     }
 
     // This is a previously created game. Go to the page after checking admin credentials.
@@ -226,9 +236,7 @@ class Login extends Component {
               this.state.adminEmail !== res.data.adminEmail
             ) {
               this.setState({
-                message: alert(
-                  "This username and email do not match our database. Please try again"
-                )
+                message: 6, alertVisible: true
               });
               return;
             } else if (
@@ -237,9 +245,7 @@ class Login extends Component {
               this.state.adminName !== res.data.adminName
             ) {
               this.setState({
-                message: alert(
-                  'This username does not match our database for this game. Please try again. If you would like an email reminder of your username, click "Email Login Info"'
-                )
+                message: 7, alertVisible: true
               });
               //email username option...add button to email
               this.setState({ emailButton: true });
@@ -250,9 +256,7 @@ class Login extends Component {
               this.state.adminEmail !== res.data.adminEmail
             ) {
               this.setState({
-                message: alert(
-                  "This email does not match our database for this user's game. Please try again. If you would like an email sent to your registered account, click 'Email Login Info'"
-                )
+                message: 8, alertVisible: true
               });
               //email username option...add button to email
               this.setState({ emailButton: true });
@@ -266,14 +270,18 @@ class Login extends Component {
               this.state.gameId === res.data._id
             ) {
               this.setState({
-                message: alert("Welcome Back!")
-              });
+                message: 2, alertVisible: true
+              })
               // to change: if gameOver = true (in House model), take to the stats page
-              window.location =
-                "/admingame/" +
-                this.state.gameId +
-                "/admin/" +
-                this.state.adminName;
+              setInterval(() => {
+                if(!this.state.alertVisible) {
+                window.location =
+                  "/admingame/" +
+                  this.state.gameId +
+                  "/admin/" +
+                  this.state.adminName;
+                }
+              }, 100);
             }
           }
         })
@@ -320,6 +328,14 @@ class Login extends Component {
       this.toggleIntro();
     }
   };
+
+  setShow = () => {
+    if(this.state.alertVisible) {
+      this.setState({alertVisible: false})
+    } else {
+      this.setState({alertVisible: true})
+    }
+}
 
   render() {
     return (
@@ -525,6 +541,15 @@ class Login extends Component {
           page={this.state.page}
           nextOrClose={this.state.nextOrClose}
           onHide={this.introNextorClose}
+        />
+        <AlertMessages 
+    
+          message={this.state.message}
+          newGame={this.state.newGame}
+          adminName={this.state.adminName}
+          adminEmail={this.state.adminEmail}
+          alertVisible={this.state.alertVisible}
+          setShow={this.setShow}
         />
       </div>
     );
