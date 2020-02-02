@@ -44,6 +44,14 @@ function AlertMessages(props) {
         "This email does not match our database for this user's game. Please try again. If you would like an email sent to your registered account, click 'Email Login Info'";
       color = "danger";
       break;
+    case 9:
+      mess = "Must be a valid email format, ex: myName@email.com";
+      color = "danger";
+      break;
+    case 10:
+      mess = "Username must be 32 characters or less";
+      color = "danger";
+      break;
   }
 
   return (
