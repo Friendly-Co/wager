@@ -36,7 +36,9 @@ class AdminGame extends Component {
           "the guess " +
             data.currentGuess +
             " came from user " +
-            data.playerName
+            data.playerName +
+            "and this game: " +
+            data.gameId
         );
       }
     });
@@ -51,7 +53,7 @@ class AdminGame extends Component {
         var alreadyHere = false;
         //make sure we only update current players's guesses
         for (let i = 0; i < state.scoreSeed.length; i++) {
-          if (state.scoreSeed[i].playerName == data.playerName) {
+          if (state.scoreSeed[i].playerName === data.playerName) {
             //malfunctions if you use === - It behaves like the data types are different, when they SHOULD both be strings
             playerIndex = i;
             console.log("these names are matching!");
@@ -65,7 +67,7 @@ class AdminGame extends Component {
         // Create a new card for new player
         if (!alreadyHere) {
           // may need to change currScore default for late logins
-          data.currScore = 50;
+          // data.currScore = 50;
           const scoreSeed = state.scoreSeed.concat(data);
           return { scoreSeed };
         } else {
@@ -152,7 +154,7 @@ class AdminGame extends Component {
             {/* <div className="wrapper"> */}
             <Leaderboard
               scoreSeed={this.state.scoreSeed}
-              gameId={this.props.match.params.gameId} //this.props.match.params.gameId;
+              gameId={this.props.match.params.gameId}
               currentGuess={this.state.currentGuess}
               // deleteAllPlayers={this.deleteAllPlayers}
               endGame={this.endGame}
