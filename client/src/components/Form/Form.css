@@ -39,7 +39,7 @@ button.btn.btn-success.search-button:active {
     display: inline-block;
     vertical-align: middle;
     margin: 10px;
-    color: black;
+    color: #fff !important;
     text-align: center;
     background: #4219b0;
     box-shadow: inset 5px 5px 15px rgba(150, 150, 150, .5), inset -5px -5px 15px rgba(0, 0, 0, .5), 3px 3px 5px rgba(0, 0, 0, .7);
@@ -53,7 +53,7 @@ button.btn.btn-success.search-button:active {
     box-shadow: inset 1px 1px 1px rgba(150, 150, 150, .5), inset -1px -1px 1px rgba(0, 0, 0, .5), 1px 1px 1px rgba(0, 0, 0, .7);
   }
   .squishy:disabled {
-      color: black;
+      color: #fff;
   }
   
   .squishy span {

@@ -3,13 +3,13 @@ import "./Form.css";
 
 export function FormBtn(props) {
   return (
-    <div
+    <button
       {...props}
       type="submit"
       className="btn-1 squishy guessButton"
     ><span>
       {props.children}
       </span>
-    </div>
+    </button>
   );
 }

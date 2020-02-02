@@ -12,60 +12,60 @@ function AdminBtns(props) {
   return (
     <div className="center-buttons">
       <Button
-        // className="btn btn-dark halt-bets"
+        className="btn-3 squishy adminbutton halt-bets"
         role="button"
         tabIndex="0"
         onClick={() => {
           // props.haltBets();
           props.setModalHalt();
         }}
-      >
-        Halt Bets
+      ><span>
+        Halt Bets</span>
       </Button>
       <div>
         <Button
-          // className="btn btn-main"
+          className="btn-1 squishy adminbutton"
           role="button"
           tabIndex="0"
           onClick={() => {
             props.handleAnswer("Run");
             props.setModalCorrect("Run");
           }}
-        >
-          Run
+        ><span>
+          Run</span>
         </Button>
         <Button
-          // className="btn btn-main"
+          className="btn-1 squishy adminbutton"
           role="button"
           tabIndex="0"
           onClick={() => {
             props.handleAnswer("Pass");
             props.setModalCorrect("Pass");
           }}
-        >
-          Pass
+        ><span>
+          Pass</span>
         </Button>
         <Button
-          // className="btn btn-main"
+          className="btn-1 squishy adminbutton"
           role="button"
           tabIndex="0"
           onClick={() => {
             props.handleAnswer("Kick");
             props.setModalCorrect("Kick");
           }}
-        >
-          Kick
+        ><span>
+          Kick</span>
         </Button>
         <Button
-          // className="btn btn-main"
+          className="btn-1 squishy adminbutton"
           role="button"
           tabIndex="0"
           onClick={() => {
             props.handleAnswer("Turnover");
             props.setModalCorrect("Turnover");
           }}
-        >
-          Turnover
+        ><span>
+          Turnover</span>
         </Button>
       </div>
     </div>

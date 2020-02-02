@@ -422,9 +422,8 @@ class Login extends Component {
             </FormBtn>
             </Col>
             <Col size='6'>
-              <div className='guessButton squishy btn-1'>
-            <span onClick={this.toggleLogin}>Admin Login</span>
-            </div>
+              <button className='guessButton squishy btn-1' onClick={this.toggleLogin}>Admin Login
+            </button>
           </Col>
            </Row> 
           </form>
