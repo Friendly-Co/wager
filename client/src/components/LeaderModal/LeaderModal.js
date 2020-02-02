@@ -12,7 +12,7 @@ function LeaderModal(props) {
         centered
         >
           <Modal.Header>
-            <Modal.Title id="contained-modal-title-vcenter">
+            <Modal.Title className="col-12 text-center" id="contained-modal-title-vcenter">
               <div id="leaderTitle">
                 <h2>LeaderBoard</h2>
               </div>

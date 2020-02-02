@@ -51,7 +51,7 @@ var instructionCopy = {
             centered
             >
               <Modal.Header closeButton onClick={props.toggleIntro}>
-                <Modal.Title id="contained-modal-title-vcenter">
+                <Modal.Title className="col-12 text-center" id="contained-modal-title-vcenter">
                     <h1>{instructionCopy.heading1}</h1>                
                 </Modal.Title>
               </Modal.Header>
