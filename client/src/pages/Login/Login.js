@@ -30,7 +30,7 @@ class Login extends Component {
     introModal: false,
     page: 1,
     nextOrClose: "Next",
-    alertVisible: false,
+    alertVisible: false
   };
 
   componentDidMount() {
@@ -79,6 +79,17 @@ class Login extends Component {
     event.preventDefault();
     //verify unique username
     if (this.state.username && this.state.gameId && this.state.playerEmail) {
+      if (
+        !this.state.playerEmail.match(
+          /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+        )
+      ) {
+        this.setState({
+          message: 9,
+          alertVisible: true
+        });
+        return;
+      }
       PlayerAPI.getPlayers(this.state.gameId)
         .then(res => {
           for (let i = 0; i < res.data.length; i++) {
@@ -107,14 +118,14 @@ class Login extends Component {
               });
               // to change: if gameOver = true (in House model), take to the stats page
               setTimeout(() => {
-                  window.location =
+                window.location =
                   "/game/" +
                   this.state.gameId +
                   "/user/" +
                   this.state.username +
                   "/userid/" +
                   res.data[i]._id;
-                  return;
+                return;
               }, 3000);
               // });
             }
@@ -128,7 +139,8 @@ class Login extends Component {
             ) {
               this.setState({ possiblePlayerId: res.data[i]._id });
               this.setState({
-                message: 3, alertVisible: true
+                message: 3,
+                alertVisible: true
               });
               this.setState({ playerEmailButton: true });
               return;
@@ -149,11 +161,12 @@ class Login extends Component {
             PlayerAPI.savePlayer(toSave).then(res => {
               console.log(res.data);
               this.setState({
-                message: 4, alertVisible: true
+                message: 4,
+                alertVisible: true
               });
               // to change: if gameOver = true (in House model), take to the stats page
               setTimeout(() => {
-                  window.location =
+                window.location =
                   "/game/" +
                   this.state.gameId +
                   "/user/" +
@@ -186,9 +199,19 @@ class Login extends Component {
 
   handleAdminSave = event => {
     event.preventDefault();
-
+    if (
+      !this.state.adminEmail.match(
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/
+      )
+    ) {
+      this.setState({
+        message: 9,
+        alertVisible: true
+      });
+      return;
+    }
     // This is a new game to save. Accept all fields and save
-    if (this.state.newGame) {
+    else if (this.state.newGame) {
       this.setState(state => {
         state.gameInfo = "";
         state.gameId = "";
@@ -200,14 +223,15 @@ class Login extends Component {
       };
       HouseAPI.saveGame(toSave).then(res => {
         this.setState({
-          message: 5, alertVisible: true
-        })
+          message: 5,
+          alertVisible: true
+        });
         // to change: if gameOver = true (in House model), take to the stats page
         setTimeout(() => {
-            window.location =
+          window.location =
             "/admingame/" + res.data._id + "/admin/" + this.state.adminName;
         }, 3000);
-        });
+      });
     }
 
     // This is a previously created game. Go to the page after checking admin credentials.
@@ -228,7 +252,8 @@ class Login extends Component {
               this.state.adminEmail !== res.data.adminEmail
             ) {
               this.setState({
-                message: 6, alertVisible: true
+                message: 6,
+                alertVisible: true
               });
               return;
             } else if (
@@ -237,7 +262,8 @@ class Login extends Component {
               this.state.adminName !== res.data.adminName
             ) {
               this.setState({
-                message: 7, alertVisible: true
+                message: 7,
+                alertVisible: true
               });
               //email username option...add button to email
               this.setState({ emailButton: true });
@@ -248,7 +274,8 @@ class Login extends Component {
               this.state.adminEmail !== res.data.adminEmail
             ) {
               this.setState({
-                message: 8, alertVisible: true
+                message: 8,
+                alertVisible: true
               });
               //email username option...add button to email
               this.setState({ emailButton: true });
@@ -262,8 +289,9 @@ class Login extends Component {
               this.state.gameId === res.data._id
             ) {
               this.setState({
-                message: 2, alertVisible: true
-              })
+                message: 2,
+                alertVisible: true
+              });
               // to change: if gameOver = true (in House model), take to the stats page
               setTimeout(() => {
                 window.location =
@@ -320,12 +348,12 @@ class Login extends Component {
   };
 
   setShow = () => {
-    if(this.state.alertVisible) {
-      this.setState({alertVisible: false})
+    if (this.state.alertVisible) {
+      this.setState({ alertVisible: false });
     } else {
-      this.setState({alertVisible: true})
+      this.setState({ alertVisible: true });
     }
-}
+  };
 
   render() {
     return (
@@ -533,7 +561,7 @@ class Login extends Component {
           onHide={this.introNextorClose}
           toggleIntro={this.toggleIntro}
         />
-        <AlertMessages 
+        <AlertMessages
           message={this.state.message}
           newGame={this.state.newGame}
           adminName={this.state.adminName}
