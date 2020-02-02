@@ -54,12 +54,10 @@ class User extends Component {
       // ev.preventDefault();
       this.socket.emit("SEND_MESSAGE", {
         playerName: this.state.username,
-        currentGuess: this.state.guess
+        currentGuess: this.state.guess,
+        gameId: gameId,
+        playerId: playerId
       });
-      // this.setState({guess: ''});
-      // console.log(this.state.username); //undefined
-      // console.log(this.state.guess);
-      // this.setState({})
     };
   }
 
@@ -87,7 +85,6 @@ class User extends Component {
     console.log("loadscore function");
     PlayerAPI.getPlayerScore(playerId)
       .then(res => {
-        console.log(res.data);
         this.setState({
           score: res.data.currScore
         });
@@ -97,13 +94,10 @@ class User extends Component {
   };
 
   loadLeaderboard = () => {
-    console.log("loadLeaderboard function, about to call load score function");
     this.loadScore();
-    console.log("calling PlayerAPI.getPlayers");
     PlayerAPI.getPlayers(gameId)
       .then(res => {
         this.setState({ leaderboard: res.data.splice(0, 10) });
-        // console.log(this.state.leaderboard);
       })
       .catch(err => console.log(err));
   };
@@ -157,11 +151,6 @@ class User extends Component {
       playerId: playerId,
       currentGuess: value
     };
-    console.log(toSave);
-    console.log({
-      name: username,
-      guess: value
-    });
     this.savePlayerGuess(toSave);
   };
 
