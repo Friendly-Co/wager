@@ -98,13 +98,13 @@ class User extends Component {
                 runningTotal + playerId;
               const scoreSum = scoreArray.reduce(addScores, 0);
               //find the average of all scores
-              const averageScore = scoreSum / scoreArray.length;
+              const averageScore = Math.floor(scoreSum / scoreArray.length);
               console.log("avarage:" + averageScore);
               const toSave = { _id: playerId, currScore: averageScore };
               PlayerAPI.savePlayer(toSave).then(r => {
                 console.log(r);
                 this.setState({
-                  score: Math.floor(averageScore)
+                  score: averageScore
                 });
               });
             }
