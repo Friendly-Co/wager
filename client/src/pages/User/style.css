@@ -1,3 +1,17 @@
+.bglayer2 {
+    background-image: url(../../img/bluesteel.jpg);
+    background-repeat: no-repeat;
+    background-size: 200vh;
+}
+
+.btnformat {
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+.wrapper {
+    height: 100vh;
+}
 body {
     background-color: #4119b0;
 }

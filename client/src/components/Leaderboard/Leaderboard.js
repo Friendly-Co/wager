@@ -3,6 +3,10 @@ import PlayerAPI from "../../utils/PlayerAPI";
 // import HouseAPI from "../../utils/HouseAPI";
 import DeleteBtn from "../DeleteBtn";
 import { List, ListItem } from "../List";
+
+// import Table from 'react-bootstrap/Table';
+// import { get } from "mongoose";
+
 // import io from "socket.io-client";
 
 class Leaderboard extends Component {
@@ -70,17 +74,24 @@ class Leaderboard extends Component {
         <div className="container">
           {this.props.scoreSeed.length || this.state.dbScores ? (
             <List>
+              <thead>
+                <th>Player Name</th>
+                <th>Score</th>
+                <th>Current Guess</th>
+              </thead>
+              <tbody>
               {renderFrom.map(score => {
                 return (
-                  <ListItem key={score.playerName}>
-                    <strong>
-                      <h3>{score.playerName}</h3>
-                      <p>Current Score: {score.currScore}</p>
-                      <p>Current Guess: {score.currentGuess}</p>
-                    </strong>
+                  <ListItem key={score.currScore}>
+                    
+                      <td>{score.playerName}</td>
+                      <td>Current Score: {score.currScore}</td>
+                      <td>Current Guess: {score.currentGuess}</td>
+                   
                   </ListItem>
                 );
               })}
+              </tbody>
             </List>
           ) : (
             <h3>No Players to Display</h3>
