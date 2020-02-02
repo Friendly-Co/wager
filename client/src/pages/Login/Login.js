@@ -1,9 +1,9 @@
 import React, { Component } from "react";
-import API from "../../utils/API";
-import AdminAPI from "../../utils/AdminAPI";
+import PlayerAPI from "../../utils/PlayerAPI";
+import HouseAPI from "../../utils/HouseAPI";
 import { FormBtn, Input } from "../../components/Form";
 import Logo from "../../components/Logo";
-import InstructionsModal from "../../components/InstructionsModal/index";
+import InstructionsModal from "../../components/instructionsModal";
 
 let count = 1;
 
@@ -11,22 +11,45 @@ class Login extends Component {
   // Setting our component's initial state
   state = {
     username: "",
+    playerEmail: "",
+    possiblePlayerId: "",
     message: "",
     adminLoginBoolean: false,
     adminEmail: "",
     adminName: "",
     emailButton: false,
-    emailBody: "",
-    emailHref: "",
-    emailSubject: "",
+    playerEmailButton: false,
+    //all games pulled from the database (array of objects), used for rendering dropdowns:
+    games: [],
+    // ex: Bears v. Packers, entered by admin:
+    newGame: "",
+    gameInfo: "",
+    // Unique id of game from dropdown selection:
+    gameId: "",
     introModal: false,
     page: 1,
     nextOrClose: "Next"
   };
 
   componentDidMount() {
-    this.setState({introModal: true});
+    this.setState({ introModal: true });
   }
+
+  loadGames = () => {
+    HouseAPI.getAllGames().then(res => {
+      this.setState({ games: res.data });
+    });
+  };
+
+  // This ONCE handled form input change for all admin game dropdown, but now it is unused
+  //bug: If this function is removed, at times you are unable to type in the form input areas...????!!!!
+  handleDropdownInputChange = event => {
+    this.setState({
+      ...this.state,
+      gameInfo: event.target.value,
+      gameId: event.target.id
+    });
+  };
 
   //handles form input change for all fields
   handleInputChange = event => {
@@ -37,127 +60,221 @@ class Login extends Component {
     });
   };
 
+  // to add to dropdown: if there are no games set up, send out a message, and redirect to the admin page to create a game
+  setGameInfo = (name, id) => {
+    this.setState({ gameInfo: name });
+    //If there is an id, this was selected by a player
+    if (id) {
+      this.setState({ gameId: id });
+    }
+  };
+
+  //================================= Player Login Function ====================================
+
   //search the database for any matching usernames.
   //If matching, alert the user to change their name
-  handleSave = event => {
+  handlePlayerSave = event => {
     event.preventDefault();
     //verify unique username
-    if (this.state.username) {
-      API.getScores()
+    if (this.state.username && this.state.gameId && this.state.playerEmail) {
+      PlayerAPI.getPlayers(this.state.gameId)
         .then(res => {
-          console.log(res.data);
           for (let i = 0; i < res.data.length; i++) {
-            if (this.state.username === res.data[i].playerName) {
+            // if player already exists and was kicked out
+            // Will need to change to load leaderboard for later data access
+            if (
+              this.state.username === res.data[i].playerName &&
+              this.state.gameId === res.data[i].gameId &&
+              res.data[i].kickedOut === true
+            ) {
               this.setState({
                 message: alert(
-                  "This username has been taken. Please enter a unique name."
+                  "This username has dropped below zero points in this game.  Create a new player to continue playing this game. Better luck next time!"
                 )
               });
-              //clear field
-              return false;
+              return;
+            }
+            //if player already exists and kickedOut = false and all data matches, log in
+            if (
+              this.state.username === res.data[i].playerName &&
+              this.state.playerEmail === res.data[i].playerEmail &&
+              res.data[i].kickedOut === false
+            ) {
+              this.setState({
+                message: alert("Welcome back")
+              });
+              // to change: if gameOver = true (in House model), take to the stats page
+              window.location =
+                "/game/" +
+                this.state.gameId +
+                "/user/" +
+                this.state.username +
+                "/userid/" +
+                res.data[i]._id;
+              return;
+              // });
+            }
+            // if this game already has a player with this playername, but a different email, Alert that their email is incorrect, or, if this is a taken username, they can pick a new username
+            if (
+              this.state.username === res.data[i].playerName &&
+              this.state.playerEmail !== res.data[i].playerEmail
+              //   ||
+              // (this.state.username !== res.data[i].playerName &&
+              //   this.state.playerEmail === res.data[i].playerEmail)
+            ) {
+              this.setState({ possiblePlayerId: res.data[i]._id });
+              this.setState({
+                message: alert(
+                  "This email or username does not match our database for this game. Please try again. If you would like an email sent to your registered account, click 'Email Login Info'"
+                )
+              });
+              this.setState({ playerEmailButton: true });
+              return;
             }
           }
-          //handle save
-          var toSave = {
-            playerName: this.state.username
-          };
-          API.saveScore(toSave).then(
-            this.setState({ message: alert("Your username has been saved") })
-          );
-          window.location = "/user/" + this.state.username;
+          // if the data is all new, save and log in
+          if (
+            this.state.username &&
+            this.state.gameId &&
+            this.state.playerEmail
+          ) {
+            //handle save
+            const toSave = {
+              playerName: this.state.username,
+              gameId: this.state.gameId,
+              playerEmail: this.state.playerEmail
+            };
+            PlayerAPI.savePlayer(toSave).then(res => {
+              console.log(res.data);
+              this.setState({
+                message: alert(
+                  "Your username has been saved! Click OK to redirect to your game page."
+                )
+              });
+              // to change: if gameOver = true (in House model), take to the stats page
+              window.location =
+                "/game/" +
+                this.state.gameId +
+                "/user/" +
+                this.state.username +
+                "/userid/" +
+                res.data._id;
+            });
+          }
         })
         .catch(err => console.log(err));
     }
   };
 
-  //======================Admin Function ====================================
+  emailPlayerUsername = event => {
+    event.preventDefault();
+    const toFind = this.state.possiblePlayerId;
+    PlayerAPI.getPlayerScore(toFind).then(res => {
+      const toSend = {
+        playerName: res.data.playerName,
+        playerEmail: res.data.playerEmail
+      };
+      HouseAPI.sendEmail(toSend);
+    });
+    return;
+  };
+
+  //================================ Admin Login Function ====================================
+  // consider saving the admin info in a separate collection, querying the collection, then adding that info (gameInfo and _id) to the corresponding game
 
   handleAdminSave = event => {
     event.preventDefault();
-    //verify unique username
-    if (this.state.adminName) {
-      console.log("this.state.adminName: ");
-      console.log(this.state.adminName);
-      AdminAPI.getAllAdmin()
+
+    // This is a new game to save. Accept all fields and save
+    if (this.state.newGame) {
+      this.setState(state => {
+        state.gameInfo = "";
+        state.gameId = "";
+      });
+      const toSave = {
+        adminName: this.state.adminName,
+        adminEmail: this.state.adminEmail,
+        gameInfo: this.state.newGame
+      };
+      HouseAPI.saveGame(toSave).then(res => {
+        this.setState({
+          message: alert(
+            `A new ${this.state.newGame} game has been created with the username: ${this.state.adminName} and associated email: ${this.state.adminEmail}.`
+          )
+        });
+        // to change: if gameOver = true (in House model), take to the stats page
+        window.location =
+          "/admingame/" + res.data._id + "/admin/" + this.state.adminName;
+      });
+    }
+
+    // This is a previously created game. Go to the page after checking admin credentials.
+    else if (
+      this.state.adminName &&
+      this.state.adminEmail &&
+      this.state.gameInfo
+    ) {
+      const toFind = this.state.gameId;
+
+      HouseAPI.getGameInfo(toFind)
         .then(res => {
-          console.log(res.data);
-          //if there is an admin already in the system, they were logged out
-          // make sure their email and name match the database
-          //then log them back in
-          if (res.data.length) {
+          // If there is an admin already in the system, they were logged out
+          // Make sure their email and name match the database then log them back in
+          if (res.data) {
             if (
-              this.state.adminName !== res.data[0].adminName &&
-              this.state.adminEmail !== res.data[0].adminEmail
+              this.state.adminName !== res.data.adminName &&
+              this.state.adminEmail !== res.data.adminEmail
             ) {
               this.setState({
                 message: alert(
                   "This username and email do not match our database. Please try again"
                 )
               });
-              //email username option...add button to email
-              return false;
-            }
-
-            if (this.state.adminName !== res.data[0].adminName) {
+              return;
+            } else if (
+              this.state.adminEmail === res.data.adminEmail &&
+              this.state.gameId === res.data._id &&
+              this.state.adminName !== res.data.adminName
+            ) {
               this.setState({
                 message: alert(
-                  'This username does not match our database. Please try again. If you would like an email reminder of your username, click "Email Login Info"'
+                  'This username does not match our database for this game. Please try again. If you would like an email reminder of your username, click "Email Login Info"'
                 )
               });
               //email username option...add button to email
               this.setState({ emailButton: true });
-              // this.setState(state => {
-              //   // state.emailButton = true;
-              //   state.emailBody = encodeURIComponent(
-              //     `Dear ${res.data[0].adminName}, This is a courtesy email reminder. If you did not request this email, please disregard. Your username is: ${res.data[0].adminName}`
-              //   );
-              //   state.emailSubject = encodeURIComponent(
-              //     `Your Requested Login Information`
-              //   );
-
-              //   state.emailHref = `mailto:${res.data[0].adminEmail}?subject=${state.emailSubject}&body=hey`;
-              // });
-              // console.log(this.state.emailSubject);
-              // console.log(this.state.emailBody);
-              // console.log(this.state.emailHref);
-              return false;
-            }
-
-            if (this.state.adminEmail !== res.data[0].adminEmail) {
+              return;
+            } else if (
+              this.state.adminName === res.data.adminName &&
+              this.state.gameId === res.data._id &&
+              this.state.adminEmail !== res.data.adminEmail
+            ) {
               this.setState({
                 message: alert(
-                  "This email does not match our database. Please try again"
+                  "This email does not match our database for this user's game. Please try again. If you would like an email sent to your registered account, click 'Email Login Info'"
                 )
               });
-              //change email option?
-              return false;
+              //email username option...add button to email
+              this.setState({ emailButton: true });
+              return;
             }
 
             // if already in the database and their input matches, load the admin page
             else if (
-              this.state.adminName === res.data[0].adminName &&
-              this.state.adminEmail === res.data[0].adminEmail
+              this.state.adminName === res.data.adminName &&
+              this.state.adminEmail === res.data.adminEmail &&
+              this.state.gameId === res.data._id
             ) {
-              window.location = "/admingame/admin/" + this.state.adminName;
-            }
-          }
-          // if no admin are in the database, save info and log in
-          else if (!res.data.length) {
-            var toSave = {
-              adminName: this.state.adminName,
-              adminEmail: this.state.adminEmail
-            };
-            AdminAPI.saveAdmin(toSave).then(res => {
-              console.log(
-                "this is the response we got back after saving your login: "
-              );
-              console.log(res.data);
               this.setState({
-                message: alert("Your username and email have been saved")
+                message: alert("Welcome Back!")
               });
-
-              window.location = "/admingame/admin/" + this.state.adminName;
-            });
+              // to change: if gameOver = true (in House model), take to the stats page
+              window.location =
+                "/admingame/" +
+                this.state.gameId +
+                "/admin/" +
+                this.state.adminName;
+            }
           }
         })
         .catch(err => console.log(err));
@@ -166,17 +283,18 @@ class Login extends Component {
 
   emailUsername = event => {
     event.preventDefault();
-    AdminAPI.getAllAdmin().then(res => {
-      console.log(res.data);
+    const toFind = this.state.gameId;
+    HouseAPI.getGameInfo(toFind).then(res => {
       const toSend = {
-        adminName: res.data[0].adminName,
-        adminEmail: res.data[0].adminEmail
+        adminName: res.data.adminName,
+        adminEmail: res.data.adminEmail
       };
-      AdminAPI.sendEmail(toSend).then(res => console.log(res));
+      HouseAPI.sendEmail(toSend);
     });
+    return;
   };
 
-  //boolean to control rendering for login as admin and login as user
+  // ============================== Modal Controls and Conditional Rendering ======================================
   toggleLogin = event => {
     this.setState(prevState => ({
       adminLoginBoolean: !prevState.adminLoginBoolean
@@ -185,43 +303,190 @@ class Login extends Component {
 
   toggleIntro = () => {
     if (this.state.introModal) {
-      this.setState({introModal: false});
+      this.setState({ introModal: false });
     } else {
-      this.setState({introModal: true})
+      this.setState({ introModal: true });
     }
   };
 
   introNextorClose = () => {
     count++;
-    this.setState({page: count});
-    if(count < 5) {
-      this.setState({introModal: true});
+    this.setState({ page: count });
+    if (count < 5) {
+      this.setState({ introModal: true });
     } else if (count === 5) {
-      this.setState({nextOrClose: "Close"});
+      this.setState({ nextOrClose: "Close" });
     } else {
       this.toggleIntro();
     }
-  }
+  };
 
   render() {
     return (
       <div className="container">
         <Logo />
         {!this.state.adminLoginBoolean ? (
+          //  ============================================ Player Rendering =============================================
           <form className="form-inline">
+            <div className="dropdown show">
+              <a
+                className="btn btn-secondary dropdown-toggle"
+                href="#"
+                role="button"
+                id="dropdownMenuLink"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                onClick={this.loadGames}
+              >
+                {this.state.gameInfo || "Select Your Game"}
+              </a>
+
+              <div
+                className="dropdown-menu"
+                aria-labelledby="dropdownMenuLink"
+                name={this.state.gameInfo}
+                value={this.state.gameId}
+              >
+                {this.state.games.map(game => (
+                  <a
+                    className="dropdown-item"
+                    key={game._id}
+                    value={game._id}
+                    onClick={() => {
+                      this.setGameInfo(game.gameInfo, game._id);
+                    }}
+                  >
+                    {game.gameInfo}
+                  </a>
+                ))}
+              </div>
+            </div>
+
             <Input
               value={this.state.username}
               onChange={this.handleInputChange}
               name="username"
               placeholder="Username (required)"
             ></Input>
-            <FormBtn disabled={!this.state.username} onClick={this.handleSave}>
+
+            <Input
+              value={this.state.playerEmail}
+              onChange={this.handleInputChange}
+              name="playerEmail"
+              placeholder="Email (required)"
+            ></Input>
+
+            {this.state.playerEmailButton ? (
+              <p>
+                Forgot your username?{" "}
+                <button onClick={this.emailPlayerUsername}>
+                  Email Login Info
+                </button>
+              </p>
+            ) : (
+              <p></p>
+            )}
+
+            <FormBtn
+              disabled={!this.state.username || !this.state.gameId}
+              onClick={this.handlePlayerSave}
+            >
               Submit
             </FormBtn>
             <button onClick={this.toggleLogin}>Login as Admin</button>
           </form>
         ) : (
+          //  ============================================ Admin Rendering =============================================
+          // create new game
           <form className="form-inline">
+            <Input
+              value={this.state.newGame}
+              onChange={this.handleInputChange}
+              name="newGame"
+              placeholder="Create New Ex: Cat v. Dog"
+            ></Input>
+
+            {/* select existing game */}
+            <div className="dropdown show">
+              <a
+                className="btn btn-secondary dropdown-toggle"
+                href="#"
+                role="button"
+                id="dropdownMenuLink"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+                onClick={this.loadGames}
+              >
+                {this.state.gameInfo || "Select Existing Game"}
+              </a>
+
+              <div
+                className="dropdown-menu"
+                aria-labelledby="dropdownMenuLink"
+                name={this.state.gameInfo}
+                value={this.state.gameId}
+              >
+                {/* maybe create an option to make your own game in the dropdown? */}
+                <a
+                  className="dropdown-item"
+                  key={"no answer"}
+                  onClick={() => {
+                    this.setGameInfo("", "");
+                  }}
+                >
+                  {"Select Existing Game"}
+                </a>
+                {this.state.games.map(game => (
+                  <a
+                    className="dropdown-item"
+                    key={game._id}
+                    value={game._id}
+                    onClick={() => {
+                      this.setGameInfo(game.gameInfo, game._id);
+                    }}
+                  >
+                    {game.gameInfo}
+                  </a>
+                ))}
+              </div>
+            </div>
+            {/* 
+            <input
+              type="text"
+              list="games"
+              value={this.state.gameInfo}
+              id={this.state.gameId}
+              // onChange={this.handleInputChange}
+              onChange={this.handleDropdownInputChange}
+              // name="gameInfo"
+              name={this.state.gameId}
+              placeholder="Type or Select a Game"
+              onClick={this.loadGames}
+            />
+            <datalist
+              id="games"
+              // onChange={this.change}
+              // value={this.state.gameId}
+            >
+              {this.state.games.map(game => (
+                <option
+                  class="dropdown-item"
+                  key={game._id}
+                  id={game._id}
+                  value={game.gameInfo}
+                  name={game._id}
+                  // onClick={() => {
+                  // onSelect={() => {
+                  // bug-sending the game-_id in the argument does not work, because of the manual input option to create a name
+                  // this.setGameId(game._id);
+                  // }}
+                >
+                  {game.gameInfo}
+                </option>
+              ))}
+            </datalist> */}
             <Input
               value={this.state.adminName}
               onChange={this.handleInputChange}
@@ -237,14 +502,17 @@ class Login extends Component {
             {this.state.emailButton ? (
               <p>
                 Forgot your username?{" "}
-                {/* <a href={this.state.emailHref}>Email Login Info</a> */}
                 <button onClick={this.emailUsername}>Email Login Info</button>
               </p>
             ) : (
               <p></p>
             )}
             <FormBtn
-              disabled={!this.state.adminName || !this.state.adminEmail}
+              disabled={
+                !this.state.adminName ||
+                !this.state.adminEmail ||
+                (!this.state.gameInfo && !this.state.newGame)
+              }
               onClick={this.handleAdminSave}
             >
               Submit
@@ -252,12 +520,12 @@ class Login extends Component {
             <button onClick={this.toggleLogin}>Login as Player</button>
           </form>
         )}
-    <InstructionsModal
-      show={this.state.introModal}
-      page={this.state.page}
-      nextOrClose={this.state.nextOrClose}
-      onHide={this.introNextorClose}
-    />
+        <InstructionsModal
+          show={this.state.introModal}
+          page={this.state.page}
+          nextOrClose={this.state.nextOrClose}
+          onHide={this.introNextorClose}
+        />
       </div>
     );
   }

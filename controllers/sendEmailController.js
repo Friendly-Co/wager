@@ -19,9 +19,10 @@ module.exports = {
 
     const mailOptions = {
       from: "TheJustAFriendlyWagerTeam@gmail.com",
-      to: req.body.adminEmail,
+      to: req.body.adminEmail || req.body.playerEmail,
       subject: "Your Requested Login Information",
-      text: `This is a courtesy email reminder. If you did not request this email, please disregard. Your username is: ${req.body.adminName}`
+      text: `This is a courtesy email reminder. If you did not request this email, please disregard. Your username is: ${req
+        .body.adminName || req.body.playerName}`
     };
 
     transporter.sendMail(mailOptions, function(error, info) {

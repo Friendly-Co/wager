@@ -1,11 +1,11 @@
 const router = require("express").Router();
-const scoreRoutes = require("./scores");
-const adminRoutes = require("./admin");
+const playerRoutes = require("./player");
+const houseRoutes = require("./house");
 
 // Score routes
-router.use("/scores", scoreRoutes);
+router.use("/player", playerRoutes);
 
-// Admin routes
-router.use("/admin", adminRoutes);
+// house routes
+router.use("/house", houseRoutes);
 
 module.exports = router;

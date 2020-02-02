@@ -13,13 +13,18 @@ function LeaderModal(props) {
         >
           <Modal.Header>
             <Modal.Title id="contained-modal-title-vcenter">
-                <h2>
-              LeaderBoard
-                </h2>
+              <div id="leaderTitle">
+                <h2>LeaderBoard</h2>
+              </div>
             </Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <h4>{props.username} : {props.score}</h4>
+            <div>
+              <h4 id="leaderRank">Your Rank: <span className="rankNscore">{props.currentrank}</span></h4>
+              </div>
+              <div>
+                <h4 id="leaderScore">Your Score: <span className="rankNscore">{props.score}</span></h4>
+                </div>
             
             <table id="leaderboard">
             <tbody>

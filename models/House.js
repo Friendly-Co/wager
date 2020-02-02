@@ -3,28 +3,24 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const gameSchema = new Schema({
-  // gameInfo: {
-  //   type: String,
-  //   required: true,
-  //   unique: true
-  // },
-  playerName: {
+  gameInfo: {
     type: String,
-    required: [true, "must provide a player name"],
-    unique: true,
+    required: true,
+    unique: true
+  },
+  date: { type: Date, default: Date.now },
+  adminName: {
+    type: String,
+    required: [true, "must provide a username"],
+    // unique: true,
     maxlength: 32
   },
-  currScore: { type: Number, default: 50 },
-  date: { type: Date, default: Date.now },
-  currentGuess: { type: String, default: " " }
-  // currentGuess: { type: Number, default: 5}
-
-  // players: [
-  //   {
-  //     name: { type: String, required: true, unique: true },
-  //     currScore: { type: Number, default: 0 }
-  //   }
-  // ]
+  adminEmail: {
+    type: String,
+    required: [true, "must provide an email"],
+    match: [/.+@.+\..+/, "Please enter a valid e-mail address"]
+  },
+  gameOver: { type: Boolean, required: true, default: false }
 });
 
 const House = mongoose.model("House", gameSchema);
