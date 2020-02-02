@@ -62,23 +62,21 @@ class Leaderboard extends Component {
                 <th>Current Guess</th>
               </thead>
               <tbody>
-              {renderFrom.map(score => {
-                return (
-                  <ListItem key={score._id}>
-                    <strong>
+                {renderFrom.map(score => {
+                  return (
+                    <ListItem key={score._id}>
+                      {/* <strong>
                       <h3>{score.playerName}</h3>
                       <p>Current Score: {score.currScore}</p>
                       <p>Current Guess: {score.currentGuess}</p>
-                    </strong>
+                    </strong> */}
 
-                    //merge conflict:
-//                       <td>{score.playerName}</td>
-//                       <td>Current Score: {score.currScore}</td>
-//                       <td>Current Guess: {score.currentGuess}</td>
-                   
-                  </ListItem>
-                );
-              })}
+                      <td>{score.playerName}</td>
+                      <td>Current Score: {score.currScore}</td>
+                      <td>Current Guess: {score.currentGuess}</td>
+                    </ListItem>
+                  );
+                })}
               </tbody>
             </List>
           ) : (
