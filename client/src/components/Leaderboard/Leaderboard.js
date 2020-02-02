@@ -44,7 +44,7 @@ class Leaderboard extends Component {
     ) {
       this.getFromDb();
     }
-    if (this.props.scoreSeed.length > dbScoresLength) {
+    if (this.props.scoreSeed.length >= dbScoresLength) {
       renderFrom = this.props.scoreSeed;
     } else {
       renderFrom = this.state.dbScores;
