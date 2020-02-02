@@ -50,9 +50,9 @@ var instructionCopy = {
             aria-labelledby="contained-modal-title-vcenter"
             centered
             >
-              <Modal.Header closeButton onClick={props.toggleIntro}>
+              <Modal.Header style={{marginRight: 35 + 'px'}} closeButton onClick={props.toggleIntro}>
                 <Modal.Title className="col-12 text-center" id="contained-modal-title-vcenter">
-                    <h1>{instructionCopy.heading1}</h1>                
+                    <h1 id="introh1">{instructionCopy.heading1}</h1>                
                 </Modal.Title>
               </Modal.Header>
               <Modal.Body>
