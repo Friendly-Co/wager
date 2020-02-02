@@ -24,7 +24,7 @@ var endCopy = {
             centered
             >
               <Modal.Header>
-                <Modal.Title id="contained-modal-title-vcenter">
+                <Modal.Title className="col-12 text-center" id="contained-modal-title-vcenter">
                     <h1>{endCopy.heading1}</h1>                
                 </Modal.Title>
               </Modal.Header>
