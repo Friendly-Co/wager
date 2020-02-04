@@ -3,7 +3,7 @@ import PlayerAPI from "../../utils/PlayerAPI";
 import HouseAPI from "../../utils/HouseAPI";
 import { FormBtn, Input } from "../../components/Form";
 import Logo from "../../components/Logo";
-import InstructionsModal from "../../components/InstructionsModal";
+import InstructionsModal from "../../components/instructionsModal";
 import AlertMessages from "../../components/Alerts";
 import { Row, Col, Container } from "../../components/Grid";
 import "./style.css";
