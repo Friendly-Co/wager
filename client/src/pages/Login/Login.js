@@ -3,8 +3,10 @@ import PlayerAPI from "../../utils/PlayerAPI";
 import HouseAPI from "../../utils/HouseAPI";
 import { FormBtn, Input } from "../../components/Form";
 import Logo from "../../components/Logo";
-import InstructionsModal from "../../components/instructionsModal";
+import InstructionsModal from "../../components/InstructionsModal";
 import AlertMessages from "../../components/Alerts";
+import { Row, Col, Container } from "../../components/Grid";
+import "./style.css";
 
 let count = 1;
 
@@ -371,13 +373,19 @@ class Login extends Component {
 
   render() {
     return (
-      <div className="container">
+      <Container>
         <Logo />
         {!this.state.adminLoginBoolean ? (
           //  ============================================ Player Rendering =============================================
+          <Row>
+            
+            <Col size='lg-4 md-4 sm-4'>
+              
           <form className="form-inline">
             <div className="dropdown show">
-              <a
+              <Row>
+                <Col size='12'>
+                <a
                 className="btn btn-secondary dropdown-toggle"
                 href="#"
                 role="button"
@@ -389,7 +397,8 @@ class Login extends Component {
               >
                 {this.state.gameInfo || "Select Your Game"}
               </a>
-
+              
+              
               <div
                 className="dropdown-menu"
                 aria-labelledby="dropdownMenuLink"
@@ -409,14 +418,22 @@ class Login extends Component {
                   </a>
                 ))}
               </div>
+              </Col>
+              </Row>
             </div>
 
+            <Row>
+              <Col size='12'>
             <Input
               value={this.state.username}
               onChange={this.handleInputChange}
               name="username"
               placeholder="Username (required)"
             ></Input>
+            </Col>
+            </Row>
+            <Row>
+              <Col size='12'>
 
             <Input
               value={this.state.playerEmail}
@@ -424,6 +441,8 @@ class Login extends Component {
               name="playerEmail"
               placeholder="Email (required)"
             ></Input>
+            </Col>
+            </Row>
 
             {this.state.playerEmailButton ? (
               <p>
@@ -435,15 +454,24 @@ class Login extends Component {
             ) : (
               <p></p>
             )}
-
-            <FormBtn
+            <Row>
+              <Col size='6'>
+            <FormBtn 
               disabled={!this.state.username || !this.state.gameId}
               onClick={this.handlePlayerSave}
             >
               Submit
             </FormBtn>
-            <button onClick={this.toggleLogin}>Login as Admin</button>
+            </Col>
+            <Col size='6'>
+              <button className='guessButton squishy btn-1' onClick={this.toggleLogin}>Admin Login
+            </button>
+          </Col>
+           </Row> 
           </form>
+          
+          </Col>
+          </Row>
         ) : (
           //  ============================================ Admin Rendering =============================================
           // create new game
@@ -555,7 +583,7 @@ class Login extends Component {
             ) : (
               <p></p>
             )}
-            <FormBtn
+            <FormBtn className='btn-1 squishy'
               disabled={
                 !this.state.adminName ||
                 !this.state.adminEmail ||
@@ -565,7 +593,7 @@ class Login extends Component {
             >
               Submit
             </FormBtn>
-            <button onClick={this.toggleLogin}>Login as Player</button>
+            <button className='btn-1 squishy' onClick={this.toggleLogin}>Login as Player</button>
           </form>
         )}
         <InstructionsModal
@@ -583,7 +611,7 @@ class Login extends Component {
           alertVisible={this.state.alertVisible}
           setShow={this.setShow}
         />
-      </div>
+      </Container>
     );
   }
 }

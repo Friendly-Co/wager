@@ -6,9 +6,10 @@ export function FormBtn(props) {
     <button
       {...props}
       type="submit"
-      className="btn btn-success search-button mb-2"
-    >
+      className="btn-1 squishy guessButton"
+    ><span>
       {props.children}
+      </span>
     </button>
   );
 }
