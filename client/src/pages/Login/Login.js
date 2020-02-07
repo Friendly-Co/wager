@@ -99,6 +99,7 @@ class Login extends Component {
         });
         return;
       }
+
       PlayerAPI.getPlayers(this.state.gameId)
         .then(res => {
           //filter the data for only names and emails that match.
@@ -107,14 +108,10 @@ class Login extends Component {
               x.playerName === this.state.username &&
               x.playerEmail === this.state.playerEmail
           );
-          console.log("matchingPlayer: ");
-          console.log(matchingPlayer);
 
           if (matchingPlayer.length) {
-            console.log("triggered");
             // if player already exists and was kicked out- Will need to change to load leaderboard for later data access
             if (matchingPlayer[0].kickedOut === true) {
-              console.log("triggered");
               this.setState({
                 message: 1,
                 alertVisible: true
@@ -123,7 +120,6 @@ class Login extends Component {
             }
             // Log previous player back in
             else if (matchingPlayer[0].kickedOut === false) {
-              console.log("triggered");
               this.setState({
                 message: 2,
                 alertVisible: true
@@ -136,7 +132,7 @@ class Login extends Component {
                   "/user/" +
                   this.state.username +
                   "/userid/" +
-                  matchingPlayer._id;
+                  matchingPlayer[0]._id;
                 return;
               }, 3000);
             }
@@ -144,17 +140,11 @@ class Login extends Component {
             const matchingEmail = res.data.filter(
               x => x.playerEmail === this.state.playerEmail
             );
-            console.log("matchingEmail: ");
-            console.log(matchingEmail);
             const matchingName = res.data.filter(
               x => x.playerName === this.state.username
             );
-            console.log("matchingName: ");
-            console.log(matchingName);
-
             // if there are no players in the system who match the data exactly, see if there are any matching emails or usernames
             if (matchingEmail.length === 1 || matchingName.length === 1) {
-              console.log("triggered");
               if (matchingEmail.length === 1) {
                 var idMatch = matchingEmail[0]._id;
               } else if (matchingName.length === 1) {
@@ -170,7 +160,6 @@ class Login extends Component {
             }
             // if the data is all new, save and log in
             else if (!matchingPlayer.length) {
-              console.log("triggered");
               //handle save
               const toSave = {
                 playerName: this.state.username,
@@ -389,99 +378,98 @@ class Login extends Component {
         {!this.state.adminLoginBoolean ? (
           //  ============================================ Player Rendering =============================================
           <Row>
-            
-            <Col size='lg-4 md-4 sm-4'>
-              
-          <form className="form-inline">
-            <div className="dropdown show">
-              <Row>
-                <Col size='12'>
-                <a
-                className="btn btn-secondary dropdown-toggle"
-                href="#"
-                role="button"
-                id="dropdownMenuLink"
-                data-toggle="dropdown"
-                aria-haspopup="true"
-                aria-expanded="false"
-                onClick={this.loadGames}
-              >
-                {this.state.gameInfo || "Select Your Game"}
-              </a>
-              
-              
-              <div
-                className="dropdown-menu"
-                aria-labelledby="dropdownMenuLink"
-                name={this.state.gameInfo}
-                value={this.state.gameId}
-              >
-                {this.state.games.map(game => (
-                  <a
-                    className="dropdown-item"
-                    key={game._id}
-                    value={game._id}
-                    onClick={() => {
-                      this.setGameInfo(game.gameInfo, game._id);
-                    }}
-                  >
-                    {game.gameInfo}
-                  </a>
-                ))}
-              </div>
-              </Col>
-              </Row>
-            </div>
+            <Col size="lg-4 md-4 sm-4">
+              <form className="form-inline">
+                <div className="dropdown show">
+                  <Row>
+                    <Col size="12">
+                      <a
+                        className="btn btn-secondary dropdown-toggle"
+                        href="#"
+                        role="button"
+                        id="dropdownMenuLink"
+                        data-toggle="dropdown"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        onClick={this.loadGames}
+                      >
+                        {this.state.gameInfo || "Select Your Game"}
+                      </a>
 
-            <Row>
-              <Col size='12'>
-            <Input
-              value={this.state.username}
-              onChange={this.handleInputChange}
-              name="username"
-              placeholder="Username (required)"
-            ></Input>
-            </Col>
-            </Row>
-            <Row>
-              <Col size='12'>
+                      <div
+                        className="dropdown-menu"
+                        aria-labelledby="dropdownMenuLink"
+                        name={this.state.gameInfo}
+                        value={this.state.gameId}
+                      >
+                        {this.state.games.map(game => (
+                          <a
+                            className="dropdown-item"
+                            key={game._id}
+                            value={game._id}
+                            onClick={() => {
+                              this.setGameInfo(game.gameInfo, game._id);
+                            }}
+                          >
+                            {game.gameInfo}
+                          </a>
+                        ))}
+                      </div>
+                    </Col>
+                  </Row>
+                </div>
 
-            <Input
-              value={this.state.playerEmail}
-              onChange={this.handleInputChange}
-              name="playerEmail"
-              placeholder="Email (required)"
-            ></Input>
-            </Col>
-            </Row>
+                <Row>
+                  <Col size="12">
+                    <Input
+                      value={this.state.username}
+                      onChange={this.handleInputChange}
+                      name="username"
+                      placeholder="Username (required)"
+                    ></Input>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col size="12">
+                    <Input
+                      value={this.state.playerEmail}
+                      onChange={this.handleInputChange}
+                      name="playerEmail"
+                      placeholder="Email (required)"
+                    ></Input>
+                  </Col>
+                </Row>
 
-            {this.state.playerEmailButton ? (
-              <p>
-                Forgot your username?{" "}
-                <button onClick={this.emailPlayerUsername}>
-                  Email Login Info
-                </button>
-              </p>
-            ) : (
-              <p></p>
-            )}
-            <Row>
-              <Col size='6'>
-            <FormBtn 
-              disabled={!this.state.username || !this.state.gameId}
-              onClick={this.handlePlayerSave}
-            >
-              Submit
-            </FormBtn>
+                {this.state.playerEmailButton ? (
+                  <p>
+                    Forgot your username?{" "}
+                    <button onClick={this.emailPlayerUsername}>
+                      Email Login Info
+                    </button>
+                  </p>
+                ) : (
+                  <p></p>
+                )}
+                <Row>
+                  <Col size="6">
+                    <FormBtn
+                      disabled={!this.state.username || !this.state.gameId}
+                      onClick={this.handlePlayerSave}
+                    >
+                      Submit
+                    </FormBtn>
+                  </Col>
+                  <Col size="6">
+                    <button
+                      className="guessButton squishy btn-1"
+                      onClick={this.toggleLogin}
+                    >
+                      Admin Login
+                    </button>
+                  </Col>
+                </Row>
+              </form>
             </Col>
-            <Col size='6'>
-              <button className='guessButton squishy btn-1' onClick={this.toggleLogin}>Admin Login
-            </button>
-          </Col>
-           </Row> 
-          </form>
-          
-          </Col>
           </Row>
         ) : (
           //  ============================================ Admin Rendering =============================================
@@ -594,7 +582,8 @@ class Login extends Component {
             ) : (
               <p></p>
             )}
-            <FormBtn className='btn-1 squishy'
+            <FormBtn
+              className="btn-1 squishy"
               disabled={
                 !this.state.adminName ||
                 !this.state.adminEmail ||
@@ -604,7 +593,9 @@ class Login extends Component {
             >
               Submit
             </FormBtn>
-            <button className='btn-1 squishy' onClick={this.toggleLogin}>Login as Player</button>
+            <button className="btn-1 squishy" onClick={this.toggleLogin}>
+              Login as Player
+            </button>
           </form>
         )}
         <InstructionsModal
