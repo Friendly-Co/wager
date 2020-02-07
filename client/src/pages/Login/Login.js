@@ -77,7 +77,7 @@ class Login extends Component {
   //If matching, alert the user to change their name
   handlePlayerSave = event => {
     event.preventDefault();
-    //verify unique username
+    //Validation to match backend model
     if (this.state.username && this.state.gameId && this.state.playerEmail) {
       if (
         !this.state.playerEmail.match(
@@ -99,26 +99,29 @@ class Login extends Component {
       }
       PlayerAPI.getPlayers(this.state.gameId)
         .then(res => {
-          for (let i = 0; i < res.data.length; i++) {
-            // if player already exists and was kicked out
-            // Will need to change to load leaderboard for later data access
-            if (
-              this.state.username === res.data[i].playerName &&
-              this.state.gameId === res.data[i].gameId &&
-              res.data[i].kickedOut === true
-            ) {
+          //filter the data for only names and emails that match.
+          const matchingPlayer = res.data.filter(
+            x =>
+              x.playerName === this.state.username &&
+              x.playerEmail === this.state.playerEmail
+          );
+          console.log("matchingPlayer: ");
+          console.log(matchingPlayer);
+
+          if (matchingPlayer.length) {
+            console.log("triggered");
+            // if player already exists and was kicked out- Will need to change to load leaderboard for later data access
+            if (matchingPlayer[0].kickedOut === true) {
+              console.log("triggered");
               this.setState({
                 message: 1,
                 alertVisible: true
               });
               return;
             }
-            //if player already exists and kickedOut = false and all data matches, log in
-            if (
-              this.state.username === res.data[i].playerName &&
-              this.state.playerEmail === res.data[i].playerEmail &&
-              res.data[i].kickedOut === false
-            ) {
+            // Log previous player back in
+            else if (matchingPlayer[0].kickedOut === false) {
+              console.log("triggered");
               this.setState({
                 message: 2,
                 alertVisible: true
@@ -131,20 +134,31 @@ class Login extends Component {
                   "/user/" +
                   this.state.username +
                   "/userid/" +
-                  res.data[i]._id;
+                  matchingPlayer._id;
                 return;
               }, 3000);
-              // });
             }
-            // if this game already has a player with this playername, but a different email, Alert that their email is incorrect, or, if this is a taken username, they can pick a new username
-            if (
-              this.state.username === res.data[i].playerName &&
-              this.state.playerEmail !== res.data[i].playerEmail
-              //   ||
-              // (this.state.username !== res.data[i].playerName &&
-              //   this.state.playerEmail === res.data[i].playerEmail)
-            ) {
-              this.setState({ possiblePlayerId: res.data[i]._id });
+          } else if (!matchingPlayer.length) {
+            const matchingEmail = res.data.filter(
+              x => x.playerEmail === this.state.playerEmail
+            );
+            console.log("matchingEmail: ");
+            console.log(matchingEmail);
+            const matchingName = res.data.filter(
+              x => x.playerName === this.state.username
+            );
+            console.log("matchingName: ");
+            console.log(matchingName);
+
+            // if there are no players in the system who match the data exactly, see if there are any matching emails or usernames
+            if (matchingEmail.length === 1 || matchingName.length === 1) {
+              console.log("triggered");
+              if (matchingEmail.length === 1) {
+                var idMatch = matchingEmail[0]._id;
+              } else if (matchingName.length === 1) {
+                var idMatch = matchingName[0]._id;
+              }
+              this.setState({ possiblePlayerId: idMatch });
               this.setState({
                 message: 3,
                 alertVisible: true
@@ -152,36 +166,33 @@ class Login extends Component {
               this.setState({ playerEmailButton: true });
               return;
             }
-          }
-          // if the data is all new, save and log in
-          if (
-            this.state.username &&
-            this.state.gameId &&
-            this.state.playerEmail
-          ) {
-            //handle save
-            const toSave = {
-              playerName: this.state.username,
-              gameId: this.state.gameId,
-              playerEmail: this.state.playerEmail
-            };
-            PlayerAPI.savePlayer(toSave).then(res => {
-              console.log(res.data);
-              this.setState({
-                message: 4,
-                alertVisible: true
+            // if the data is all new, save and log in
+            else if (!matchingPlayer.length) {
+              console.log("triggered");
+              //handle save
+              const toSave = {
+                playerName: this.state.username,
+                gameId: this.state.gameId,
+                playerEmail: this.state.playerEmail
+              };
+              PlayerAPI.savePlayer(toSave).then(res => {
+                console.log(res.data);
+                this.setState({
+                  message: 4,
+                  alertVisible: true
+                });
+                // to change: if gameOver = true (in House model), take to the stats page
+                setTimeout(() => {
+                  window.location =
+                    "/game/" +
+                    this.state.gameId +
+                    "/user/" +
+                    this.state.username +
+                    "/userid/" +
+                    res.data._id;
+                }, 3000);
               });
-              // to change: if gameOver = true (in House model), take to the stats page
-              setTimeout(() => {
-                window.location =
-                  "/game/" +
-                  this.state.gameId +
-                  "/user/" +
-                  this.state.username +
-                  "/userid/" +
-                  res.data._id;
-              }, 3000);
-            });
+            }
           }
         })
         .catch(err => console.log(err));
