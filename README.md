@@ -4,11 +4,8 @@
 
 Just a Friendly Wager is a betting app, which allows users to login and bet on future events.
 
-#### The User Page:
-![demo](demo/user.gif)
-
 #### Interaction Between the User Page and the Admin Page:
-![demo](demo/admin.gif)
+![demo](demo/jafwager.gif)
 
 For a demo of the app, visit: <https://justafriendlywager.herokuapp.com>
 
