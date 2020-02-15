@@ -27,7 +27,7 @@ module.exports = {
       })
       .catch(err => res.status(422).json(err));
   },
-  // Find a player by username
+  // Find players by gameId
   findByName: function(req, res) {
     console.log("findByName function in playerController.js");
     console.log(req.params);
@@ -39,7 +39,7 @@ module.exports = {
       })
       .catch(err => res.status(422).json(err));
   },
-  // Create a new user in the database, and update their currentGuess
+  // Create a new user in the database
   create: function(req, res) {
     console.log("create function in playerController.js");
     console.log(req.body);
@@ -49,7 +49,7 @@ module.exports = {
       !(req.body.length > 1) &&
       !req.body.currScore
     ) {
-      console.log("no guess... this is a new user!");
+      console.log("This is a new user!");
       console.log(req.body);
       Players.create(req.body)
         .then(dbModel => {
@@ -57,18 +57,6 @@ module.exports = {
           res.json(dbModel);
         })
         .catch(err => res.status(422).json(err));
-      //create guesses
-    } else if (req.body.currentGuess) {
-      console.log("nice guess, user!");
-      console.log(req.body);
-      Players.findOneAndUpdate(
-        { _id: req.body.playerId },
-        { $set: { currentGuess: req.body.currentGuess, newPlayer: false } }
-      )
-        .then(dbModel => res.json(dbModel))
-        .catch(err => res.status(422).json(err));
-      console.log("guess saved!");
-      //store update beginning score to average for late users
     } else if (req.body.currScore) {
       console.log("this is a late user; Let's fix your score to the average");
       console.log(req.body);
@@ -95,69 +83,17 @@ module.exports = {
 
       .catch(err => res.status(422).json(err));
   },
-  // calculate all scores
+  // Update player guesses
   update: function(req, res) {
-    console.log("update function in playerController.js");
+    console.log("update function in playerController.js- nice guess, user!");
     console.log(req.body);
-    var answer = req.body[0].answer;
-    answer = answer.toUpperCase();
-    const gameId = req.body[1].gameId;
-    console.log(req.body);
-    //should be according to the user's guess, not the answer!
-    var toAddOrSubtract = 0;
-
-    switch (answer) {
-      case "RUN":
-        toAddOrSubtract = 3;
-        break;
-      case "PASS":
-        toAddOrSubtract = 3;
-        break;
-      case "KICK":
-        toAddOrSubtract = 1;
-        break;
-      case "TURNOVER":
-        toAddOrSubtract = 10;
-        break;
-      default:
-        toAddOrSubtract = 0;
-    }
-
-    //Subtract 1 from scores when unanswered
-    Players.updateMany(
-      { currentGuess: " ", gameId: gameId },
-      { $inc: { currScore: -1 }, $set: { currentGuess: " " } },
-      { multi: true }
+    Players.findOneAndUpdate(
+      { _id: req.body.playerId },
+      { $set: { currentGuess: req.body.currentGuess, newPlayer: false } }
     )
-      .then(() => {
-        // increase scores of correct guesses
-        return Players.updateMany(
-          { currentGuess: answer, gameId: gameId },
-          {
-            $inc: { currScore: +toAddOrSubtract },
-            $set: { currentGuess: " " }
-          },
-          { multi: true }
-        );
-      })
-      .then(() => {
-        // if a player answered the question, but incorrectly - will be much more complex if subtracting by player's answer...
-        return Players.updateMany(
-          { currentGuess: { $nin: [answer, " "] }, gameId: gameId },
-          {
-            $inc: { currScore: -toAddOrSubtract },
-            $set: { currentGuess: " " }
-          },
-          { multi: true }
-        );
-      })
-      .then(() => {
-        return Players.find({ gameId: gameId }).then(dbModel => {
-          console.log(dbModel);
-          res.json(dbModel);
-        });
-      })
+      .then(dbModel => res.json(dbModel))
       .catch(err => res.status(422).json(err));
+    console.log("guess saved!");
   },
   removeAll: function(req, res) {
     console.log("removeAll function in playerController.js");
