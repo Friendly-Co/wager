@@ -51,22 +51,11 @@ module.exports = {
           return Players.updateMany(
             { gameId: gameId },
             {
-              // $inc: { currScore: -toAddOrSubtract },
               $set: { currentGuess: " " }
             },
             { multi: true }
           );
         })
-        //   .then(() => {
-        //     return Players.updateMany(
-        //       { currentGuess: "KICK", gameId: gameId },
-        //       {
-        //         $inc: { currScore: -1 },
-        //         $set: { currentGuess: " " }
-        //       },
-        //       { multi: true }
-        //     );
-        //   })
         .then(() => {
           return Players.find({ gameId: gameId }).then(dbModel => {
             console.log(dbModel);
@@ -115,16 +104,6 @@ module.exports = {
         })
         .catch(err => res.status(422).json(err));
     }
-
-    //Subtract 1 from scores when unanswered
-    // Players.updateMany(
-    //   { currentGuess: " ", gameId: gameId },
-    //   { $inc: { currScore: -1 }, $set: { currentGuess: " " } },
-    //   { multi: true }
-    // )
-    //   .then(() => {
-    //     // increase scores of correct guesses
-    //     return
 
     // if the answer is run (answer), find all with RUN as currentGuess, and add 3
     //... find all with currentGuess PASS (other = PASS), and subtract 3 ....find all with currentGuess KICK, and subtract 1
