@@ -5,6 +5,7 @@ import AdminBtns from "../../components/AdminBtns";
 import { Col, Row, Container } from "../../components/Grid";
 import PlayerAPI from "../../utils/PlayerAPI";
 import HouseAPI from "../../utils/HouseAPI";
+import ScoreAPI from "../../utils/ScoreAPI";
 import io from "socket.io-client";
 import Logo from "../../components/Logo";
 
@@ -115,7 +116,8 @@ class AdminGame extends Component {
     const toSend = [{ answer: value }, { gameId: this.state.gameId }];
     // const toSend = this.state.scoreSeed.concat(houseAnswer);
     console.log(toSend);
-    PlayerAPI.calculateScores(toSend).then(res => {
+    // PlayerAPI.calculateScores(toSend).then(res => {
+    ScoreAPI.calculateScores(toSend).then(res => {
       console.log("scores saved");
       console.log("after that, ...");
       console.log(res.data);
