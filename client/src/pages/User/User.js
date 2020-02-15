@@ -107,6 +107,7 @@ class User extends Component {
                   score: averageScore
                 });
               });
+              return;
             }
           });
         }
@@ -127,6 +128,7 @@ class User extends Component {
         this.setState({
           score: res.data.currScore
         });
+        console.log(res.data);
       })
 
       .catch(err => console.log(err));
@@ -196,7 +198,8 @@ class User extends Component {
 
   // function that saves players' guesses to the database
   savePlayerGuess = toSave => {
-    PlayerAPI.savePlayer(toSave)
+    // PlayerAPI.savePlayer(toSave)
+    PlayerAPI.saveGuess(toSave)
       .then(res => {
         this.setState({
           score: res.data.currScore

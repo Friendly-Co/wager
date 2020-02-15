@@ -143,7 +143,8 @@ class Login extends Component {
             const matchingName = res.data.filter(
               x => x.playerName === this.state.username
             );
-            // if there are no players in the system who match the data exactly, see if there are any matching emails or usernames
+            // if there are no players in the system who match the data exactly, see if there are any matching emails
+            //or usernames
             if (matchingEmail.length === 1 || matchingName.length === 1) {
               if (matchingEmail.length === 1) {
                 var idMatch = matchingEmail[0]._id;
