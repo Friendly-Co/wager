@@ -45,10 +45,16 @@ class User extends Component {
       if (data.setModalHalt && gameId === data.gameId) {
         this.toggleHalt();
       } else if (gameId === data.gameId) {
-        this.acceptAnswer(data.answer);
-        this.lastGuess();
+        if (data.answer) {
+          this.acceptAnswer(data.answer);
+          this.lastGuess();
+        }
         this.toggleCorrect();
         this.toggleHaltOff();
+        if (data.removeHaltBetsModal) {
+          this.toggleHaltOff();
+          this.toggleModalCorrectOffWithoutUndoingGuess();
+        }
       }
     });
 
@@ -201,6 +207,11 @@ class User extends Component {
     // }
   };
 
+  toggleModalCorrectOffWithoutUndoingGuess = () => {
+    this.loadScore();
+    this.setState({ setModalCorrect: false });
+  };
+
   toggleCorrect = () => {
     this.setState({ setModalCorrect: true });
   };
@@ -291,7 +302,7 @@ class User extends Component {
       <div className="wrapper bglayer2">
         <Row>
           <Col size="12">
-            <div >
+            <div>
               <Row>
                 {/* <Col size="lg-2 md-2"></Col> */}
                 <Col size="12">
@@ -302,7 +313,7 @@ class User extends Component {
 
               <Row>
                 {/* <Col size='lg-4 md-2'></Col> */}
-                <Col size='12'>
+                <Col size="12">
                   <Score user={this.state.username} score={this.state.score} />
                 </Col>
                 {/* <Col size='lg-4 md-2'></Col> */}
