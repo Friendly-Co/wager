@@ -8,6 +8,13 @@
     border-color: #4219b0;
     border-width: .25rem;
     border-style: inset;
-    width: 100vw;
+    width: 25vw;
 
 }
+
+@media only screen and (max-width: 900px) {
+    .guessWindow {
+      width: 225px;
+    }
+    
+  }
