@@ -11,7 +11,7 @@ function AdminBtns(props) {
   // render() {
   return (
     <div className="center-buttons">
-      <Button
+      <div
         className="btn-3 squishy adminbutton halt-bets"
         role="button"
         tabIndex="0"
@@ -21,9 +21,9 @@ function AdminBtns(props) {
         }}
       ><span>
         Halt Bets</span>
-      </Button>
+      </div>
       <div>
-        <Button
+        <div
           className="btn-1 squishy adminbutton"
           role="button"
           tabIndex="0"
@@ -33,8 +33,8 @@ function AdminBtns(props) {
           }}
         ><span>
           Run</span>
-        </Button>
-        <Button
+        </div>
+        <div
           className="btn-1 squishy adminbutton"
           role="button"
           tabIndex="0"
@@ -44,8 +44,8 @@ function AdminBtns(props) {
           }}
         ><span>
           Pass</span>
-        </Button>
-        <Button
+        </div>
+        <div
           className="btn-1 squishy adminbutton"
           role="button"
           tabIndex="0"
@@ -55,8 +55,8 @@ function AdminBtns(props) {
           }}
         ><span>
           Kick</span>
-        </Button>
-        <Button
+        </div>
+        <div
           className="btn-1 squishy adminbutton"
           role="button"
           tabIndex="0"
@@ -66,7 +66,7 @@ function AdminBtns(props) {
           }}
         ><span>
           Turnover</span>
-        </Button>
+        </div>
       </div>
     </div>
   );
