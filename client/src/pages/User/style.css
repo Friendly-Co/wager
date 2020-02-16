@@ -11,8 +11,21 @@
 }
 .wrapper {
     height: 100vh;
+    /* width: 100vw; */
 }
 body {
     background-color: #4119b0;
 }
+
+img {
+    width: 25vw;
+    margin-left: 0vw;
+}
+
+@media only screen and (max-width: 900px) {
+    img {
+      width: 225px;
+    }
+
+  }
 
