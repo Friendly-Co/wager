@@ -145,10 +145,10 @@ class Login extends Component {
             );
             // if there are no players in the system who match the data exactly, see if there are any matching emails
             //or usernames
-            if (matchingEmail.length === 1 || matchingName.length === 1) {
-              if (matchingEmail.length === 1) {
+            if (matchingEmail.length >= 1 || matchingName.length >= 1) {
+              if (matchingEmail.length >= 1) {
                 var idMatch = matchingEmail[0]._id;
-              } else if (matchingName.length === 1) {
+              } else if (matchingName.length >= 1) {
                 var idMatch = matchingName[0]._id;
               }
               this.setState({ possiblePlayerId: idMatch });

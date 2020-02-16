@@ -1,7 +1,7 @@
 // import React, { Component } from "react";
 import React from "react";
 import "./AdminBtns.css";
-import Button from 'react-bootstrap/Button';
+import Button from "react-bootstrap/Button";
 // import io from "socket.io-client";
 // import PlayerAPI from "../../utils/PlayerAPI";
 // import Leaderboard from "../../components/Leaderboard";
@@ -16,11 +16,14 @@ function AdminBtns(props) {
         role="button"
         tabIndex="0"
         onClick={() => {
-          // props.haltBets();
           props.setModalHalt();
         }}
-      ><span>
-        Halt Bets</span>
+      >
+        {props.removeHaltModal ? (
+          <span>Undo Halt</span>
+        ) : (
+          <span>Halt Bets</span>
+        )}
       </div>
       <div>
         <div
@@ -31,8 +34,8 @@ function AdminBtns(props) {
             props.handleAnswer("Run");
             props.setModalCorrect("Run");
           }}
-        ><span>
-          Run</span>
+        >
+          <span>Run</span>
         </div>
         <div
           className="btn-1 squishy adminbutton"
@@ -42,8 +45,8 @@ function AdminBtns(props) {
             props.handleAnswer("Pass");
             props.setModalCorrect("Pass");
           }}
-        ><span>
-          Pass</span>
+        >
+          <span>Pass</span>
         </div>
         <div
           className="btn-1 squishy adminbutton"
@@ -53,8 +56,8 @@ function AdminBtns(props) {
             props.handleAnswer("Kick");
             props.setModalCorrect("Kick");
           }}
-        ><span>
-          Kick</span>
+        >
+          <span>Kick</span>
         </div>
         <div
           className="btn-1 squishy adminbutton"
@@ -64,8 +67,8 @@ function AdminBtns(props) {
             props.handleAnswer("Turnover");
             props.setModalCorrect("Turnover");
           }}
-        ><span>
-          Turnover</span>
+        >
+          <span>Turnover</span>
         </div>
       </div>
     </div>

@@ -16,7 +16,8 @@ class AdminGame extends Component {
       scoreSeed: [],
       answer: " ",
       currentGuess: "",
-      gameId: ""
+      gameId: "",
+      removeHaltModal: false
     };
 
     this.socket = io("https://justafriendlywager.herokuapp.com/", {
@@ -91,10 +92,24 @@ class AdminGame extends Component {
   }
 
   setModalHalt = ev => {
-    this.socket.emit("toggle_modal", {
-      gameId: this.state.gameId,
-      setModalHalt: true
-    });
+    if (this.state.removeHaltModal === true) {
+      console.log("this.state.removeHaltModal is TRUE!");
+      this.setState({ removeHaltModal: false }, () => {
+        this.socket.emit("toggle_modal", {
+          gameId: this.state.gameId,
+          setModalHalt: false,
+          removeHaltBetsModal: true
+        });
+      });
+    } else {
+      console.log("this.state.removeHaltModal is FALSE!");
+      this.setState({ removeHaltModal: true }, () => {
+        this.socket.emit("toggle_modal", {
+          gameId: this.state.gameId,
+          setModalHalt: true
+        });
+      });
+    }
   };
 
   setModalCorrect = value => {
@@ -104,11 +119,6 @@ class AdminGame extends Component {
       setModalCorrect: true,
       answer: value
     });
-  };
-
-  haltBets = () => {
-    console.log("halt bets button pressed");
-    // io.socket.off();  //does not work yet
   };
 
   //send house answer and player guesses to the server for calculation
@@ -173,6 +183,7 @@ class AdminGame extends Component {
                 handleAnswer={this.handleAnswer}
                 setModalHalt={this.setModalHalt}
                 setModalCorrect={this.setModalCorrect}
+                removeHaltModal={this.state.removeHaltModal}
               />
             </Col>
           </Row>
