@@ -214,6 +214,10 @@ class User extends Component {
 
   toggleCorrect = () => {
     this.setState({ setModalCorrect: true });
+    setTimeout(() => {
+      this.toggleModalCorrectOff();
+    }, 3000)
+      
   };
 
   toggleHalt = () => {
