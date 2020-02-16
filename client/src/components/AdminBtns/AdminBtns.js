@@ -19,7 +19,11 @@ function AdminBtns(props) {
           props.setModalHalt();
         }}
       >
-        <span>Halt Bets</span>
+        {props.removeHaltModal ? (
+          <span>Undo Halt</span>
+        ) : (
+          <span>Halt Bets</span>
+        )}
       </div>
       <div>
         <div
