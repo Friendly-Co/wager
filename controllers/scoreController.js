@@ -97,6 +97,16 @@ module.exports = {
           );
         })
         .then(() => {
+          return Players.updateMany(
+            { currentGuess: "TURNOVER", gameId: gameId },
+            {
+              $inc: { currScore: -10 },
+              $set: { currentGuess: " " }
+            },
+            { multi: true }
+          );
+        })
+        .then(() => {
           return Players.find({ gameId: gameId }).then(dbModel => {
             console.log(dbModel);
             res.json(dbModel);
@@ -133,6 +143,16 @@ module.exports = {
             { currentGuess: "KICK", gameId: gameId },
             {
               $inc: { currScore: -1 },
+              $set: { currentGuess: " " }
+            },
+            { multi: true }
+          );
+        })
+        .then(() => {
+          return Players.updateMany(
+            { currentGuess: "TURNOVER", gameId: gameId },
+            {
+              $inc: { currScore: -10 },
               $set: { currentGuess: " " }
             },
             { multi: true }
