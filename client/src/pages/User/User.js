@@ -288,21 +288,21 @@ class User extends Component {
       tableBody = "No Scores to Display";
     }
     return (
-      <div>
+      <div className="wrapper bglayer2">
         <Row>
           <Col size="12">
-            <div className="wrapper bglayer2">
+            <div >
               <Row>
-                <Col size="lg-4 md-2"></Col>
-                <div className="col-lg-4 col-md-8 col-m-12">
+                {/* <Col size="lg-2 md-2"></Col> */}
+                <Col size="12">
                   <Logo />
-                </div>
-                <Col size="lg-4 md-2"></Col>
+                </Col>
+                {/* <Col size="lg-2 md-2"></Col> */}
               </Row>
 
               <Row>
                 {/* <Col size='lg-4 md-2'></Col> */}
-                <Col size="12">
+                <Col size='12'>
                   <Score user={this.state.username} score={this.state.score} />
                 </Col>
                 {/* <Col size='lg-4 md-2'></Col> */}

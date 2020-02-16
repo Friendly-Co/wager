@@ -38,11 +38,11 @@
   margin: 10px 0px 0px 0px;
 }
 h3 {
-  color: #4219b0 !important;
+  color: white !important;
 }
 p {
   font-size: 1.25rem;
-  color: #4219b0;
+  color: white;
 }
 
 .wrapper {
@@ -61,4 +61,10 @@ p {
 .card {
   size: 150px;
   background-color: #93c8e8;
+}
+th {
+  color: white;
+}
+tr {
+  color: white;
 }

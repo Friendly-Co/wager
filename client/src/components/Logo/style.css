@@ -1,6 +1,6 @@
 img {
-   width: 80%; 
-   margin: 0;
+   width: 75%; 
+   margin: 0 !important;
    /* padding: 0% 0% 0% 15px; */
    border-bottom-style: solid;
    border-color: #93c8e8;
@@ -9,5 +9,5 @@ img {
 
 .alignimg {
    align-self: center;
-   padding-left: 15%;
+   /* padding-left: 15%; */
 }
