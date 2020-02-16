@@ -69,6 +69,31 @@ class User extends Component {
     });
   };
 
+  filterOutliers = arr => {
+    console.log(arr);
+    // because the array comes in order of greatest to least, q1 and q3 are flipped [50, 45, 41, 40, 39, 5, 1]
+    var q3 = arr[Math.floor(arr.length / 4)];
+    // var q3 = arr[Math.ceil(arr.length * (3 / 4))];
+    var q1 = arr[Math.ceil((arr.length - 1) * (3 / 4))];
+    // find the inter quartile range
+    var iqr = q3 - q1;
+    console.log("q1: " + q1);
+    console.log("q3: " + q3);
+    console.log("iqr: " + iqr);
+    // determine allowable uper and lower margins
+    var maxValue = q3 + iqr * 1.5;
+    var minValue = q1 - iqr * 1.5;
+    console.log("minvalue: " + minValue);
+    console.log("maxvalue: " + maxValue);
+    // compare scores with allowable margins to remove outliers
+    var filteredValues = arr.filter(function(x) {
+      return x <= maxValue && x >= minValue;
+    });
+
+    console.log("filteredValues: ", filteredValues);
+    return filteredValues;
+  };
+
   componentDidMount = () => {
     username = this.props.match.params.username;
     playerId = this.props.match.params.playerId;
@@ -80,29 +105,35 @@ class User extends Component {
     });
     // if player scores differ from 50, start player off at the average
     PlayerAPI.getPlayers(gameId).then(res => {
-      //if the curent array of players has a length > 2 (including the new player, who starts out at 50), then this may be a later player and shoulw start out at the average score
+      //if the curent array of players has a length > 2 (including the new player, who starts out at 50), then this may be a later player and should start out at the average score
       if (res.data.length > 2) {
         // Filter out the all scores of 50 from the array. If there are scores other than 50, the game is in session and this is a late player
         const aboveOrBelow50 = res.data.filter(
           person => person.currScore !== 50
         );
-        if (aboveOrBelow50.length) {
+        if (aboveOrBelow50.length > 0) {
+          //====================================================================
           PlayerAPI.getPlayerScore(playerId).then(response => {
             if (response.data.newPlayer === true) {
               console.log(res.data);
               //create an array of the currScore properties
-              const getCurrScores = item => item.currScore;
-              const scoreArray = res.data.map(getCurrScores);
+              const scoreArray = res.data.map(item => item.currScore);
+              // remove outliers before averaging player scores to determine late player's score
+              const filteredScoreArray = this.filterOutliers(scoreArray);
+
               //find the sum of all scores
-              const addScores = (runningTotal, playerId) =>
-                runningTotal + playerId;
-              const scoreSum = scoreArray.reduce(addScores, 0);
+              const scoreSum = filteredScoreArray.reduce(
+                (runningTotal, score) => runningTotal + score,
+                0
+              );
               //find the average of all scores
-              const averageScore = Math.floor(scoreSum / scoreArray.length);
+              const averageScore = Math.ceil(
+                scoreSum / filteredScoreArray.length
+              );
               console.log("avarage:" + averageScore);
               const toSave = { _id: playerId, currScore: averageScore };
               PlayerAPI.savePlayer(toSave).then(r => {
-                console.log(r);
+                console.log(r.data);
                 this.setState({
                   score: averageScore
                 });
