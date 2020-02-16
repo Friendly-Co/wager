@@ -1,7 +1,9 @@
 .container {
     height: 100vh;
 }
-
+h1 {
+   color: white !important;
+}
 p {
     font-size: 16pt;
 }
