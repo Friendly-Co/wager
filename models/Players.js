@@ -15,6 +15,7 @@ const playerSchema = new Schema({
   },
   currScore: { type: Number, default: 50 },
   currentGuess: { type: String, default: " " },
+  lastGuess: { type: String, default: " " },
 
   playerEmail: {
     type: String,
