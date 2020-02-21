@@ -14,7 +14,7 @@ module.exports = {
     var toAddOrSubtract = 0;
     let otherGuess = "";
 
-    noGuess();
+    // noGuess();
 
     // players win and loose points depending on their guess
     switch (answer) {
@@ -38,34 +38,46 @@ module.exports = {
         toAddOrSubtract = 0;
     }
 
-    function noGuess() {
-      Players.updateMany(
-        { currentGuess: " ", gameId: gameId },
-        {
-          $set: { currentGuess: " ", lastGuess: " " }
-        },
-        { multi: true }
-      )
-        .then(() => {
-          return Players.find({ gameId: gameId }).then(dbModel => {
-            console.log(dbModel);
-            res.json(dbModel);
-          });
-        })
-        .catch(err => res.status(422).json(err));
-    }
+    //throws an error if there ARE empty guesses: UnhandledPromiseRejectionWarning: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
+    //fixed by adding this to the end of each function
+    // function noGuess() {
+    //   Players.updateMany(
+    //     { currentGuess: " ", gameId: gameId },
+    //     {
+    //       $set: { currentGuess: " ", lastGuess: " " }
+    //     },
+    //     { multi: true }
+    //   )
+    //     .then(() => {
+    //       return Players.find({ gameId: gameId }).then(dbModel => {
+    //         console.log(dbModel);
+    //         res.json(dbModel);
+    //       });
+    //     })
+    //     .catch(err => res.status(422).json(err));
+    //   return;
+    // }
 
     // if the answer is turnover, find all with TURNOVER as currentGuess, and add 10
     // reset all currentGuesses to  " "
     function turnover() {
       Players.updateMany(
-        { currentGuess: answer, gameId: gameId },
+        { currentGuess: " ", gameId: gameId },
         {
-          $inc: { currScore: +10 },
-          $set: { currentGuess: " ", lastGuess: answer }
+          $set: { lastGuess: " " }
         },
         { multi: true }
       )
+        .then(() => {
+          return Players.updateMany(
+            { currentGuess: answer, gameId: gameId },
+            {
+              $inc: { currScore: +10 },
+              $set: { currentGuess: " ", lastGuess: answer }
+            },
+            { multi: true }
+          );
+        })
         .then(() => {
           return Players.updateMany(
             { currentGuess: "RUN", gameId: gameId },
@@ -94,6 +106,15 @@ module.exports = {
           );
         })
         .then(() => {
+          return Players.updateMany(
+            { currentGuess: " ", gameId: gameId },
+            {
+              $set: { lastGuess: " " }
+            },
+            { multi: true }
+          );
+        })
+        .then(() => {
           return Players.find({ gameId: gameId }).then(dbModel => {
             console.log(dbModel);
             res.json(dbModel);
@@ -106,13 +127,22 @@ module.exports = {
     //... find all with currentGuess RUN or PASS, and subtract 3
     function kick() {
       Players.updateMany(
-        { currentGuess: answer, gameId: gameId },
+        { currentGuess: " ", gameId: gameId },
         {
-          $inc: { currScore: +1 },
-          $set: { currentGuess: " ", lastGuess: answer }
+          $set: { lastGuess: " " }
         },
         { multi: true }
       )
+        .then(() => {
+          return Players.updateMany(
+            { currentGuess: answer, gameId: gameId },
+            {
+              $inc: { currScore: +1 },
+              $set: { currentGuess: " ", lastGuess: answer }
+            },
+            { multi: true }
+          );
+        })
         .then(() => {
           return Players.updateMany(
             { currentGuess: "RUN", gameId: gameId },
@@ -143,6 +173,15 @@ module.exports = {
             { multi: true }
           );
         })
+        // .then(() => {
+        //   return Players.updateMany(
+        //     { currentGuess: " ", gameId: gameId },
+        //     {
+        //       $set: { lastGuess: " " }
+        //     },
+        //     { multi: true }
+        //   );
+        // })
         .then(() => {
           return Players.find({ gameId: gameId }).then(dbModel => {
             console.log(dbModel);
@@ -158,13 +197,22 @@ module.exports = {
     //... find all with currentGuess RUN (other = RUN), and subtract 3 ....find all with currentGuess KICK, and subtract 1
     function runOrPass() {
       Players.updateMany(
-        { currentGuess: answer, gameId: gameId },
+        { currentGuess: " ", gameId: gameId },
         {
-          $inc: { currScore: +toAddOrSubtract },
-          $set: { currentGuess: " ", lastGuess: answer }
+          $set: { lastGuess: " " }
         },
         { multi: true }
       )
+        .then(() => {
+          return Players.updateMany(
+            { currentGuess: answer, gameId: gameId },
+            {
+              $inc: { currScore: +toAddOrSubtract },
+              $set: { currentGuess: " ", lastGuess: answer }
+            },
+            { multi: true }
+          );
+        })
         .then(() => {
           return Players.updateMany(
             { currentGuess: otherGuess, gameId: gameId },
@@ -216,7 +264,7 @@ module.exports = {
     var toAddOrSubtract = 0;
     let otherGuess = "";
 
-    noGuess();
+    // noGuess();
 
     // players win and loose points depending on their guess
     switch (answer) {
@@ -240,22 +288,22 @@ module.exports = {
         toAddOrSubtract = 0;
     }
 
-    function noGuess() {
-      Players.updateMany(
-        { lasttGuess: " ", gameId: gameId },
-        {
-          $set: { currentGuess: " " }
-        },
-        { multi: true }
-      )
-        .then(() => {
-          return Players.find({ gameId: gameId }).then(dbModel => {
-            console.log(dbModel);
-            res.json(dbModel);
-          });
-        })
-        .catch(err => res.status(422).json(err));
-    }
+    // function noGuess() {
+    //   Players.updateMany(
+    //     { lasttGuess: " ", gameId: gameId },
+    //     {
+    //       $set: { currentGuess: " " }
+    //     },
+    //     { multi: true }
+    //   )
+    //     .then(() => {
+    //       return Players.find({ gameId: gameId }).then(dbModel => {
+    //         console.log(dbModel);
+    //         res.json(dbModel);
+    //       });
+    //     })
+    //     .catch(err => res.status(422).json(err));
+    // }
 
     // if the answer is turnover, find all with TURNOVER as lastGuess, and add 10
     // reset all lastGuesses to  " "
