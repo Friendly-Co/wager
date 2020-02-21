@@ -84,15 +84,6 @@ module.exports = {
           );
         })
         .then(() => {
-          return Players.updateMany(
-            { currentGuess: " ", gameId: gameId },
-            {
-              $set: { lastGuess: " " }
-            },
-            { multi: true }
-          );
-        })
-        .then(() => {
           return Players.find({ gameId: gameId }).then(dbModel => {
             console.log(dbModel);
             res.json(dbModel);
