@@ -14,8 +14,6 @@ module.exports = {
     var toAddOrSubtract = 0;
     let otherGuess = "";
 
-    // noGuess();
-
     // players win and loose points depending on their guess
     switch (answer) {
       case "RUN":
@@ -37,26 +35,6 @@ module.exports = {
       default:
         toAddOrSubtract = 0;
     }
-
-    //throws an error if there ARE empty guesses: UnhandledPromiseRejectionWarning: Error [ERR_HTTP_HEADERS_SENT]: Cannot set headers after they are sent to the client
-    //fixed by adding this to the end of each function
-    // function noGuess() {
-    //   Players.updateMany(
-    //     { currentGuess: " ", gameId: gameId },
-    //     {
-    //       $set: { currentGuess: " ", lastGuess: " " }
-    //     },
-    //     { multi: true }
-    //   )
-    //     .then(() => {
-    //       return Players.find({ gameId: gameId }).then(dbModel => {
-    //         console.log(dbModel);
-    //         res.json(dbModel);
-    //       });
-    //     })
-    //     .catch(err => res.status(422).json(err));
-    //   return;
-    // }
 
     // if the answer is turnover, find all with TURNOVER as currentGuess, and add 10
     // reset all currentGuesses to  " "
@@ -173,15 +151,6 @@ module.exports = {
             { multi: true }
           );
         })
-        // .then(() => {
-        //   return Players.updateMany(
-        //     { currentGuess: " ", gameId: gameId },
-        //     {
-        //       $set: { lastGuess: " " }
-        //     },
-        //     { multi: true }
-        //   );
-        // })
         .then(() => {
           return Players.find({ gameId: gameId }).then(dbModel => {
             console.log(dbModel);
@@ -264,8 +233,6 @@ module.exports = {
     var toAddOrSubtract = 0;
     let otherGuess = "";
 
-    // noGuess();
-
     // players win and loose points depending on their guess
     switch (answer) {
       case "RUN":
@@ -287,23 +254,6 @@ module.exports = {
       default:
         toAddOrSubtract = 0;
     }
-
-    // function noGuess() {
-    //   Players.updateMany(
-    //     { lasttGuess: " ", gameId: gameId },
-    //     {
-    //       $set: { currentGuess: " " }
-    //     },
-    //     { multi: true }
-    //   )
-    //     .then(() => {
-    //       return Players.find({ gameId: gameId }).then(dbModel => {
-    //         console.log(dbModel);
-    //         res.json(dbModel);
-    //       });
-    //     })
-    //     .catch(err => res.status(422).json(err));
-    // }
 
     // if the answer is turnover, find all with TURNOVER as lastGuess, and add 10
     // reset all lastGuesses to  " "
