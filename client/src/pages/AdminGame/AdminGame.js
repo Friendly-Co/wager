@@ -123,10 +123,9 @@ class AdminGame extends Component {
 
   //send house answer and player guesses to the server for calculation
   handleAnswer = value => {
+    this.setState({ answer: value });
     const toSend = [{ answer: value }, { gameId: this.state.gameId }];
-    // const toSend = this.state.scoreSeed.concat(houseAnswer);
     console.log(toSend);
-    // PlayerAPI.calculateScores(toSend).then(res => {
     ScoreAPI.calculateScores(toSend).then(res => {
       console.log("scores saved");
       console.log("after that, ...");
@@ -137,6 +136,25 @@ class AdminGame extends Component {
       console.log("this.state.scoreSeed is now: ");
       console.log(this.state.scoreSeed);
     });
+  };
+
+  handleUndo = () => {
+    if (this.state.answer !== " ") {
+      const toSend = [
+        { answer: this.state.answer },
+        { gameId: this.state.gameId }
+      ];
+      console.log(toSend);
+      ScoreAPI.undoScores(toSend).then(res => {
+        console.log("scores undone. here is the response: ");
+        console.log(res.data);
+        this.setState({
+          scoreSeed: res.data
+        });
+        console.log("this.state.scoreSeed is now: ");
+        console.log(this.state.scoreSeed);
+      });
+    }
   };
 
   // deleteAllPlayers = () => {
@@ -184,6 +202,7 @@ class AdminGame extends Component {
                 setModalHalt={this.setModalHalt}
                 setModalCorrect={this.setModalCorrect}
                 removeHaltModal={this.state.removeHaltModal}
+                handleUndo={this.handleUndo}
               />
             </Col>
           </Row>
