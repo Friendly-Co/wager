@@ -664,9 +664,9 @@ const styles = {
     marginRight: "15%",
     marginTop: 10
   },
-  buttonRight: {
-    marginLeft: 35
-  },
+  // buttonRight: {
+  //   marginLeft: 35
+  // },
   newgameInput: {
     marginTop: 5,
     marginLeft: "22%",
