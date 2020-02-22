@@ -600,7 +600,7 @@ class Login extends Component {
             )}
             <div style={styles.buttonContainer}>
             <div>
-            <FormBtn
+            <button
               className="btn-1 squishy"
               disabled={
                 !this.state.adminName ||
@@ -610,7 +610,7 @@ class Login extends Component {
               onClick={this.handleAdminSave}
             >
               Submit
-            </FormBtn>
+            </button>
             <button style={styles.buttonRight} 
             className="btn-1 squishy" onClick={this.toggleLogin}>
               Login as Player
@@ -660,13 +660,13 @@ const styles = {
     
   },
   buttonContainer: {
-    marginLeft: "15%",
-    marginRight: "15%",
-    marginTop: 10
+    width: "100%",
+    marginTop: 10,
+    textAlign: "center"
   },
-  // buttonRight: {
-  //   marginLeft: 35
-  // },
+  buttonRight: {
+    marginLeft: 35
+  },
   newgameInput: {
     marginTop: 5,
     marginLeft: "22%",
