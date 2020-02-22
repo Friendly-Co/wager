@@ -375,15 +375,18 @@ class Login extends Component {
   render() {
     return (
       <Container>
-        <Logo />
+        <div style={styles.loginLogo} id="loginLogo">
+          <Logo />
+        </div>
         {!this.state.adminLoginBoolean ? (
           //  ============================================ Player Rendering =============================================
-          <Row>
-            <Col size="lg-4 md-4 sm-4">
+          // <Row>
+          //   <Col size="lg-4 md-4 sm-4">
               <form className="form-inline">
+                <div style={styles.dropdown}>
                 <div className="dropdown show">
-                  <Row>
-                    <Col size="12">
+                  {/* <Row>
+                    <Col size="12"> */}
                       <a
                         className="btn btn-secondary dropdown-toggle"
                         href="#"
@@ -416,30 +419,33 @@ class Login extends Component {
                           </a>
                         ))}
                       </div>
-                    </Col>
-                  </Row>
+                    {/* </Col>
+                  </Row> */}
+                </div>
                 </div>
 
-                <Row>
-                  <Col size="12">
+                {/* <Row>
+                  <Col size="12"> */}
+                  <div style={styles.inputContainer} >
                     <Input
                       value={this.state.username}
                       onChange={this.handleInputChange}
                       name="username"
                       placeholder="Username (required)"
                     ></Input>
-                  </Col>
-                </Row>
-                <Row>
-                  <Col size="12">
+                  {/* </Col>
+                </Row> */}
+                {/* <Row>
+                  <Col size="12"> */}
                     <Input
                       value={this.state.playerEmail}
                       onChange={this.handleInputChange}
                       name="playerEmail"
                       placeholder="Email (required)"
                     ></Input>
-                  </Col>
-                </Row>
+                    </div>
+                  {/* </Col>
+                </Row> */}
 
                 {this.state.playerEmailButton ? (
                   <p>
@@ -451,39 +457,36 @@ class Login extends Component {
                 ) : (
                   <p></p>
                 )}
-                <Row>
-                  <Col size="6">
+                {/* <Row>
+                  <Col size="6"> */}
+                  <div style={styles.buttonContainer} >
                     <FormBtn
                       disabled={!this.state.username || !this.state.gameId}
                       onClick={this.handlePlayerSave}
                     >
                       Submit
                     </FormBtn>
-                  </Col>
-                  <Col size="6">
+                  {/* </Col>
+                  <Col size="6"> */}
                     <button
+                      style={styles.buttonRight}
                       className="guessButton squishy btn-1"
                       onClick={this.toggleLogin}
                     >
                       Admin Login
                     </button>
-                  </Col>
-                </Row>
+                    </div>
+                  {/* </Col>
+                </Row> */}
               </form>
-            </Col>
-          </Row>
+          //   </Col>
+          // </Row>
         ) : (
           //  ============================================ Admin Rendering =============================================
           // create new game
           <form className="form-inline">
-            <Input
-              value={this.state.newGame}
-              onChange={this.handleInputChange}
-              name="newGame"
-              placeholder="Create New Ex: Cat v. Dog"
-            ></Input>
-
             {/* select existing game */}
+            <div style={styles.dropdown} >
             <div className="dropdown show">
               <a
                 className="btn btn-secondary dropdown-toggle"
@@ -528,6 +531,16 @@ class Login extends Component {
                 ))}
               </div>
             </div>
+            <span style={{color: "white"}}> | OR | </span>
+            <Input
+              className="placeholder-text"
+              style={styles.newgameInput}
+              value={this.state.newGame}
+              onChange={this.handleInputChange}
+              name="newGame"
+              placeholder="Create New Ex: Cat v. Dog"
+              ></Input>
+              </div>
             {/* 
             <input
               type="text"
@@ -563,6 +576,7 @@ class Login extends Component {
                 </option>
               ))}
             </datalist> */}
+            <div style={styles.inputContainer} >
             <Input
               value={this.state.adminName}
               onChange={this.handleInputChange}
@@ -575,6 +589,7 @@ class Login extends Component {
               name="adminEmail"
               placeholder="Email (required)"
             ></Input>
+            </div>
             {this.state.emailButton ? (
               <p>
                 Forgot your username?{" "}
@@ -583,6 +598,8 @@ class Login extends Component {
             ) : (
               <p></p>
             )}
+            <div style={styles.buttonContainer}>
+            <div>
             <FormBtn
               className="btn-1 squishy"
               disabled={
@@ -594,9 +611,12 @@ class Login extends Component {
             >
               Submit
             </FormBtn>
-            <button className="btn-1 squishy" onClick={this.toggleLogin}>
+            <button style={styles.buttonRight} 
+            className="btn-1 squishy" onClick={this.toggleLogin}>
               Login as Player
             </button>
+            </div>
+            </div>
           </form>
         )}
         <InstructionsModal
@@ -616,6 +636,45 @@ class Login extends Component {
         />
       </Container>
     );
+  }
+}
+
+const styles = {
+  loginLogo: {
+    height: "35%",
+    width: "100%",
+    textAlign: "center",
+    paddingTop: 25,
+    paddingBottom: 35,
+    
+  },
+  dropdown: {
+    width: "100%",
+    marginBottom: 30,
+    textAlign: "center"
+  },
+  inputContainer: {
+    width: "100%",
+    marginLeft: "10%",
+    marginRight: "10%"
+    
+  },
+  buttonContainer: {
+    marginLeft: "15%",
+    marginRight: "15%",
+    marginTop: 10
+  },
+  buttonRight: {
+    marginLeft: 35
+  },
+  newgameInput: {
+    marginTop: 5,
+    marginLeft: "22%",
+    width: "55%",
+    float: "left",
+    backgroundColor: "#535c68",
+    color: "white",
+    textAlign: "center"
   }
 }
 

@@ -61,3 +61,7 @@
     -ms-user-select: none;
     user-select: none;
   }
+
+  .placeholder-text::placeholder {
+    color: white;
+  }
