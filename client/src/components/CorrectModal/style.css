@@ -7,8 +7,12 @@
     font-size: 50px;
     font-weight: bold;
     text-align: center;
-    color: #007BFF;
+    color: #4219b0;
     text-shadow: grey 2px 2px 5px;
+}
+
+.modalImg {
+    width: 100% !important;
 }
 
 #Wrong {
