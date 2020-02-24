@@ -306,7 +306,7 @@ class User extends Component {
       <div className="wrapper bglayer2">
         <Row>
           <Col size="12">
-            <div>
+            <div className="wrapper bglayer2">
               <Row>
                 {/* <Col size="lg-2 md-2"></Col> */}
                 <Col size="12">

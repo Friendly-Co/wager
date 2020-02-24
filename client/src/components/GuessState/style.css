@@ -12,6 +12,10 @@
 
 }
 
+.guessContainer {
+  text-align: center;
+}
+
 @media only screen and (max-width: 900px) {
     .guessWindow {
       width: 225px;

@@ -12,7 +12,7 @@ function GuessState(props) {
     };
 
     return(
-        <div>
+        <div className="guessContainer">
             <h1 className='guessWindow'> * {userGuess()} *</h1>
             <div id="underline"></div>
         </div>
