@@ -8,8 +8,9 @@ import PlayerAPI from "../../utils/PlayerAPI";
 import LeaderModal from "../../components/LeaderModal/LeaderModal";
 import CorrectModal from "../../components/CorrectModal/CorrectModal";
 import HaltModal from "../../components/HaltModal/HaltModal";
+import UndoModal from "../../components/UndoModal";
 import io from "socket.io-client";
-import { Container, Row, Col } from "../../components/Grid";
+import { Row, Col } from "../../components/Grid";
 
 let score;
 let username;
@@ -28,6 +29,7 @@ class User extends Component {
       setModalShow: false,
       setModalHalt: false,
       setModalCorrect: false,
+      setUndoModal: false,
       leaderboard: [],
       scoreSeed: [],
       answer: " ",
@@ -44,18 +46,21 @@ class User extends Component {
       // console.log(this.state.setModalHalt);
       if (data.setModalHalt && gameId === data.gameId) {
         this.toggleHalt();
-      } else if (gameId === data.gameId) {
+      } else if (data.setModalCorrect && gameId === data.gameId) {
         if (data.answer) {
           this.acceptAnswer(data.answer);
           this.lastGuess();
         }
         this.toggleCorrect();
         this.toggleHaltOff();
+        
         if (data.removeHaltBetsModal) {
           this.toggleHaltOff();
           this.toggleModalCorrectOffWithoutUndoingGuess();
         }
-      }
+      } else if (data.setUndoModal && gameId === data.gameId) {
+          this.toggleUndoModal();
+          }
     });
 
     this.sendGuess = ev => {
@@ -190,6 +195,15 @@ class User extends Component {
       this.setState({ setModalShow: false });
     }
   };
+
+  toggleUndoModal = () => {
+      this.setState({ setUndoModal: true, setModalHalt: false});
+      this.loadScore();
+    } 
+
+  toggleUndoModalOff = () => {
+      this.setState({ setUndoModal: false});
+    }
 
   toggleModalCorrectOff = () => {
     this.loadScore();
@@ -367,6 +381,10 @@ class User extends Component {
         <HaltModal
           show={this.state.setModalHalt}
           onHide={() => this.toggleHaltOff()}
+        />
+        <UndoModal 
+          show={this.state.setUndoModal}
+          onHide={() => this.toggleUndoModalOff()}
         />
       </div>
     );

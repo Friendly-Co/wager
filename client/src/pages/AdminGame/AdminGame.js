@@ -120,6 +120,13 @@ class AdminGame extends Component {
       answer: value
     });
   };
+ 
+  setUndoModal = () => {
+    this.socket.emit("toggle_modal", {
+      gameId: this.state.gameId,
+      setUndoModal: true
+    });
+  };
 
   //send house answer and player guesses to the server for calculation
   handleAnswer = value => {
@@ -145,6 +152,7 @@ class AdminGame extends Component {
         { gameId: this.state.gameId }
       ];
       console.log(toSend);
+      this.setUndoModal();
       ScoreAPI.undoScores(toSend).then(res => {
         console.log("scores undone. here is the response: ");
         console.log(res.data);
@@ -203,6 +211,7 @@ class AdminGame extends Component {
                 setModalCorrect={this.setModalCorrect}
                 removeHaltModal={this.state.removeHaltModal}
                 handleUndo={this.handleUndo}
+                setUndoModal={this.setUndoModal}
               />
             </Col>
           </Row>

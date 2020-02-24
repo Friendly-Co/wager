@@ -71,11 +71,12 @@ function AdminBtns(props) {
           <span>Turnover</span>
         </div>
         <div
-          className="btn-1 squishy adminbutton"
+          className="btn-3 squishy adminbutton"
           role="button"
           tabIndex="0"
           onClick={() => {
             props.handleUndo();
+            props.setUndoModal();
           }}
         >
           <span>Undo</span>

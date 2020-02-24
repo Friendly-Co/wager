@@ -2,6 +2,11 @@
     font-size: 45px;
     font-weight: bold;
     text-shadow: grey 2px 2px 5px;
-    color: #007BFF;
+    color: #4219b0;
     text-align: center;
+}
+
+.imgContainer {
+    text-align: center;
+    margin-right: 10px;
 }
