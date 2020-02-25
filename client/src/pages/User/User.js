@@ -163,6 +163,18 @@ class User extends Component {
           score: res.data.currScore
         });
         console.log(res.data);
+        // if the player has dropped to negative points, they're out of the game
+        if (res.data.currScore < 0) {
+          console.log("KICKEDOUUUUT!!!!!!!!");
+          this.setState({
+            message: alert(
+              "Your points have dropped below 0. Better luck next time!"
+            )
+          });
+          const toSave = { gameId: gameId, _id: playerId };
+          PlayerAPI.kickOutPlayer(toSave);
+          window.location = "/";
+        }
       })
 
       .catch(err => console.log(err));
@@ -200,23 +212,7 @@ class User extends Component {
   toggleModalCorrectOff = () => {
     this.loadScore();
     this.setState({ setModalCorrect: false, guess: " " });
-    // if (this.state.currScore < 0) {
-    //   this.setState({
-    //     message: alert(
-    //       "Your points have dropped below 0. Better luck next time!"
-    //     )
-    //   });
-    //   const toSave =
-    //     { gameId: gameId, _id: playerId }
-    //   PlayerAPI.kickOutPlayer(toSave);
-    //   window.location = "/";
-    // }
   };
-
-  // toggleModalCorrectOffWithoutUndoingGuess = () => {
-  //   this.loadScore();
-  //   this.setState({ setModalCorrect: false });
-  // };
 
   toggleCorrect = () => {
     this.setState({ setModalCorrect: true });
@@ -255,17 +251,6 @@ class User extends Component {
         this.setState({
           score: res.data.currScore
         });
-        // if (res.data.currScore < 0) {
-        //   this.setState({
-        //     message: alert(
-        //       "Your points have dropped below 0. Better luck next time!"
-        //     )
-        //   });
-        //   const toSave =
-        //     { gameId: gameId, _id: playerId }
-        //   PlayerAPI.kickOutPlayer(toSave);
-        //   window.location = "/";
-        // }
       })
       .catch(err => console.log(err));
   };
