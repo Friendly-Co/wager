@@ -16,8 +16,8 @@ class AdminGame extends Component {
       scoreSeed: [],
       answer: " ",
       currentGuess: "",
-      gameId: "",
-      removeHaltModal: false
+      gameId: ""
+      // removeHaltModal: false
     };
 
     this.socket = io("https://justafriendlywager.herokuapp.com/", {
@@ -92,24 +92,22 @@ class AdminGame extends Component {
   }
 
   setModalHalt = ev => {
-    if (this.state.removeHaltModal === true) {
-      console.log("this.state.removeHaltModal is TRUE!");
-      this.setState({ removeHaltModal: false }, () => {
-        this.socket.emit("toggle_modal", {
-          gameId: this.state.gameId,
-          setModalHalt: false,
-          removeHaltBetsModal: true
-        });
-      });
-    } else {
-      console.log("this.state.removeHaltModal is FALSE!");
-      this.setState({ removeHaltModal: true }, () => {
-        this.socket.emit("toggle_modal", {
-          gameId: this.state.gameId,
-          setModalHalt: true
-        });
-      });
-    }
+    // if (this.state.removeHaltModal === true) {
+    //   this.setState({ removeHaltModal: false }, () => {
+    //     this.socket.emit("toggle_modal", {
+    //       gameId: this.state.gameId,
+    //       setModalHalt: false
+    //     });
+    //   });
+    // } else {
+    // this.setState({ removeHaltModal: true }, () => {
+    this.socket.emit("toggle_modal", {
+      gameId: this.state.gameId,
+      setModalHalt: true
+    });
+    // }
+    // );
+    // }
   };
 
   setModalCorrect = value => {
@@ -145,6 +143,7 @@ class AdminGame extends Component {
     });
   };
 
+  // undo last scoring and restore current guesses
   handleUndo = () => {
     if (this.state.answer !== " ") {
       const toSend = [
@@ -209,7 +208,7 @@ class AdminGame extends Component {
                 handleAnswer={this.handleAnswer}
                 setModalHalt={this.setModalHalt}
                 setModalCorrect={this.setModalCorrect}
-                removeHaltModal={this.state.removeHaltModal}
+                // removeHaltModal={this.state.removeHaltModal}
                 handleUndo={this.handleUndo}
                 setUndoModal={this.setUndoModal}
               />

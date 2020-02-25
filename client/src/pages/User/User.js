@@ -53,14 +53,11 @@ class User extends Component {
         }
         this.toggleCorrect();
         this.toggleHaltOff();
-        
-        if (data.removeHaltBetsModal) {
-          this.toggleHaltOff();
-          this.toggleModalCorrectOffWithoutUndoingGuess();
-        }
-      } else if (data.setUndoModal && gameId === data.gameId) {
-          this.toggleUndoModal();
-          }
+        // if (data.removeHaltBetsModal) {
+        //   this.toggleHaltOff();
+        //   this.toggleModalCorrectOffWithoutUndoingGuess();
+        // }
+      }
     });
 
     this.sendGuess = ev => {
@@ -88,20 +85,13 @@ class User extends Component {
     var q1 = arr[Math.ceil((arr.length - 1) * (3 / 4))];
     // find the inter quartile range
     var iqr = q3 - q1;
-    console.log("q1: " + q1);
-    console.log("q3: " + q3);
-    console.log("iqr: " + iqr);
     // determine allowable uper and lower margins
     var maxValue = q3 + iqr * 1.5;
     var minValue = q1 - iqr * 1.5;
-    console.log("minvalue: " + minValue);
-    console.log("maxvalue: " + maxValue);
     // compare scores with allowable margins to remove outliers
     var filteredValues = arr.filter(function(x) {
       return x <= maxValue && x >= minValue;
     });
-
-    console.log("filteredValues: ", filteredValues);
     return filteredValues;
   };
 
@@ -197,13 +187,13 @@ class User extends Component {
   };
 
   toggleUndoModal = () => {
-      this.setState({ setUndoModal: true, setModalHalt: false});
-      this.loadScore();
-    } 
+    this.setState({ setUndoModal: true, setModalHalt: false });
+    this.loadScore();
+  };
 
   toggleUndoModalOff = () => {
-      this.setState({ setUndoModal: false});
-    }
+    this.setState({ setUndoModal: false });
+  };
 
   toggleModalCorrectOff = () => {
     this.loadScore();
@@ -221,17 +211,16 @@ class User extends Component {
     // }
   };
 
-  toggleModalCorrectOffWithoutUndoingGuess = () => {
-    this.loadScore();
-    this.setState({ setModalCorrect: false });
-  };
+  // toggleModalCorrectOffWithoutUndoingGuess = () => {
+  //   this.loadScore();
+  //   this.setState({ setModalCorrect: false });
+  // };
 
   toggleCorrect = () => {
     this.setState({ setModalCorrect: true });
     setTimeout(() => {
       this.toggleModalCorrectOff();
-    }, 3000)
-      
+    }, 3000);
   };
 
   toggleHalt = () => {
@@ -382,7 +371,7 @@ class User extends Component {
           show={this.state.setModalHalt}
           onHide={() => this.toggleHaltOff()}
         />
-        <UndoModal 
+        <UndoModal
           show={this.state.setUndoModal}
           onHide={() => this.toggleUndoModalOff()}
         />
