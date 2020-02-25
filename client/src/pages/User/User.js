@@ -57,6 +57,8 @@ class User extends Component {
         //   this.toggleHaltOff();
         //   this.toggleModalCorrectOffWithoutUndoingGuess();
         // }
+      } else if (data.setUndoModal && gameId === data.gameId) {
+        this.toggleUndoModal();
       }
     });
 
