@@ -1,13 +1,13 @@
 img {
-   /* width: 75% !important;  */
-   /* margin: 0 !important; */
-   /* padding: 0% 0% 0% 15px; */
+   width: 75% !important; 
+   margin: 0 !important;
+   padding: 0% 0% 0% 15px;
    border-bottom-style: solid;
    border-color: #93c8e8;
    /* box-shadow: .1rem .2rem .5rem black; */
 }
 
 .alignimg {
-   align-self: center;
+   text-align: center;
    /* padding-left: 15%; */
 }
