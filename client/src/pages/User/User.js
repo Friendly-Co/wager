@@ -240,6 +240,7 @@ class User extends Component {
 
   toggleEndGameModal = () => {
     this.setState({ setEndGameModal: true });
+    this.getRank();
   };
 
   // function that updates guess state with onClick
@@ -376,6 +377,7 @@ class User extends Component {
         <EndGameModal
           show={this.state.setEndGameModal}
           onHide={() => this.toggleEndGameModal()}
+          currentRank={this.state.currentRank}
         />
       </div>
     );

@@ -57,7 +57,6 @@ class AdminGame extends Component {
         //make sure we only update current players's guesses
         for (let i = 0; i < state.scoreSeed.length; i++) {
           if (state.scoreSeed[i].playerName === data.playerName) {
-            //malfunctions if you use === - It behaves like the data types are different, when they SHOULD both be strings
             playerIndex = i;
             console.log("these names are matching!");
             alreadyHere = true;
@@ -69,8 +68,6 @@ class AdminGame extends Component {
         }
         // Create a new card for new player
         if (!alreadyHere) {
-          // may need to change currScore default for late logins
-          // data.currScore = 50;
           const scoreSeed = state.scoreSeed.concat(data);
           return { scoreSeed };
         } else {
@@ -176,7 +173,7 @@ class AdminGame extends Component {
     HouseAPI.gameOver(toSave).then(res => {
       console.log(res.data);
     });
-    this.setState({ message: alert("game overr!") });
+    // this.setState({ message: alert("game overr!") });
     this.setEndGameoModal();
   };
 
