@@ -9,7 +9,7 @@ import LeaderModal from "../../components/LeaderModal/LeaderModal";
 import CorrectModal from "../../components/CorrectModal/CorrectModal";
 import HaltModal from "../../components/HaltModal/HaltModal";
 import UndoModal from "../../components/UndoModal";
-import EndGameModal from "../../components/EndGameModal";
+import EndGameModal from "../../components/endGameModal";
 import io from "socket.io-client";
 import { Row, Col } from "../../components/Grid";
 

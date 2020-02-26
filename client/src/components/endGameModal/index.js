@@ -1,1 +1,1 @@
-export { default } from "./EndGameModal";
+export { default } from "./endGameModal";
