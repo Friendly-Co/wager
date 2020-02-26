@@ -207,7 +207,6 @@ class AdminGame extends Component {
                 handleAnswer={this.handleAnswer}
                 setModalHalt={this.setModalHalt}
                 setModalCorrect={this.setModalCorrect}
-                // removeHaltModal={this.state.removeHaltModal}
                 handleUndo={this.handleUndo}
                 setUndoModal={this.setUndoModal}
               />
