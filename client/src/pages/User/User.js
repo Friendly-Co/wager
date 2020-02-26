@@ -68,7 +68,8 @@ class User extends Component {
         playerName: this.state.username,
         currentGuess: this.state.guess,
         gameId: gameId,
-        playerId: playerId
+        playerId: playerId,
+        currScore: this.state.score
       });
     };
   }
@@ -160,12 +161,13 @@ class User extends Component {
     PlayerAPI.getPlayerScore(playerId)
       .then(res => {
         this.setState({
-          score: res.data.currScore
+          score: res.data.currScore,
+          guess: res.data.currentGuess
         });
         console.log(res.data);
         // if the player has dropped to negative points, they're out of the game
         if (res.data.currScore < 0) {
-          console.log("KICKEDOUUUUT!!!!!!!!");
+          // console.log("KICKEDOUUUUT!!!!!!!!");
           this.setState({
             message: alert(
               "Your points have dropped below 0. Better luck next time!"
@@ -207,6 +209,7 @@ class User extends Component {
 
   toggleUndoModalOff = () => {
     this.setState({ setUndoModal: false });
+    this.loadScore();
   };
 
   toggleModalCorrectOff = () => {
