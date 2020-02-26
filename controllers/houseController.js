@@ -30,21 +30,26 @@ module.exports = {
     console.log(req.body);
 
     // if the game is over, record it in the database
-    if (req.body.gameOver) {
-      console.log("gameOver");
-      House.findOneAndUpdate({ _id: req.body._id }, { gameOver: true })
-        .then(dbModel => res.json(dbModel))
-        .catch(err => res.status(422).json(err));
-    } else {
-      const toSave = {
-        gameInfo: req.body.gameInfo,
-        adminName: req.body.adminName,
-        adminEmail: req.body.adminEmail
-      };
-      House.create(toSave)
-        .then(dbModel => res.json(dbModel))
-        .catch(err => res.status(422).json(err));
-    }
+    // if (req.body.gameOver) {
+    //   console.log("gameOver");
+    //   House.findOneAndUpdate({ _id: req.body._id }, { gameOver: true })
+    //     .then(dbModel => res.json(dbModel))
+    //     .catch(err => res.status(422).json(err));
+    // } else {
+    const toSave = {
+      gameInfo: req.body.gameInfo,
+      adminName: req.body.adminName,
+      adminEmail: req.body.adminEmail
+    };
+    House.create(toSave)
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
+    // }
+  },
+  update: function(req, res) {
+    House.findOneAndUpdate({ _id: req.body._id }, { gameOver: true })
+      .then(dbModel => res.json(dbModel))
+      .catch(err => res.status(422).json(err));
   },
   //Clear the database of all accounts
   removeAll: function(req, res) {
