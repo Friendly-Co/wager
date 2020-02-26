@@ -13,7 +13,7 @@ class Leaderboard extends Component {
 
     this.state = {
       dbScores: [],
-      scoreSeed: [],
+      // scoreSeed: props.scoreSeed,
       gameId: props.gameId
     };
   }
@@ -29,16 +29,12 @@ class Leaderboard extends Component {
         res.data.filter(x => x.currScore >= 0 && x.kickedOut === false);
         console.log("here is the response");
         console.log(res.data);
-        this.setState({ dbScores: res.data });
+        this.setState({ dbScores: [...res.data] });
       })
       .catch(err => console.log(err));
   };
 
   render(props) {
-    // // //If scoreSeed is longer than dbScores, pull from the database to update state, but still render from the scoreSeed to show updated guesses
-    if (dbScoresLength < scoreSeedLength) {
-      this.getFromDb();
-    }
     //If no scoreSeed props are coming from the Admin page, render from the database
     // This is a fallback for bugs related to user and admin page reloading, or the very beginning of the game
     // var renderFrom;
@@ -48,6 +44,12 @@ class Leaderboard extends Component {
     var scoreSeedLength = this.props.scoreSeed.filter(
       x => x.gameId === this.state.gameId && x.kickedOut === false
     ).length;
+
+    // // //If scoreSeed is longer than dbScores, pull from the database to update state, but still render from the scoreSeed to show updated guesses
+    if (dbScoresLength < scoreSeedLength) {
+      this.getFromDb();
+    }
+
     // var renderFromScoreseed = false;
 
     // for (let i = 0; i < this.props.scoreSeed.length; i++) {
