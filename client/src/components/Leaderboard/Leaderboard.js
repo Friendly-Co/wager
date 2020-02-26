@@ -35,19 +35,39 @@ class Leaderboard extends Component {
   };
 
   render(props) {
-    //If no scoreSeed props are coming from the Admin page, render from the database
-    // This is a fallback for bugs related to user and admin page reloading, or the very beginning of the game
-    var renderFrom = this.props.scoreSeed;
-    // var renderFrom = this.state.dbScores;
-    var dbScoresLength = Object.keys(this.state.dbScores).length;
-    var scoreSeedLength = this.props.scoreSeed.filter(
-      x => x.gameId === this.state.gameId && x.kickedOut === false
-    ).length;
-
     // // //If scoreSeed is longer than dbScores, pull from the database to update state, but still render from the scoreSeed to show updated guesses
     if (dbScoresLength < scoreSeedLength) {
       this.getFromDb();
     }
+    //If no scoreSeed props are coming from the Admin page, render from the database
+    // This is a fallback for bugs related to user and admin page reloading, or the very beginning of the game
+    // var renderFrom;
+    // var renderFrom = this.props.scoreSeed;
+    var renderFrom = this.state.dbScores;
+    var dbScoresLength = Object.keys(this.state.dbScores).length;
+    var scoreSeedLength = this.props.scoreSeed.filter(
+      x => x.gameId === this.state.gameId && x.kickedOut === false
+    ).length;
+    // var renderFromScoreseed = false;
+
+    // for (let i = 0; i < this.props.scoreSeed.length; i++) {
+    //   if (this.props.scoreSeed[i].currentGuess !== " ") {
+    //     renderFromScoreseed = true;
+    //     break;
+    //   }
+    // }
+
+    // if (renderFromScoreseed) {
+    //   renderFrom = this.props.scoreSeed;
+    //   console.log("rendering from scoreSeed");
+    // } else {
+    //   renderFrom = this.state.dbScores;
+    //   console.log("rendering from dbScores");
+    //   console.log("==== dbScore: ");
+    //   console.log(this.state.dbScores);
+    //   console.log("==== scoreseed: ");
+    //   console.log(this.props.scoreSeed);
+    // }
 
     if (this.props.scoreSeed.length < dbScoresLength) {
       renderFrom = this.state.dbScores;
@@ -62,8 +82,11 @@ class Leaderboard extends Component {
     }
 
     renderFrom = renderFrom
-      .filter(x => x.gameId === this.state.gameId && x.kickedOut === false)
+      .filter(x => x.gameId === this.state.gameId && x.currScore >= 0)
       .sort((a, b) => b.currScore - a.currScore);
+
+    console.log("===================renderfrom ===========");
+    console.log(renderFrom);
 
     return (
       <div>
