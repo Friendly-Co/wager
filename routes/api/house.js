@@ -6,7 +6,8 @@ const sendEmailController = require("../../controllers/sendEmailController");
 router
   .route("/:gameInfo")
   .get(houseController.findById)
-  .post(houseController.create);
+  .post(houseController.create)
+  .put(houseController.update);
 
 // Matches with "/api/house/mail/moremail"
 router.route("/mail/moremail").post(sendEmailController.create);

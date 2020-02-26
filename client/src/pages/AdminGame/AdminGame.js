@@ -17,7 +17,6 @@ class AdminGame extends Component {
       answer: " ",
       currentGuess: "",
       gameId: ""
-      // removeHaltModal: false
     };
 
     this.socket = io("https://justafriendlywager.herokuapp.com/", {
@@ -49,7 +48,7 @@ class AdminGame extends Component {
 
     const addUserInfo = data => {
       console.log("here's the data sent from users by socket");
-      console.log(data); // {playerName: "Tarzan", currentGuess: " "}
+      console.log(data);
       console.log("here's the scoreseed: ");
       console.log(this.state.scoreSeed);
       this.setState(state => {
@@ -95,22 +94,10 @@ class AdminGame extends Component {
   }
 
   setModalHalt = ev => {
-    // if (this.state.removeHaltModal === true) {
-    //   this.setState({ removeHaltModal: false }, () => {
-    //     this.socket.emit("toggle_modal", {
-    //       gameId: this.state.gameId,
-    //       setModalHalt: false
-    //     });
-    //   });
-    // } else {
-    // this.setState({ removeHaltModal: true }, () => {
     this.socket.emit("toggle_modal", {
       gameId: this.state.gameId,
       setModalHalt: true
     });
-    // }
-    // );
-    // }
   };
 
   setModalCorrect = value => {
@@ -126,6 +113,13 @@ class AdminGame extends Component {
     this.socket.emit("toggle_modal", {
       gameId: this.state.gameId,
       setUndoModal: true
+    });
+  };
+
+  setEndGameoModal = () => {
+    this.socket.emit("toggle_modal", {
+      gameId: this.state.gameId,
+      setEndGameModal: true
     });
   };
 
@@ -179,9 +173,11 @@ class AdminGame extends Component {
 
   endGame = () => {
     const toSave = { _id: this.state.gameId, gameOver: true };
-    HouseAPI.saveGame(toSave).then(res => {
+    HouseAPI.gameOver(toSave).then(res => {
       console.log(res.data);
     });
+    this.setState({ message: alert("game overr!") });
+    this.setEndGameoModal();
   };
 
   //Maybe add: only render if the admin in the database matches the admin params

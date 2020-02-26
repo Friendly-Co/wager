@@ -9,6 +9,7 @@ import LeaderModal from "../../components/LeaderModal/LeaderModal";
 import CorrectModal from "../../components/CorrectModal/CorrectModal";
 import HaltModal from "../../components/HaltModal/HaltModal";
 import UndoModal from "../../components/UndoModal";
+import EndGameModal from "../../components/EndGameModal";
 import io from "socket.io-client";
 import { Row, Col } from "../../components/Grid";
 
@@ -30,6 +31,7 @@ class User extends Component {
       setModalHalt: false,
       setModalCorrect: false,
       setUndoModal: false,
+      setEndGameModal: false,
       leaderboard: [],
       scoreSeed: [],
       answer: " ",
@@ -59,6 +61,8 @@ class User extends Component {
         // }
       } else if (data.setUndoModal && gameId === data.gameId) {
         this.toggleUndoModal();
+      } else if (data.setEndGameModal && gameId === data.gameId) {
+        this.toggleEndGameModal();
       }
     });
 
@@ -191,7 +195,7 @@ class User extends Component {
       .catch(err => console.log(err));
   };
 
-  // all the Modal Functions
+  // all Modal Functions to follow
   toggleModal = () => {
     if (!this.state.setModalShow) {
       this.getRank();
@@ -232,6 +236,10 @@ class User extends Component {
     if (this.state.setModalCorrect) {
       this.setState({ setModalHalt: false });
     }
+  };
+
+  toggleEndGameModal = () => {
+    this.setState({ setEndGameModal: true });
   };
 
   // function that updates guess state with onClick
@@ -364,6 +372,10 @@ class User extends Component {
         <UndoModal
           show={this.state.setUndoModal}
           onHide={() => this.toggleUndoModalOff()}
+        />
+        <EndGameModal
+          show={this.state.setEndGameModal}
+          onHide={() => this.toggleEndGameModal()}
         />
       </div>
     );

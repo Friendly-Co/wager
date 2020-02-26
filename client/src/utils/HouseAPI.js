@@ -24,6 +24,13 @@ export default {
     console.log(toSave);
     return axios.post("/api/house/adminname", toSave);
   },
+  // Updates gameOver boolean in database
+  gameOver: function(toSave) {
+    console.log("gameOver from HouseAPI.js- toSave:");
+    console.log(toSave);
+    return axios.put("/api/house/adminname", toSave);
+  },
+
   // Email a username reminder
   sendEmail: function(toSend) {
     console.log("sendEmail from HouseAPI.js- toSend:");
