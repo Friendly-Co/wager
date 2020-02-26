@@ -41,7 +41,7 @@ class Leaderboard extends Component {
     // var renderFrom = this.state.dbScores;
     var dbScoresLength = Object.keys(this.state.dbScores).length;
     var scoreSeedLength = this.props.scoreSeed.filter(
-      x => x.gameId === this.state.gameId
+      x => x.gameId === this.state.gameId && x.kickedOut === false
     ).length;
 
     // // //If scoreSeed is longer than dbScores, pull from the database to update state, but still render from the scoreSeed to show updated guesses
@@ -63,7 +63,7 @@ class Leaderboard extends Component {
 
     renderFrom = renderFrom
       .filter(x => x.gameId === this.state.gameId && x.kickedOut === false)
-      .sort((a, b) => a - b);
+      .sort((a, b) => b.currScore - a.currScore);
 
     return (
       <div>
