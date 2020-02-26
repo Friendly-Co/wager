@@ -17,6 +17,34 @@ var endCopy = {
     "For more information about this project, please vist our Github at: https://github.com/Friendly-Co/wager"
 };
 
+function renderWinner(props) {
+  if (props.currentRank <= 1) {
+    return (
+      <div id="watch">
+        <h2>{endCopy.WinHead}</h2>
+        <p>{endCopy.WinCopy}</p>
+        <br />
+        <h2>{endCopy.general1}</h2>
+        <p>{endCopy.github}</p>
+      </div>
+    );
+  }
+}
+
+function renderLoser(props) {
+  if (props.currentRank > 1) {
+    return (
+      <div id="watch">
+        <h2>{endCopy.NoWinHead}</h2>
+        <p>{endCopy.noWinCopy}</p>
+        <br />
+        <h2>{endCopy.general1}</h2>
+        <p>{endCopy.github}</p>
+      </div>
+    );
+  }
+}
+
 function endGameModal(props) {
   return (
     <Modal
@@ -34,7 +62,9 @@ function endGameModal(props) {
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <div id="watch">
+        {renderWinner(props)}
+        {renderLoser(props)}
+        {/* <div id="watch">
           <h2>{endCopy.WinHead}</h2>
           <p>{endCopy.WinCopy}</p>
           <br />
@@ -43,7 +73,7 @@ function endGameModal(props) {
           <br />
           <h2>{endCopy.general1}</h2>
           <p>{endCopy.github}</p>
-        </div>
+        </div> */}
       </Modal.Body>
       <Modal.Footer>
         <Button onClick={props.onHide}>Close</Button>
