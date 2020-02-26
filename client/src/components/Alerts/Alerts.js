@@ -21,8 +21,7 @@ function AlertMessages(props) {
       color = "danger";
       break;
     case 4:
-      mess =
-        "Your username has been saved! Click the 'x' to redirect to your game page.";
+      mess = "Your username has been saved! Redirecting to your game page.";
       color = "primary";
       break;
     case 5:
