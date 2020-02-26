@@ -208,12 +208,15 @@ class User extends Component {
 
   toggleUndoModal = () => {
     this.setState({ setUndoModal: true, setModalHalt: false });
-    this.loadScore();
+    // this.loadScore();
+    setTimeout(() => {
+      this.toggleUndoModalOff();
+    }, 3000);
   };
 
   toggleUndoModalOff = () => {
-    this.setState({ setUndoModal: false });
     this.loadScore();
+    this.setState({ setUndoModal: false });
   };
 
   toggleModalCorrectOff = () => {
