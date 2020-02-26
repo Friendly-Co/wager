@@ -26,6 +26,9 @@ class Leaderboard extends Component {
   getFromDb = () => {
     PlayerAPI.getPlayers(this.state.gameId)
       .then(res => {
+        res.data.filter(x => x.currScore >= 0 && x.kickedOut === false);
+        console.log("here is the response");
+        console.log(res.data);
         this.setState({ dbScores: res.data });
       })
       .catch(err => console.log(err));
@@ -34,22 +37,31 @@ class Leaderboard extends Component {
   render(props) {
     //If no scoreSeed props are coming from the Admin page, render from the database
     // This is a fallback for bugs related to user and admin page reloading, or the very beginning of the game
-    var renderFrom = this.state.dbScores;
+    var renderFrom = this.props.scoreSeed;
+    // var renderFrom = this.state.dbScores;
     var dbScoresLength = Object.keys(this.state.dbScores).length;
+    var scoreSeedLength = this.props.scoreSeed.filter(
+      x => x.gameId === this.state.gameId
+    ).length;
 
     // // //If scoreSeed is longer than dbScores, pull from the database to update state, but still render from the scoreSeed to show updated guesses
-    if (
-      dbScoresLength <
-      this.props.scoreSeed.filter(x => x.gameId === this.state.gameId).length
-    ) {
+    if (dbScoresLength < scoreSeedLength) {
       this.getFromDb();
     }
-    if (this.props.scoreSeed.length >= dbScoresLength) {
-      renderFrom = this.props.scoreSeed;
-    } else {
+    if (this.props.scoreSeed.length < dbScoresLength) {
       renderFrom = this.state.dbScores;
+      console.log("rendering from dbScores");
+      console.log("==== dbScore: ");
+      console.log(this.state.dbScores);
+      console.log("==== scoreseed: ");
+      console.log(this.props.scoreSeed);
+    } else {
+      renderFrom = this.props.scoreSeed;
+      console.log("rendering from scoreSeed");
     }
-    renderFrom = renderFrom.filter(x => x.gameId === this.state.gameId);
+    renderFrom = renderFrom.filter(
+      x => x.gameId === this.state.gameId && x.kickedOut === false
+    );
     return (
       <div>
         <h1>Player Scores</h1>

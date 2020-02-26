@@ -40,7 +40,9 @@ class AdminGame extends Component {
             " came from user " +
             data.playerName +
             "and this game: " +
-            data.gameId
+            data.gameId +
+            "and here's their current score: " +
+            data.currScore
         );
       }
     });
@@ -86,7 +88,8 @@ class AdminGame extends Component {
       ev.preventDefault();
       this.socket.emit("SEND_MESSAGE", {
         user: this.state.scoreSeed.user,
-        currentGuess: this.state.scoreSeed.currentGuess
+        currentGuess: this.state.scoreSeed.currentGuess,
+        message: "SENDING MESSAGE"
       });
     };
   }
@@ -118,7 +121,7 @@ class AdminGame extends Component {
       answer: value
     });
   };
- 
+
   setUndoModal = () => {
     this.socket.emit("toggle_modal", {
       gameId: this.state.gameId,
