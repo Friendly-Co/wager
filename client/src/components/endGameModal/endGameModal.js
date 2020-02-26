@@ -1,4 +1,6 @@
+// import React from "./node_modules/react";
 import React from "react";
+// import { Modal, Button } from "./node_modules/react-bootstrap";
 import { Modal, Button } from "react-bootstrap";
 import "./style.css";
 
