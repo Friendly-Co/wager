@@ -5,8 +5,7 @@ import "./style.css";
 var endCopy = {
   heading1: "GAME OVER",
   NoWinHead: "Sorry, you did not win any prizes this time around",
-  noWinCopy:
-    "Stay tuned for future games of Just a Friendly Wager and thank you for",
+  noWinCopy: "Stay tuned for future games of Just a Friendly Wager",
   WinHead: "YOU WON!",
   WinCopy:
     "See your host to redeem your prize! Use Win Code: #######. Thank you for playing `Just a Friendly Wager`!",
@@ -16,7 +15,7 @@ var endCopy = {
     "For more information about this project, please vist our Github at: https://github.com/Friendly-Co/wager"
 };
 
-function endGameModal(props) {
+function EndGameModal(props) {
   return (
     <Modal
       {...props}
@@ -51,4 +50,4 @@ function endGameModal(props) {
   );
 }
 
-export default endGameModal;
+export default EndGameModal;
