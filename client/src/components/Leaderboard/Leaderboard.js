@@ -48,6 +48,7 @@ class Leaderboard extends Component {
     if (dbScoresLength < scoreSeedLength) {
       this.getFromDb();
     }
+
     if (this.props.scoreSeed.length < dbScoresLength) {
       renderFrom = this.state.dbScores;
       console.log("rendering from dbScores");
@@ -59,10 +60,11 @@ class Leaderboard extends Component {
       renderFrom = this.props.scoreSeed;
       console.log("rendering from scoreSeed");
     }
-    renderFrom = renderFrom.filter(
-      x => x.gameId === this.state.gameId && x.kickedOut === false
-    );
-    renderFrom = renderFrom.sort((a, b) => a - b);
+
+    renderFrom = renderFrom
+      .filter(x => x.gameId === this.state.gameId && x.kickedOut === false)
+      .sort((a, b) => a - b);
+
     return (
       <div>
         <h1>Player Scores</h1>
@@ -78,12 +80,6 @@ class Leaderboard extends Component {
                 {renderFrom.map(score => {
                   return (
                     <ListItem key={score._id}>
-                      {/* <strong>
-                      <h3>{score.playerName}</h3>
-                      <p>Current Score: {score.currScore}</p>
-                      <p>Current Guess: {score.currentGuess}</p>
-                    </strong> */}
-
                       <td>{score.playerName}</td>
                       <td>Current Score: {score.currScore}</td>
                       <td>Current Guess: {score.currentGuess}</td>
