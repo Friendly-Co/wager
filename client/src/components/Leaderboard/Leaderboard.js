@@ -62,6 +62,10 @@ class Leaderboard extends Component {
     renderFrom = renderFrom.filter(
       x => x.gameId === this.state.gameId && x.kickedOut === false
     );
+    function sortRenderFrom(a, b) {
+      return a > b ? -1 : b > a ? 1 : 0;
+    }
+    renderFrom.sort((a, b) => a - b);
     return (
       <div>
         <h1>Player Scores</h1>
