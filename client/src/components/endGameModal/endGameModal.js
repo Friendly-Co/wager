@@ -17,7 +17,7 @@ var endCopy = {
     "For more information about this project, please vist our Github at: https://github.com/Friendly-Co/wager"
 };
 
-function EndGameModal(props) {
+function endGameModal(props) {
   return (
     <Modal
       {...props}
@@ -52,4 +52,4 @@ function EndGameModal(props) {
   );
 }
 
-export default EndGameModal;
+export default endGameModal;
