@@ -38,8 +38,8 @@ class Leaderboard extends Component {
     //If no scoreSeed props are coming from the Admin page, render from the database
     // This is a fallback for bugs related to user and admin page reloading, or the very beginning of the game
     // var renderFrom;
-    // var renderFrom = this.props.scoreSeed;
-    var renderFrom = this.state.dbScores;
+    var renderFrom = this.props.scoreSeed;
+    // var renderFrom = this.state.dbScores;
     var dbScoresLength = Object.keys(this.state.dbScores).length;
     var scoreSeedLength = this.props.scoreSeed.filter(
       x => x.gameId === this.state.gameId && x.kickedOut === false
@@ -50,38 +50,38 @@ class Leaderboard extends Component {
       this.getFromDb();
     }
 
-    // var renderFromScoreseed = false;
+    var renderFromScoreseed = false;
 
-    // for (let i = 0; i < this.props.scoreSeed.length; i++) {
-    //   if (this.props.scoreSeed[i].currentGuess !== " ") {
-    //     renderFromScoreseed = true;
-    //     break;
-    //   }
-    // }
+    for (let i = 0; i < this.props.scoreSeed.length; i++) {
+      if (this.props.scoreSeed[i].currentGuess !== " ") {
+        renderFromScoreseed = true;
+        break;
+      }
+    }
 
-    // if (renderFromScoreseed) {
-    //   renderFrom = this.props.scoreSeed;
-    //   console.log("rendering from scoreSeed");
-    // } else {
-    //   renderFrom = this.state.dbScores;
-    //   console.log("rendering from dbScores");
-    //   console.log("==== dbScore: ");
-    //   console.log(this.state.dbScores);
-    //   console.log("==== scoreseed: ");
-    //   console.log(this.props.scoreSeed);
-    // }
-
-    if (this.props.scoreSeed.length < dbScoresLength) {
+    if (renderFromScoreseed || this.props.scoreSeed.length >= dbScoresLength) {
+      renderFrom = this.props.scoreSeed;
+      console.log("rendering from scoreSeed");
+    } else {
       renderFrom = this.state.dbScores;
       console.log("rendering from dbScores");
       console.log("==== dbScore: ");
       console.log(this.state.dbScores);
       console.log("==== scoreseed: ");
       console.log(this.props.scoreSeed);
-    } else {
-      renderFrom = this.props.scoreSeed;
-      console.log("rendering from scoreSeed");
     }
+
+    // if (this.props.scoreSeed.length < dbScoresLength) {
+    //   renderFrom = this.state.dbScores;
+    //   console.log("rendering from dbScores");
+    //   console.log("==== dbScore: ");
+    //   console.log(this.state.dbScores);
+    //   console.log("==== scoreseed: ");
+    //   console.log(this.props.scoreSeed);
+    // } else {
+    //   renderFrom = this.props.scoreSeed;
+    //   console.log("rendering from scoreSeed");
+    // }
 
     renderFrom = renderFrom
       .filter(x => x.gameId === this.state.gameId && x.currScore >= 0)
