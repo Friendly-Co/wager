@@ -37,9 +37,7 @@ class Leaderboard extends Component {
   render(props) {
     //If no scoreSeed props are coming from the Admin page, render from the database
     // This is a fallback for bugs related to user and admin page reloading, or the very beginning of the game
-    // var renderFrom;
-    var renderFrom = this.props.scoreSeed;
-    // var renderFrom = this.state.dbScores;
+    var renderFrom;
     var dbScoresLength = Object.keys(this.state.dbScores).length;
     var scoreSeedLength = this.props.scoreSeed.filter(
       x => x.gameId === this.state.gameId && x.kickedOut === false
@@ -60,10 +58,10 @@ class Leaderboard extends Component {
     }
 
     if (renderFromScoreseed || this.props.scoreSeed.length >= dbScoresLength) {
-      renderFrom = this.props.scoreSeed;
+      renderFrom = [].concat(this.props.scoreSeed);
       console.log("rendering from scoreSeed");
     } else {
-      renderFrom = this.state.dbScores;
+      renderFrom = [].concat(this.state.dbScores);
       console.log("rendering from dbScores");
       console.log("==== dbScore: ");
       console.log(this.state.dbScores);
